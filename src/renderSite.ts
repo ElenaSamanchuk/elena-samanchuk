@@ -68,6 +68,7 @@ const casePreviewMarkup = (item: CaseCard) => {
             alt="Скриншот ${escapeHtml(item.title)}"
             loading="lazy"
             decoding="async"
+            fetchpriority="low"
           />
         </div>
       </div>

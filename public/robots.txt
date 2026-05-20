@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://elenasamanchuk.github.io/tochka-site-marketer-new/sitemap.xml

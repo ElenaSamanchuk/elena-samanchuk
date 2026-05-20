@@ -1,4 +1,6 @@
 import "./style.css";
+import "./compat.css";
+import "./performance.css";
 import "./cursor.css";
 import "./effects-extra.css";
 import { initSite } from "./initSite";

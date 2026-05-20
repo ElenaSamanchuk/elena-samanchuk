@@ -1,0 +1,73 @@
+/* Кроссбраузер: fallbacks и префиксы */
+
+.navbar,
+.hire-bar,
+.resume-card,
+.hero-metrics li,
+.code-card,
+.btn-glass,
+.capability-card,
+.clients-marquee,
+.stack-marquee {
+  -webkit-backdrop-filter: blur(18px);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .navbar,
+  .hire-bar {
+    background: rgba(10, 10, 15, 0.94);
+  }
+
+  .resume-card,
+  .capability-card,
+  .hero-metrics li {
+    background: rgba(16, 19, 37, 0.92);
+  }
+}
+
+.case-links__label,
+.case-detail,
+.block-lead {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+@supports (height: 100dvh) {
+  .hero-header {
+    min-height: min(100dvh, 920px);
+  }
+}
+
+.scroll-top {
+  right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: max(16px, env(safe-area-inset-bottom, 0px));
+}
+
+@media (max-width: 900px) and (min-width: 521px) {
+  .hero-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero-metrics li:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 520px) {
+  .hero-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Firefox: плавный скролл только если разрешён */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

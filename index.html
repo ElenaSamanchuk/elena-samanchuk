@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0a0f" />
+    <meta name="color-scheme" content="dark" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -22,8 +28,13 @@
       name="description"
       content="Маркетинговые страницы до релиза: под ключ или один этап. Tilda, свой код, промо-механики, QA. Кейсы Growfood, Приём, Nasha."
     />
+    <meta
+      name="keywords"
+      content="лендинги, маркетинговые страницы, Tilda, веб-продакшн, промо-механики, FoodTech, UX, конверсия, Елена Саманчук"
+    />
     <meta name="author" content="Елена Саманчук" />
     <link rel="canonical" href="https://elenasamanchuk.github.io/tochka-site-marketer-new/" />
+    <link rel="manifest" href="/site.webmanifest" />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ru_RU" />
@@ -56,23 +67,50 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Елена Саманчук",
-        "jobTitle": "Маркетинговые страницы · веб-продакшн лендингов",
-        "description": "Лендинги под ключ или по этапам: Tilda, HTML/CSS/JS, промо-механики, QA и аналитика.",
-        "url": "https://elenasamanchuk.github.io/tochka-site-marketer-new/",
-        "image": "https://elenasamanchuk.github.io/tochka-site-marketer-new/og-cover.svg",
-        "email": "mailto:elenasamanchuk@gmail.com",
-        "sameAs": [
-          "https://t.me/ElaneDmitrievna",
-          "https://github.com/ElenaSamanchuk"
-        ],
-        "knowsAbout": [
-          "лендинги",
-          "Tilda",
-          "промо-механики",
-          "UX/UI",
-          "конверсия"
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://elenasamanchuk.github.io/tochka-site-marketer-new/#website",
+            "url": "https://elenasamanchuk.github.io/tochka-site-marketer-new/",
+            "name": "Елена Саманчук — лендинги под ключ и по этапам",
+            "description": "Маркетинговые страницы до релиза: под ключ или один этап. Tilda, свой код, промо-механики, QA.",
+            "inLanguage": "ru-RU"
+          },
+          {
+            "@type": "Person",
+            "@id": "https://elenasamanchuk.github.io/tochka-site-marketer-new/#person",
+            "name": "Елена Саманчук",
+            "jobTitle": "Маркетинговые страницы · веб-продакшн",
+            "description": "Лендинги под ключ или по этапам: Tilda, HTML/CSS/JS, промо-механики, QA и аналитика.",
+            "url": "https://elenasamanchuk.github.io/tochka-site-marketer-new/",
+            "image": "https://elenasamanchuk.github.io/tochka-site-marketer-new/og-cover.svg",
+            "email": "mailto:elenasamanchuk@gmail.com",
+            "sameAs": [
+              "https://t.me/ElaneDmitrievna",
+              "https://github.com/ElenaSamanchuk"
+            ],
+            "knowsAbout": [
+              "лендинги",
+              "Tilda",
+              "промо-механики",
+              "UX/UI",
+              "конверсия",
+              "SEO",
+              "QA"
+            ]
+          },
+          {
+            "@type": "ProfessionalService",
+            "@id": "https://elenasamanchuk.github.io/tochka-site-marketer-new/#service",
+            "name": "Лендинги и маркетинговые страницы",
+            "url": "https://elenasamanchuk.github.io/tochka-site-marketer-new/",
+            "description": "Под ключ или по этапам: бриф, дизайн, Tilda, свой код, релиз и поддержка.",
+            "areaServed": "RU",
+            "serviceType": ["лендинги", "промо-страницы", "веб-продакшн"],
+            "provider": {
+              "@id": "https://elenasamanchuk.github.io/tochka-site-marketer-new/#person"
+            }
+          }
         ]
       }
     </script>

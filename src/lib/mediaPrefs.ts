@@ -7,6 +7,17 @@ export function prefersSaveData(): boolean {
   return Boolean(connection?.saveData);
 }
 
+export function isCoarsePointer(): boolean {
+  return window.matchMedia("(pointer: coarse)").matches;
+}
+
+export function isNarrowViewport(): boolean {
+  return window.matchMedia("(max-width: 900px)").matches;
+}
+
+/** Отключает WebGL, tilt и spotlight на мобильных и при economize motion/data */
 export function prefersLightEffects(): boolean {
-  return prefersReducedMotion() || prefersSaveData();
+  return (
+    prefersReducedMotion() || prefersSaveData() || isCoarsePointer() || isNarrowViewport()
+  );
 }

@@ -1,0 +1,18 @@
+{
+  "name": "Елена Саманчук — лендинги под ключ",
+  "short_name": "ES · лендинги",
+  "description": "Маркетинговые страницы до релиза: под ключ или по этапам.",
+  "start_url": "/tochka-site-marketer-new/",
+  "scope": "/tochka-site-marketer-new/",
+  "display": "standalone",
+  "lang": "ru",
+  "background_color": "#0a0a0f",
+  "theme_color": "#0a0a0f",
+  "icons": [
+    {
+      "src": "/tochka-site-marketer-new/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ]
+}

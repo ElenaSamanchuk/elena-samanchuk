@@ -1,0 +1,21 @@
+/* Отложенная отрисовка тяжёлых секций ниже первого экрана */
+
+.main-block {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 520px;
+}
+
+.timeline-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 360px;
+}
+
+.case-preview__track img {
+  content-visibility: auto;
+}
+
+/* Marquee: снижаем нагрузку вне viewport */
+.clients-marquee,
+.stack-marquee {
+  content-visibility: auto;
+}
