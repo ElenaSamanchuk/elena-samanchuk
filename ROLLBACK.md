@@ -1,19 +1,19 @@
 # Откат правок
 
-## Откатить UX pass 3 (последний)
+## Откатить fullstack pass (последний)
 
 ```bash
 cd tochka-site-marketer-new
-git checkout before-ux-pass-3
+git checkout before-dev-pass
 ```
 
 или:
 
 ```bash
-git reset --hard snapshot-pre-ux-pass-3
+git reset --hard snapshot-pre-dev-pass
 ```
 
-## Вернуть pass 3
+## Вернуть fullstack pass
 
 ```bash
 git checkout master
@@ -21,22 +21,23 @@ git checkout master
 
 ## Предыдущие снимки
 
-| Команда | Состояние |
-|---------|-----------|
-| `git reset --hard snapshot-pre-ux-pass` | до UX pass 1–2 |
-| `git reset --hard snapshot-pre-pass2` | до копирайт pass 2 |
-| `git reset --hard 7bf26b3` | первый git-снимок |
+| Тег / ветка | Состояние |
+|-------------|-----------|
+| `snapshot-pre-dev-pass` | до fullstack pass |
+| `before-dev-pass` | та же точка (ветка) |
+| `snapshot-pre-ux-pass-3` | до UX pass 3 |
+| `snapshot-pre-ux-pass` | до UX pass 1–2 |
+| `snapshot-pre-pass2` | до копирайт pass 2 |
 
-## Теги
+## Файлы fullstack pass
 
-- `snapshot-pre-ux-pass-3` — перед pass 3
-- `snapshot-pre-ux-pass` — перед pass 1–2
-- `snapshot-pre-pass2` — перед копирайт pass 2
-
-## Файлы UX pass 3
-
-- `src/style.css` — mobile hero, метрики, timeline, navbar scroll, safe-area
-- `src/initSite.ts` — nav по scrollY, navbar is-scrolled, клавиатура вкладок pipeline
-- `src/markup/heroPipelineCard.ts` — tabindex вкладок
+- `src/lib/scrollRuntime.ts`, `escapeHtml.ts`, `mediaPrefs.ts` — новые утилиты
+- `src/data/capabilities.ts` — вынесены данные из `main.ts`
+- `src/initSite.ts` — один батч scroll, saveData, tilt
+- `src/effects/webglBg.ts`, `scrollToTop.ts` — пауза WebGL, scroll runtime
+- `vite.config.ts` — chunk для WebGL
+- `index.html` — асинхронная загрузка шрифтов
+- Удалены неиспользуемые `counter.ts`, `pageAnchors.ts`
+- `src/style.css` — фикс padding кейсов (timeline-card)
 
 Ссылки в кейсах не менялись.

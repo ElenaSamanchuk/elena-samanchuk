@@ -3,15 +3,20 @@ import { initCasePreviews } from "./effects/casePreview";
 import { initMechanicsVideos } from "./effects/mechanicsVideos";
 import { initScrollToTop } from "./effects/scrollToTop";
 import { initWebGLBackground } from "./effects/webglBg";
+import { prefersLightEffects, prefersReducedMotion } from "./lib/mediaPrefs";
+import { initScrollRuntime, registerScrollTask } from "./lib/scrollRuntime";
 
 export function initSite() {
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reducedMotion = prefersReducedMotion();
+  const lightEffects = prefersLightEffects();
   const scrollOffset = 92;
+
+  initScrollRuntime();
 
   initCustomCursor(reducedMotion);
   initScrollToTop(reducedMotion);
 
-  if (!reducedMotion) {
+  if (!lightEffects) {
     const webglCanvas = document.querySelector<HTMLCanvasElement>("#webgl-bg");
     if (webglCanvas) initWebGLBackground(webglCanvas);
   }
@@ -34,8 +39,7 @@ export function initSite() {
 
   document.querySelectorAll(".reveal-card").forEach((node) => observer.observe(node));
 
-  const enableTilt =
-    !reducedMotion && !window.matchMedia("(pointer: coarse)").matches;
+  const enableTilt = !lightEffects && !window.matchMedia("(pointer: coarse)").matches;
 
   document.querySelectorAll<HTMLElement>("[data-tilt]").forEach((card) => {
     if (!enableTilt) return;
@@ -71,10 +75,6 @@ export function initSite() {
     if (scrollProgressBar) scrollProgressBar.style.width = `${progress}%`;
   };
 
-  updateScrollUi();
-  window.addEventListener("scroll", updateScrollUi, { passive: true });
-  window.addEventListener("resize", updateScrollUi);
-
   const navLinks = Array.from(
     document.querySelectorAll<HTMLAnchorElement>(".nav-links a[href^='#']"),
   );
@@ -106,18 +106,14 @@ export function initSite() {
     setActiveNav(current);
   };
 
-  if (navSections.length) {
-    updateActiveNav();
-    window.addEventListener("scroll", updateActiveNav, { passive: true });
-    window.addEventListener("resize", updateActiveNav);
-  }
-
   const navbar = document.getElementById("site-navbar");
   const updateNavbar = () => {
     navbar?.classList.toggle("is-scrolled", window.scrollY > 16);
   };
-  updateNavbar();
-  window.addEventListener("scroll", updateNavbar, { passive: true });
+
+  registerScrollTask(updateScrollUi);
+  if (navSections.length) registerScrollTask(updateActiveNav);
+  registerScrollTask(updateNavbar);
 
   const animateMetric = (item: HTMLElement) => {
     if (item.dataset.metricAnimated === "true") return;
@@ -180,7 +176,10 @@ export function initSite() {
         tab.tabIndex = isActive ? 0 : -1;
       });
       panels.forEach((panel, index) => {
-        panel.classList.toggle("is-active", index === step);
+        const isActive = index === step;
+        panel.classList.toggle("is-active", isActive);
+        panel.toggleAttribute("hidden", !isActive);
+        panel.setAttribute("aria-hidden", String(!isActive));
       });
       if (progressFill) progressFill.style.width = `${((step + 1) / panels.length) * 100}%`;
       mechanicsCtrl?.setActive(step === 2);
@@ -195,8 +194,9 @@ export function initSite() {
       if (activeIndex < 0) return;
       if (event.key === "ArrowRight") {
         event.preventDefault();
-        setPipelineStep((activeIndex + 1) % tabs.length);
-        tabs[(activeIndex + 1) % tabs.length]?.focus();
+        const next = (activeIndex + 1) % tabs.length;
+        setPipelineStep(next);
+        tabs[next]?.focus();
       }
       if (event.key === "ArrowLeft") {
         event.preventDefault();

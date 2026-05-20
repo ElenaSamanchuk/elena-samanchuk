@@ -1,77 +1,17 @@
 import "./style.css";
 import "./cursor.css";
 import "./effects-extra.css";
+import { bentoSpans, capabilities, stack } from "./data/capabilities";
 import { topCases, type CaseCard } from "./data/cases";
 import { getCaseDisplayTags } from "./data/caseDisplayTags";
 import { siteCopy } from "./data/siteCopy";
+import { escapeHtml } from "./lib/escapeHtml";
 import { collaborationRoadmapsMarkup } from "./markup/collaborationRoadmap";
 import { initSite } from "./initSite";
 import { agencies, brands } from "./data/clients";
 import { heroPipelineCardMarkup } from "./markup/heroPipelineCard";
 
-type CapabilityGroup = {
-  label: string;
-  items: string;
-};
-
-type Capability = {
-  title: string;
-  lead: string;
-  groups: CapabilityGroup[];
-};
-
-const capabilities: Capability[] = [
-  {
-    title: "Постановка",
-    lead: "Фиксируем цель страницы и рамки — до первого макета.",
-    groups: [
-      { label: "Стратегия", items: "оффер · KPI · гипотезы · конверсия" },
-      { label: "Документы", items: "бриф · ТЗ по блокам" },
-      { label: "Управление", items: "координация · бюджет · сроки" },
-    ],
-  },
-  {
-    title: "Контент и интерфейс",
-    lead: "Структура, копирайт и UI ведут к целевому действию.",
-    groups: [
-      { label: "Смысл", items: "структура · копирайт · сценарий блоков" },
-      { label: "Дизайн", items: "прототип · UI · креатив · адаптив · UX" },
-    ],
-  },
-  {
-    title: "Разработка",
-    lead: "Макет становится рабочей страницей: Tilda, Zero Block, свой код.",
-    groups: [
-      { label: "Сборка", items: "Tilda · Zero Block · HTML/CSS/JS" },
-      { label: "Платформа", items: "механики · формы · админка · API · боты" },
-    ],
-  },
-  {
-    title: "После релиза",
-    lead: "Стабильность, метрики и итерации без поломки витрины.",
-    groups: [
-      { label: "Качество", items: "QA · адаптив · кросс-браузер" },
-      { label: "Рост", items: "SEO · аналитика · контент · рефакторинг" },
-    ],
-  },
-];
-
-const stack = [
-  "Figma",
-  "Cursor",
-  "HTML / CSS / JS",
-  "Tilda",
-  "SEO",
-  "QA",
-  "GitHub",
-  "Яндекс.Метрика",
-  "Google Analytics",
-  "HTML5-баннеры",
-];
-
 const metrics = siteCopy.metrics;
-
-const bentoSpans = ["bento-span-7", "bento-span-5", "bento-span-6", "bento-span-6"];
 
 const caseTagsMarkup = (item: CaseCard) => {
   const tags = getCaseDisplayTags(item.niches, item.tech);
@@ -88,8 +28,8 @@ const caseLinksMarkup = (item: CaseCard) => `
       .map(
         (link) => `
       <li>
-        <a href="${link.href}" target="_blank" rel="noreferrer">
-          <span class="case-links__label">${link.label}</span>
+        <a href="${link.href}" target="_blank" rel="noopener noreferrer">
+          <span class="case-links__label">${escapeHtml(link.label)}</span>
           <span class="case-links__icon" aria-hidden="true">↗</span>
         </a>
       </li>
@@ -107,8 +47,8 @@ const caseMetricsMarkup = (item: CaseCard) => {
       .map(
         (metric) => `
       <div class="case-card-metric">
-        <span>${metric.label}</span>
-        <strong>${metric.value}</strong>
+        <span>${escapeHtml(metric.label)}</span>
+        <strong>${escapeHtml(metric.value)}</strong>
       </div>
     `,
       )
@@ -123,7 +63,7 @@ if (!app) throw new Error("App root #app not found");
 const casePreviewMarkup = (item: CaseCard) => {
   if (!item.previewImage) return "";
 
-  return `<aside class="case-preview is-loading" data-case-preview aria-label="Превью ${item.title}">
+  return `<aside class="case-preview is-loading" data-case-preview aria-label="Превью ${escapeHtml(item.title)}">
     <div class="case-preview__viewport">
       <div class="case-preview__skeleton" aria-hidden="true"></div>
       <div class="case-preview__stage" data-preview-stage>
@@ -131,7 +71,7 @@ const casePreviewMarkup = (item: CaseCard) => {
           <img
             data-preview-img
             src="${item.previewImage}"
-            alt="Скриншот ${item.title}"
+            alt="Скриншот ${escapeHtml(item.title)}"
             loading="lazy"
             decoding="async"
           />
@@ -146,15 +86,15 @@ const capabilityMarkup = capabilities
     (item, index) => `
       <article class="capability-card reveal-card bento-item ${bentoSpans[index] ?? ""}" data-tilt data-spotlight>
         <div class="capability-icon" aria-hidden="true"></div>
-        <h3>${item.title}</h3>
-        <p class="capability-card__lead">${item.lead}</p>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p class="capability-card__lead">${escapeHtml(item.lead)}</p>
         <div class="capability-groups">
           ${item.groups
             .map(
               (group) => `
             <div class="capability-group">
-              <span class="capability-group__label">${group.label}</span>
-              <span class="capability-group__items">${group.items}</span>
+              <span class="capability-group__label">${escapeHtml(group.label)}</span>
+              <span class="capability-group__items">${escapeHtml(group.items)}</span>
             </div>
           `,
             )
@@ -164,9 +104,9 @@ const capabilityMarkup = capabilities
     `,
   )
   .join("");
-const stackMarkup = stack.map((item) => `<li class="skill-pill">${item}</li>`).join("");
+const stackMarkup = stack.map((item) => `<li class="skill-pill">${escapeHtml(item)}</li>`).join("");
 const marqueeItems = [...stack, ...stack]
-  .map((item) => `<span class="stack-marquee__item">${item}</span>`)
+  .map((item) => `<span class="stack-marquee__item">${escapeHtml(item)}</span>`)
   .join("");
 const metricsMarkup = metrics
   .map(
@@ -175,7 +115,7 @@ const metricsMarkup = metrics
         <strong>
           <span class="metric-value">0</span>${item.suffix ? `<span class="metric-suffix">${item.suffix}</span>` : ""}
         </strong>
-        <span>${item.label}</span>
+        <span>${escapeHtml(item.label)}</span>
       </li>
     `,
   )
@@ -186,10 +126,10 @@ const caseMarkup = topCases
       <article class="resume-card timeline-card reveal-card${item.previewImage ? " has-case-preview" : ""}" data-tilt>
         <div class="timeline-card__main">
           ${caseTagsMarkup(item)}
-          <h3>${item.title}</h3>
-          <p class="case-detail"><strong>Задача:</strong> ${item.proof}</p>
-          <p class="case-detail"><strong>Вклад:</strong> ${item.role}</p>
-          <p class="case-detail"><strong>Результат:</strong> ${item.outcome}</p>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p class="case-detail"><strong>Задача:</strong> ${escapeHtml(item.proof)}</p>
+          <p class="case-detail"><strong>Вклад:</strong> ${escapeHtml(item.role)}</p>
+          <p class="case-detail"><strong>Результат:</strong> ${escapeHtml(item.outcome)}</p>
           ${caseMetricsMarkup(item)}
           ${caseLinksMarkup(item)}
         </div>
@@ -202,7 +142,7 @@ const caseMarkup = topCases
 const year = new Date().getFullYear();
 
 const textMarqueeItems = (items: string[]) =>
-  [...items, ...items].map((name) => `<span class="clients-marquee__text">${name}</span>`).join("");
+  [...items, ...items].map((name) => `<span class="clients-marquee__text">${escapeHtml(name)}</span>`).join("");
 
 const partnerNames = [...new Set([...agencies, ...brands])];
 

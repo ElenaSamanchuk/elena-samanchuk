@@ -73,6 +73,7 @@ export function initWebGLBackground(canvas: HTMLCanvasElement): () => void {
   const timeLocation = gl.getUniformLocation(program, "u_time");
 
   let animationId = 0;
+  let running = true;
 
   const resize = () => {
     const dpr = Math.min(window.devicePixelRatio, 1.5);
@@ -86,6 +87,7 @@ export function initWebGLBackground(canvas: HTMLCanvasElement): () => void {
   };
 
   const render = (time: number) => {
+    if (!running) return;
     gl.useProgram(program);
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.enableVertexAttribArray(positionLocation);
@@ -96,15 +98,27 @@ export function initWebGLBackground(canvas: HTMLCanvasElement): () => void {
     animationId = window.requestAnimationFrame(render);
   };
 
+  const onVisibility = () => {
+    running = !document.hidden;
+    if (running) {
+      animationId = window.requestAnimationFrame(render);
+      return;
+    }
+    window.cancelAnimationFrame(animationId);
+  };
+
   resize();
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   animationId = window.requestAnimationFrame(render);
 
   window.addEventListener("resize", resize);
+  document.addEventListener("visibilitychange", onVisibility);
 
   return () => {
+    running = false;
     window.cancelAnimationFrame(animationId);
     window.removeEventListener("resize", resize);
+    document.removeEventListener("visibilitychange", onVisibility);
   };
 }

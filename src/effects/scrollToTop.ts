@@ -1,3 +1,5 @@
+import { registerScrollTask } from "../lib/scrollRuntime";
+
 /** Стрелка вверх как в webdev-studio — без круга */
 export function initScrollToTop(reducedMotion: boolean) {
   const button = document.createElement("button");
@@ -16,6 +18,6 @@ export function initScrollToTop(reducedMotion: boolean) {
     window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
   });
 
+  registerScrollTask(update);
   update();
-  window.addEventListener("scroll", update, { passive: true });
 }

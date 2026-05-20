@@ -1,4 +1,5 @@
 import { pipelineDevVideo } from "../data/mechanicsVideos";
+import { escapeHtml } from "../lib/escapeHtml";
 
 export const mechanicsWidgetMarkup = `
   <div class="mechanics-widget mechanics-widget--inline mechanics-widget--single" data-mechanics-widget aria-label="Живые механики">
@@ -16,7 +17,7 @@ export const mechanicsWidgetMarkup = `
           playsinline
           loop
           preload="metadata"
-          aria-label="${pipelineDevVideo.label}"
+          aria-label="${escapeHtml(pipelineDevVideo.label)}"
         ></video>
       </div>
     </div>
