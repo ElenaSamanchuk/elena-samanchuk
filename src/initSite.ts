@@ -1,14 +1,20 @@
-import { initModernTrends } from "./effects/modernTrends";
 import { initCasePreviews } from "./effects/casePreview";
-import { initMechanicsVideos } from "./effects/mechanicsVideos";
+import { initBlockBuilder } from "./effects/blockBuilderAnim";
 import { initScrollToTop } from "./effects/scrollToTop";
-import { initWebGLBackground } from "./effects/webglBg";
-import { prefersLightEffects, prefersReducedMotion } from "./lib/mediaPrefs";
+import { syncNavOffset } from "./lib/navOffset";
+import { prefersReducedMotion } from "./lib/mediaPrefs";
 import { readScrollOffset } from "./lib/scrollOffset";
+import { initMetricCounters, initSiteMotion } from "./lib/siteMotion";
 import { initScrollRuntime, registerScrollTask } from "./lib/scrollRuntime";
 
 /** Показывает в консоли и data-атрибуте активную сборку сайта */
-export const SITE_REVISION = "portfolio-final";
+export const SITE_REVISION = "stack-tw";
+
+/** Доп. сдвиг якоря: секция останавливается чуть ниже шапки, не «над» блоком */
+const ANCHOR_SCROLL_EXTRA = 72;
+
+/** Линия активации пункта меню (синхронна с якорной прокруткой) */
+const NAV_SPY_EXTRA = 64;
 
 export function initSite() {
   document.documentElement.dataset.siteRevision = SITE_REVISION;
@@ -18,63 +24,16 @@ export function initSite() {
   }
 
   const reducedMotion = prefersReducedMotion();
-  const lightEffects = prefersLightEffects();
   let scrollOffset = readScrollOffset();
 
   initScrollRuntime();
-
-  initModernTrends(reducedMotion);
-  initScrollToTop(reducedMotion);
-
-  if (!lightEffects) {
-    const webglCanvas = document.querySelector<HTMLCanvasElement>("#webgl-bg");
-    if (webglCanvas) initWebGLBackground(webglCanvas);
-  }
-
-  const scrollToSection = (selector: string) => {
-    const target = document.querySelector<HTMLElement>(selector);
-    if (!target) return;
-    const top = target.getBoundingClientRect().top + window.scrollY - scrollOffset;
-    window.scrollTo({ top, behavior: reducedMotion ? "auto" : "smooth" });
-  };
-
-  const revealObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      });
-    },
-    { threshold: 0.12 },
-  );
-
-  document.querySelectorAll(".reveal-card").forEach((node) => revealObserver.observe(node));
-
-  document.addEventListener("click", (event) => {
-    const link = (event.target as Element).closest<HTMLAnchorElement>('a[href^="#"]');
-    if (!link) return;
-    const hash = link.getAttribute("href");
-    if (!hash || hash === "#") return;
-    const target = document.querySelector<HTMLElement>(hash);
-    if (!target) return;
-    event.preventDefault();
-    scrollToSection(hash);
-  });
+  syncNavOffset();
 
   const scrollProgressBar = document.querySelector<HTMLElement>("#scroll-progress-bar");
-
-  const updateScrollUi = () => {
-    scrollOffset = readScrollOffset();
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = docHeight > 0 ? Math.min(100, (window.scrollY / docHeight) * 100) : 0;
-    if (scrollProgressBar) scrollProgressBar.style.width = `${progress}%`;
-  };
+  const navbar = document.getElementById("site-navbar");
 
   const sectionNavLinks = Array.from(
-    document.querySelectorAll<HTMLAnchorElement>(
-      ".nav-links a[href^='#'], .page-journey__link[href^='#']",
-    ),
+    document.querySelectorAll<HTMLAnchorElement>(".nav-link[href^='#']"),
   );
   const navSections = sectionNavLinks
     .map((link) => {
@@ -98,119 +57,78 @@ export function initSite() {
     });
   };
 
+  const updateScrollUi = () => {
+    scrollOffset = readScrollOffset();
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? Math.min(100, (window.scrollY / docHeight) * 100) : 0;
+    if (scrollProgressBar) scrollProgressBar.style.width = `${progress}%`;
+  };
+
+  const navMarkerTop = () => scrollOffset + NAV_SPY_EXTRA;
+
   const updateActiveNav = () => {
     if (!navSections.length) return;
-    const marker = window.scrollY + scrollOffset + 40;
+    const markerFromTop = navMarkerTop();
     let current = navSections[0].href;
-    for (const item of navSections) {
-      if (item.section.offsetTop <= marker) current = item.href;
+
+    for (let i = navSections.length - 1; i >= 0; i--) {
+      const item = navSections[i];
+      const top = item.section.getBoundingClientRect().top;
+      if (top <= markerFromTop) {
+        current = item.href;
+        break;
+      }
     }
+
     setActiveNav(current);
   };
 
-  const navbar = document.getElementById("site-navbar");
   const updateNavbar = () => {
     navbar?.classList.toggle("is-scrolled", window.scrollY > 16);
   };
 
-  registerScrollTask(updateScrollUi);
-  if (navSections.length) registerScrollTask(updateActiveNav);
-  registerScrollTask(updateNavbar);
-
-  const animateMetric = (item: HTMLElement) => {
-    if (item.dataset.metricAnimated === "true") return;
-    item.dataset.metricAnimated = "true";
-    const valueNode = item.querySelector<HTMLElement>(".metric-value");
-    if (!valueNode) return;
-    const end = Number(item.dataset.metricEnd ?? "0");
-    const duration = reducedMotion ? 0 : 1200;
-    const start = performance.now();
-    const render = (current: number) => {
-      valueNode.textContent = String(Math.round(current));
-    };
-    if (duration === 0) {
-      render(end);
-      return;
-    }
-    const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / duration);
-      render(end * (1 - (1 - t) ** 3));
-      if (t < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
+  const onScroll = () => {
+    updateScrollUi();
+    updateActiveNav();
+    updateNavbar();
   };
 
-  const metricObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        animateMetric(entry.target as HTMLElement);
-        observer.unobserve(entry.target);
-      });
-    },
-    { threshold: 0.35 },
-  );
+  const syncLayout = () => {
+    syncNavOffset();
+    onScroll();
+  };
 
-  document.querySelectorAll<HTMLElement>(".metric-item").forEach((node) => metricObserver.observe(node));
+  registerScrollTask(syncLayout);
+
+  const motionApi = initSiteMotion(onScroll);
+  initMetricCounters(reducedMotion);
+  initScrollToTop(reducedMotion);
+
+  const scrollToSection = (selector: string) => {
+    const target = document.querySelector<HTMLElement>(selector);
+    if (!target) return;
+    scrollOffset = readScrollOffset();
+    motionApi.scrollTo(target, scrollOffset + ANCHOR_SCROLL_EXTRA);
+    window.setTimeout(updateActiveNav, reducedMotion ? 0 : 450);
+    window.setTimeout(updateActiveNav, reducedMotion ? 50 : 1150);
+  };
+
+  document.addEventListener("click", (event) => {
+    const link = (event.target as Element).closest<HTMLAnchorElement>('a[href^="#"]');
+    if (!link) return;
+    const hash = link.getAttribute("href");
+    if (!hash || hash === "#") return;
+    const target = document.querySelector<HTMLElement>(hash);
+    if (!target) return;
+    event.preventDefault();
+    if (link.classList.contains("nav-link")) setActiveNav(hash);
+    scrollToSection(hash);
+  });
 
   initCasePreviews(reducedMotion);
-  const mechanicsCtrl = initMechanicsVideos(reducedMotion);
 
-  const pipelineRoot = document.querySelector<HTMLElement>("[data-pipeline]");
-  if (pipelineRoot) {
-    const tabs = Array.from(pipelineRoot.querySelectorAll<HTMLButtonElement>(".pipeline-tab"));
-    const panels = Array.from(pipelineRoot.querySelectorAll<HTMLElement>(".pipeline-panel"));
-    const progressFill = pipelineRoot.querySelector<HTMLElement>(".pipeline-progress__fill");
+  const builderRoot = document.querySelector<HTMLElement>("[data-block-builder]");
+  if (builderRoot) initBlockBuilder(builderRoot, reducedMotion);
 
-    const setPipelineStep = (step: number) => {
-      tabs.forEach((tab, index) => {
-        const isActive = index === step;
-        tab.classList.toggle("is-active", isActive);
-        tab.setAttribute("aria-selected", String(isActive));
-        tab.tabIndex = isActive ? 0 : -1;
-      });
-      panels.forEach((panel, index) => {
-        const isActive = index === step;
-        panel.classList.toggle("is-active", isActive);
-        panel.toggleAttribute("hidden", !isActive);
-        panel.setAttribute("aria-hidden", String(!isActive));
-      });
-      if (progressFill) progressFill.style.width = `${((step + 1) / panels.length) * 100}%`;
-      mechanicsCtrl?.setActive(step === 2);
-    };
-
-    tabs.forEach((tab, index) => {
-      tab.addEventListener("click", () => setPipelineStep(index));
-    });
-
-    pipelineRoot.addEventListener("keydown", (event) => {
-      const activeIndex = tabs.findIndex((tab) => tab.classList.contains("is-active"));
-      if (activeIndex < 0) return;
-      if (event.key === "ArrowRight") {
-        event.preventDefault();
-        const next = (activeIndex + 1) % tabs.length;
-        setPipelineStep(next);
-        tabs[next]?.focus();
-      }
-      if (event.key === "ArrowLeft") {
-        event.preventDefault();
-        const next = (activeIndex - 1 + tabs.length) % tabs.length;
-        setPipelineStep(next);
-        tabs[next]?.focus();
-      }
-      if (event.key === "Home") {
-        event.preventDefault();
-        setPipelineStep(0);
-        tabs[0]?.focus();
-      }
-      if (event.key === "End") {
-        event.preventDefault();
-        const last = tabs.length - 1;
-        setPipelineStep(last);
-        tabs[last]?.focus();
-      }
-    });
-
-    setPipelineStep(0);
-  }
+  onScroll();
 }

@@ -1,0 +1,58 @@
+/* Светлая тема: переопределения виджетов и разметки */
+
+[data-theme="light"] {
+  --widget-border: rgb(0 0 0 / 0.1);
+  --widget-fill: rgb(0 0 0 / 0.04);
+  --widget-fill-strong: rgb(0 0 0 / 0.07);
+  --widget-panel-bg: rgb(255 255 255 / 0.92);
+}
+
+[data-theme="light"] h1 span {
+  background-image: linear-gradient(135deg, #4338ca 0%, #7c3aed 48%, #db2777 100%);
+}
+
+[data-theme="light"] .case-details__row dt {
+  color: var(--color-muted-soft);
+}
+
+[data-theme="light"] .case-details__row dd {
+  color: var(--color-muted);
+}
+
+[data-theme="light"] .page-builder {
+  filter: none;
+}
+
+[data-theme="light"] .pb {
+  border-color: rgb(0 0 0 / 0.1);
+  background: rgb(0 0 0 / 0.03);
+}
+
+[data-theme="light"] .pb.is-styled {
+  border-color: rgb(99 102 241 / 0.35);
+  box-shadow: none;
+}
+
+[data-theme="light"] .pb-nav i,
+[data-theme="light"] .pb-hero__title,
+[data-theme="light"] .pb-hero__line,
+[data-theme="light"] .pb-hero__pill,
+[data-theme="light"] .pb-columns__item,
+[data-theme="light"] .pb-columns__item b,
+[data-theme="light"] .pb-columns__item i {
+  background: rgb(0 0 0 / 0.08);
+}
+
+[data-theme="light"] .pb-hero.is-styled .pb-hero__title {
+  background: rgb(255 255 255 / 0.55);
+}
+
+[data-theme="light"] .pb-cards i,
+[data-theme="light"] .pb-footer i {
+  background: rgb(0 0 0 / 0.08);
+}
+
+[data-theme="light"] .case-preview {
+  border-color: rgb(0 0 0 / 0.1);
+  box-shadow: none;
+}

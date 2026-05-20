@@ -1,42 +1,59 @@
-import { bentoSpans, capabilities, stack } from "./data/capabilities";
-import { topCases, type CaseCard } from "./data/cases";
+import { stack } from "./data/capabilities";
+import { capabilityRoadmapMarkup } from "./markup/capabilityRoadmap";
 import { getCaseDisplayTags } from "./data/caseDisplayTags";
+import { topCases, type CaseCard } from "./data/cases";
 import { contactLinks, EXTERNAL_REL } from "./data/contacts";
-import { agencies, brands } from "./data/clients";
-import { pageJourney, siteCopy } from "./data/siteCopy";
+import { siteCopy } from "./data/siteCopy";
 import { escapeHtml } from "./lib/escapeHtml";
 import { safeHref } from "./lib/safeUrl";
+import { collaborationFlowMarkup } from "./markup/collaborationFlow";
 import { collaborationRoadmapsMarkup } from "./markup/collaborationRoadmap";
 import { heroPipelineCardMarkup } from "./markup/heroPipelineCard";
 
 const metrics = siteCopy.metrics;
 
-const sectionHeadMarkup = (_num: string, kicker: string, title: string, lead: string) => `
-  <header class="section-head">
-    <p class="section-kicker">${escapeHtml(kicker)}</p>
-    <h2>${escapeHtml(title)}</h2>
-    <p class="block-lead">${escapeHtml(lead)}</p>
+const sectionHeadMarkup = (kicker: string, title: string, lead: string) => `
+  <header class="mb-8" data-reveal>
+    <p class="kicker">${escapeHtml(kicker)}</p>
+    <h2 class="text-ink mt-2 text-2xl font-semibold tracking-tight md:text-3xl">${escapeHtml(title)}</h2>
+    <p class="text-muted mt-3 max-w-2xl text-[15px] leading-relaxed">${escapeHtml(lead)}</p>
   </header>
 `;
 
-const caseTagsMarkup = (item: CaseCard) => {
+const casePillsMarkup = (item: CaseCard) => {
   const tags = getCaseDisplayTags(item.niches, item.tech);
-  if (!tags.length) return "";
+  const badges = item.badges ?? [];
+  if (!tags.length && !badges.length) return "";
 
-  return `<div class="case-tags" aria-label="Ниша и стек">
-    ${tags.map((tag) => `<span class="case-tag case-tag--${tag.kind}">${escapeHtml(tag.label)}</span>`).join("")}
-  </div>`;
+  const tagHtml = tags
+    .map((tag) => {
+      const tone = tag.kind === "niche" ? "pill-niche" : "pill-tech";
+      return `<span class="${tone}">${escapeHtml(tag.label)}</span>`;
+    })
+    .join("");
+
+  const badgeHtml = badges
+    .map((badge) => `<span class="pill-badge">${escapeHtml(badge)}</span>`)
+    .join("");
+
+  return `<div class="mt-3 flex flex-wrap gap-2" aria-label="Ниша и стек">${tagHtml}${badgeHtml}</div>`;
+};
+
+const caseOutcomeMarkup = (item: CaseCard) => {
+  if (!item.outcome) return "";
+
+  return `<p class="case-outcome">${escapeHtml(item.outcome)}</p>`;
 };
 
 const caseLinksMarkup = (item: CaseCard) => `
-  <ul class="case-links" aria-label="Живые примеры">
+  <ul class="mt-5 space-y-2" aria-label="Живые примеры">
     ${item.links
       .map(
         (link) => `
       <li>
-        <a href="${safeHref(link.href)}" target="_blank" rel="${EXTERNAL_REL}">
-          <span class="case-links__label">${escapeHtml(link.label)}</span>
-          <span class="case-links__icon" aria-hidden="true">↗</span>
+        <a class="case-link" href="${safeHref(link.href)}" target="_blank" rel="${EXTERNAL_REL}">
+          <span>${escapeHtml(link.label)}</span>
+          <span aria-hidden="true">↗</span>
         </a>
       </li>
     `,
@@ -45,25 +62,8 @@ const caseLinksMarkup = (item: CaseCard) => `
   </ul>
 `;
 
-const caseMetricsMarkup = (item: CaseCard) => {
-  if (!item.metrics.length) return "";
-
-  return `<div class="case-card-metrics">
-    ${item.metrics
-      .map(
-        (metric) => `
-      <div class="case-card-metric">
-        <span>${escapeHtml(metric.label)}</span>
-        <strong>${escapeHtml(metric.value)}</strong>
-      </div>
-    `,
-      )
-      .join("")}
-  </div>`;
-};
-
 const caseDetailsMarkup = (item: CaseCard) => `
-  <dl class="case-details">
+  <dl class="mt-5 space-y-3 case-details">
     <div class="case-details__row">
       <dt>Задача</dt>
       <dd>${escapeHtml(item.proof)}</dd>
@@ -78,7 +78,7 @@ const caseDetailsMarkup = (item: CaseCard) => `
 const casePreviewMarkup = (item: CaseCard) => {
   if (!item.previewImage) return "";
 
-  return `<aside class="case-preview is-loading" data-case-preview aria-label="Превью ${escapeHtml(item.title)}">
+  return `<aside class="case-preview is-loading max-lg:order-first max-lg:m-5 max-lg:mb-0 max-lg:min-h-[min(300px,45vh)]" data-case-preview aria-label="Превью ${escapeHtml(item.title)}">
     <div class="case-preview__viewport">
       <div class="case-preview__skeleton" aria-hidden="true"></div>
       <div class="case-preview__stage" data-preview-stage>
@@ -97,40 +97,21 @@ const casePreviewMarkup = (item: CaseCard) => {
   </aside>`;
 };
 
-const capabilityMarkup = capabilities
+const stackMarkup = stack
   .map(
-    (item, index) => `
-      <article class="capability-card reveal-card bento-item ${bentoSpans[index] ?? ""}">
-        <div class="capability-icon" aria-hidden="true"></div>
-        <h3>${escapeHtml(item.title)}</h3>
-        <p class="capability-card__lead">${escapeHtml(item.lead)}</p>
-        <div class="capability-groups">
-          ${item.groups
-            .map(
-              (group) => `
-            <div class="capability-group">
-              <span class="capability-group__label">${escapeHtml(group.label)}</span>
-              <span class="capability-group__items">${escapeHtml(group.items)}</span>
-            </div>
-          `,
-            )
-            .join("")}
-        </div>
-      </article>
-    `,
+    (item) =>
+      `<li class="text-muted fill-muted rounded-full px-3 py-1.5 text-xs font-medium">${escapeHtml(item)}</li>`,
   )
   .join("");
-
-const stackMarkup = stack.map((item) => `<li class="skill-pill">${escapeHtml(item)}</li>`).join("");
 
 const metricsMarkup = metrics
   .map(
     (item) => `
-      <li class="metric-item" data-metric-end="${item.end}" data-metric-suffix="${escapeHtml(item.suffix)}">
-        <strong>
-          <span class="metric-value">0</span>${item.suffix ? `<span class="metric-suffix">${escapeHtml(item.suffix)}</span>` : ""}
+      <li class="metric-tile" data-metric data-metric-end="${item.end}">
+        <strong class="text-ink text-xl font-bold">
+          <span data-metric-value>0</span>${item.suffix ? escapeHtml(item.suffix) : ""}
         </strong>
-        <span>${escapeHtml(item.label)}</span>
+        <span class="text-muted mt-1 block text-xs">${escapeHtml(item.label)}</span>
       </li>
     `,
   )
@@ -138,18 +119,15 @@ const metricsMarkup = metrics
 
 const caseMarkup = topCases
   .map(
-    (item, index) => `
-      <article class="resume-card timeline-card reveal-card${item.previewImage ? " has-case-preview" : ""}">
-        <div class="timeline-card__main">
-          <div class="case-card__head">
-            <span class="case-card__index">${String(index + 1).padStart(2, "0")}</span>
-            ${caseTagsMarkup(item)}
-            <h3>${escapeHtml(item.title)}</h3>
-            <p class="case-card__sector">${escapeHtml(item.sector)}</p>
-            <p class="case-outcome">${escapeHtml(item.outcome)}</p>
+    (item) => `
+      <article class="timeline-card${item.previewImage ? " has-case-preview grid lg:grid-cols-[minmax(0,1fr)_minmax(240px,38%)] lg:items-stretch" : ""}" data-case-card data-reveal>
+        <div class="min-w-0 p-7 pb-6">
+          <div>
+            <h3 class="text-ink text-2xl font-semibold">${escapeHtml(item.title)}</h3>
+            ${casePillsMarkup(item)}
+            ${caseOutcomeMarkup(item)}
           </div>
           ${caseDetailsMarkup(item)}
-          ${caseMetricsMarkup(item)}
           ${caseLinksMarkup(item)}
         </div>
         ${casePreviewMarkup(item)}
@@ -158,83 +136,45 @@ const caseMarkup = topCases
   )
   .join("");
 
-const partnerNames = [...new Set([...agencies, ...brands])];
-
-const pageJourneyMarkup = `
-  <nav class="page-journey" aria-label="Маршрут по странице">
-    <div class="container">
-    <ol class="page-journey__list">
-      ${pageJourney
-        .map(
-          (item) => `
-        <li>
-          <a class="page-journey__link" href="${item.href}">
-            <span class="page-journey__dot" aria-hidden="true"></span>
-            <span class="page-journey__label">${escapeHtml(item.label)}</span>
-          </a>
-        </li>
-      `,
-        )
-        .join("")}
-    </ol>
-    </div>
-  </nav>
-`;
-
-const partnersLineMarkup = partnerNames
-  .slice(0, 10)
-  .map((name) => escapeHtml(name))
-  .join('<span class="partners-strip__sep" aria-hidden="true"> · </span>');
-
 const navbarMarkup = `
-  <nav class="navbar" id="site-navbar" aria-label="Главная навигация">
-    <a class="logo" href="#top">
-      <span>ES</span>
-      <span class="logo__text">
-        <strong>Елена Саманчук</strong>
-        <span class="logo__role">Маркетинг · веб-продакшн</span>
+  <nav class="glass-nav" id="site-navbar" aria-label="Главная навигация">
+    <a class="flex min-w-0 shrink items-center gap-2.5 leading-tight no-underline" href="#top">
+      <span class="min-w-0">
+        <span class="flex items-center gap-2">
+          <strong class="text-ink text-sm">Елена Саманчук</strong>
+          <span class="status-pulse shrink-0" title="Онлайн" aria-label="Онлайн"></span>
+        </span>
+        <span class="text-muted-soft block text-[11px]">${escapeHtml(siteCopy.brand.tagline)}</span>
       </span>
     </a>
-    <div class="nav-status" aria-label="Открыта к предложениям">
-      <span class="status-pulse" aria-hidden="true"></span>
-      Доступна · удалённо
-    </div>
-    <div class="nav-links">
-      ${siteCopy.nav.map((item) => `<a href="${item.href}">${escapeHtml(item.label)}</a>`).join("")}
+    <div class="ml-auto flex flex-wrap items-center gap-1">
+      ${siteCopy.nav.map((item) => `<a class="nav-link" href="${item.href}">${escapeHtml(item.label)}</a>`).join("")}
     </div>
   </nav>
 `;
 
 const contactHubMarkup = `
   <section
-    class="main-block final-conversion contact-hub collaboration-block reveal-card vt-section"
+    class="contact-hub flex flex-col gap-0 overflow-hidden p-7 lg:p-8"
     id="${siteCopy.contact.sectionId}"
     style="view-transition-name: contact"
     aria-labelledby="contact-formats-title"
+    data-reveal
   >
-    <div class="contact-hub__collab">
-      <p class="hero-label">${escapeHtml(siteCopy.contact.formatsKicker)}</p>
-      <h2 id="contact-formats-title" class="contact-hub__collab-title">${escapeHtml(siteCopy.contact.formatsTitle)}</h2>
-      <p class="block-lead">${escapeHtml(siteCopy.contact.formatsLead)}</p>
-      <p class="collab-legend" aria-hidden="true">
-        <span>Сообщение</span>
-        <span class="collab-legend__line" aria-hidden="true"></span>
-        <span>Согласование</span>
-        <span class="collab-legend__line" aria-hidden="true"></span>
-        <span>Старт работ</span>
-      </p>
-      <div class="collab-roadmaps">
-        ${collaborationRoadmapsMarkup}
-      </div>
+    <div class="contact-hub__collab min-w-0">
+      <p class="kicker">${escapeHtml(siteCopy.contact.formatsKicker)}</p>
+      <h2 id="contact-formats-title" class="mt-2 text-2xl font-semibold">${escapeHtml(siteCopy.contact.formatsTitle)}</h2>
+      <p class="mt-3 max-w-3xl text-[15px] leading-relaxed">${escapeHtml(siteCopy.contact.formatsLead)}</p>
+      <div class="collab-roadmaps mt-5">${collaborationRoadmapsMarkup}</div>
     </div>
-    <div class="contact-hub__divider" aria-hidden="true"></div>
-    <div class="contact-hub__cta" id="contact-cta">
-      <p class="hero-label">${escapeHtml(siteCopy.contact.ctaKicker)}</p>
-      <h3 class="contact-hub__cta-title">${escapeHtml(siteCopy.contact.ctaTitle)}</h3>
-      <p class="contact-hub__cta-lead">${escapeHtml(siteCopy.contact.ctaLead)}</p>
-      <div class="hero-actions">
-        <a class="btn btn-accent" href="${safeHref(contactLinks.telegram)}" target="_blank" rel="${EXTERNAL_REL}"><span class="btn__label">Написать в Telegram</span></a>
-        <a class="btn btn-glass" href="${safeHref(contactLinks.email)}"><span class="btn__label">Написать на email</span></a>
+    <div class="contact-hub__cta mt-8 lg:mt-10" id="contact-cta">
+      <p class="kicker">${escapeHtml(siteCopy.contact.ctaKicker)}</p>
+      <h3 class="mt-2 text-xl font-semibold">${escapeHtml(siteCopy.contact.ctaTitle)}</h3>
+      <p class="mt-3 max-w-2xl text-sm leading-relaxed">${escapeHtml(siteCopy.contact.ctaLead)}</p>
+      ${collaborationFlowMarkup}
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a class="btn-primary" href="${safeHref(contactLinks.telegram)}" target="_blank" rel="${EXTERNAL_REL}">Написать в Telegram</a>
+        <a class="btn-secondary" href="${safeHref(contactLinks.email)}">Написать на email</a>
       </div>
     </div>
   </section>
@@ -245,7 +185,6 @@ export function renderSite(root: HTMLElement): void {
 
   root.innerHTML = `
   <a class="skip-link" href="#cases">Перейти к контенту</a>
-  <canvas id="webgl-bg" class="webgl-bg" aria-hidden="true"></canvas>
 
   <div class="scroll-progress" aria-hidden="true">
     <div class="scroll-progress__bar" id="scroll-progress-bar"></div>
@@ -253,86 +192,66 @@ export function renderSite(root: HTMLElement): void {
 
   ${navbarMarkup}
 
-  <header class="hero-header" id="top">
-    <div class="hero-noise" aria-hidden="true"></div>
-    <div class="container hero-inner">
-      <div class="hero-main">
-        <p class="hero-label">${escapeHtml(siteCopy.hero.label)}</p>
-        <h1>${siteCopy.hero.titleHtml}</h1>
-        <p class="hero-for-whom">${escapeHtml(siteCopy.hero.forWhom)}</p>
-        <p class="hero-modes__hint">${escapeHtml(siteCopy.hero.modesHint)}</p>
-        <div class="hero-modes" role="group" aria-label="Форматы сотрудничества">
-          <div class="hero-mode">
-            <span class="hero-mode__label">${escapeHtml(siteCopy.hero.modeTurnkeyLabel)}</span>
-            <p class="hero-mode__text">${escapeHtml(siteCopy.hero.leadTurnkey)}</p>
-          </div>
-          <div class="hero-mode">
-            <span class="hero-mode__label hero-mode__label--modular">${escapeHtml(siteCopy.hero.modeModularLabel)}</span>
-            <p class="hero-mode__text">${escapeHtml(siteCopy.hero.leadModular)}</p>
-          </div>
+  <header class="relative pt-[calc(var(--site-nav-offset)+1.5rem)] lg:min-h-[min(540px,72vh)]" id="top">
+    <div class="site-container grid items-center gap-9 pb-14 pt-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)]">
+      <div class="min-w-0" data-stagger>
+        <h1 class="max-w-3xl text-[clamp(2rem,5vw,3.25rem)] leading-[1.08] font-semibold tracking-tight" data-reveal>${siteCopy.hero.titleHtml}</h1>
+        <p class="text-muted mt-4 max-w-2xl text-[15px] leading-relaxed" data-reveal>${escapeHtml(siteCopy.hero.forWhom)}</p>
+        <div class="mt-6 flex flex-wrap gap-3" data-reveal>
+          <a class="btn-primary" href="#collaboration">Обсудить проект</a>
+          <a class="btn-secondary" href="#cases">Смотреть кейсы</a>
         </div>
-        <div class="hero-actions">
-          <a class="btn btn-accent" href="${safeHref(contactLinks.telegram)}" target="_blank" rel="${EXTERNAL_REL}"><span class="btn__label">Обсудить проект</span></a>
-          <a class="btn btn-glass" href="#cases"><span class="btn__label">Смотреть кейсы</span></a>
-        </div>
-        <ul class="hero-metrics">${metricsMarkup}</ul>
-        <p class="hero-proof">${escapeHtml(siteCopy.hero.proofLine)}</p>
+        <ul class="mt-8 grid list-none gap-3 p-0 sm:grid-cols-3" data-reveal>${metricsMarkup}</ul>
       </div>
-      <aside class="hero-side">
+      <aside class="hero-side" data-reveal>
         ${heroPipelineCardMarkup}
       </aside>
     </div>
   </header>
 
-  ${pageJourneyMarkup}
-
-  <main class="container resume-layout">
-    <aside class="resume-sidebar">
-      <section class="resume-card reveal-card decision-card">
-        <h2>${escapeHtml(siteCopy.sidebar.hireTitle)}</h2>
-        <p>${escapeHtml(siteCopy.sidebar.hireText)}</p>
-        <a class="sidebar-cta" href="${safeHref(contactLinks.telegram)}" target="_blank" rel="${EXTERNAL_REL}"><span class="btn__label">Написать в Telegram</span></a>
+  <main class="site-container grid gap-10 pb-[72px] pt-14 lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-10">
+    <aside class="min-w-0" data-stagger>
+      <div class="flex flex-col gap-5 lg:sticky lg:top-[108px]">
+      <section class="surface-card p-5" data-reveal>
+        <h2 class="text-[13px] font-semibold tracking-wide text-[#7c849c] uppercase">${escapeHtml(siteCopy.sidebar.hireTitle)}</h2>
+        <p class="mt-3 text-sm leading-relaxed text-[#a6b0c6]">${escapeHtml(siteCopy.sidebar.hireText)}</p>
+        <a class="btn-primary mt-4 w-full" href="${safeHref(contactLinks.telegram)}" target="_blank" rel="${EXTERNAL_REL}">Написать в Telegram</a>
       </section>
 
-      <section class="resume-card reveal-card stack-card">
-        <h2>${escapeHtml(siteCopy.sidebar.stackTitle)}</h2>
-        <ul class="skill-list">${stackMarkup}</ul>
+      <section class="surface-card p-5" data-reveal>
+        <h2 class="text-[13px] font-semibold tracking-wide text-[#7c849c] uppercase">${escapeHtml(siteCopy.sidebar.stackTitle)}</h2>
+        <ul class="mt-4 flex list-none flex-wrap gap-2 p-0">${stackMarkup}</ul>
       </section>
 
-      <section class="resume-card reveal-card" id="contact">
-        <h2>Контакты</h2>
-        <div class="link-col">
-          <a href="${safeHref(contactLinks.telegram)}" target="_blank" rel="${EXTERNAL_REL}">Telegram</a>
-          <a href="${safeHref(contactLinks.email)}">${escapeHtml("elenasamanchuk@gmail.com")}</a>
-          <a href="${safeHref(contactLinks.github)}" target="_blank" rel="${EXTERNAL_REL}">GitHub</a>
+      <section class="surface-card p-5" id="contact" data-reveal>
+        <h2 class="text-[13px] font-semibold tracking-wide text-[#7c849c] uppercase">Контакты</h2>
+        <div class="mt-4 flex flex-col gap-2 text-sm font-medium">
+          <a class="text-indigo-200 hover:text-white" href="${safeHref(contactLinks.telegram)}" target="_blank" rel="${EXTERNAL_REL}">Telegram</a>
+          <a class="text-indigo-200 hover:text-white" href="${safeHref(contactLinks.email)}">${escapeHtml("elenasamanchuk@gmail.com")}</a>
+          <a class="text-indigo-200 hover:text-white" href="${safeHref(contactLinks.github)}" target="_blank" rel="${EXTERNAL_REL}">GitHub</a>
         </div>
       </section>
+      </div>
     </aside>
 
-    <section class="resume-main">
-      <section class="main-block vt-section section-cases" id="cases" style="view-transition-name: cases">
-        ${sectionHeadMarkup("01", siteCopy.cases.kicker, siteCopy.cases.title, siteCopy.cases.lead)}
-        <div class="partners-strip reveal-card" aria-label="${escapeHtml(siteCopy.cases.partnersLabel)}">
-          <p class="section-kicker partners-strip__label">${escapeHtml(siteCopy.cases.partnersLabel)}</p>
-          <p class="partners-strip__line">${partnersLineMarkup}</p>
-        </div>
-        <div class="timeline">${caseMarkup}</div>
+    <div class="min-w-0 space-y-16">
+      <section id="cases" style="view-transition-name: cases">
+        ${sectionHeadMarkup(siteCopy.cases.kicker, siteCopy.cases.title, siteCopy.cases.lead)}
+        <div class="flex flex-col gap-5" data-stagger>${caseMarkup}</div>
       </section>
 
-      <section class="main-block vt-section" id="${siteCopy.workProcess.id}" style="view-transition-name: capabilities">
-        ${sectionHeadMarkup("02", siteCopy.workProcess.kicker, siteCopy.workProcess.title, siteCopy.workProcess.lead)}
-        <div class="capability-grid bento-grid">${capabilityMarkup}</div>
-        <p class="work-process-footnote">${escapeHtml(siteCopy.workProcess.footnote)}</p>
+      <section id="${siteCopy.workProcess.id}" style="view-transition-name: capabilities">
+        ${sectionHeadMarkup(siteCopy.workProcess.kicker, siteCopy.workProcess.title, siteCopy.workProcess.lead)}
+        <div data-reveal>${capabilityRoadmapMarkup}</div>
       </section>
 
       ${contactHubMarkup}
-    </section>
+    </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container site-footer__inner">
+  <footer class="border-t border-white/12 py-8 text-[#7c849c]">
+    <div class="site-container text-sm">
       <small>© ${year} Елена Саманчук</small>
-      <span class="site-footer__role">${escapeHtml(siteCopy.footer.role)} · ${escapeHtml(siteCopy.footer.note)}</span>
     </div>
   </footer>
 `;

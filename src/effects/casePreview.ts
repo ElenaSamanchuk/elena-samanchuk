@@ -3,7 +3,8 @@ export function initCasePreviews(reducedMotion: boolean) {
     const stage = preview.querySelector<HTMLElement>("[data-preview-stage]");
     const track = preview.querySelector<HTMLElement>("[data-preview-track]");
     const image = preview.querySelector<HTMLImageElement>("[data-preview-img]");
-    const card = preview.closest<HTMLElement>(".timeline-card");
+    const card =
+      preview.closest<HTMLElement>("[data-case-card]") ?? preview.closest("article");
 
     if (!stage || !track || !image || !card) return;
 

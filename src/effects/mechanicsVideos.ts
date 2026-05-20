@@ -34,7 +34,7 @@ export function initMechanicsVideos(reducedMotion = false): MechanicsVideosContr
 
   const setExpanded = (expanded: boolean) => {
     widget.classList.toggle("is-expanded", expanded);
-    widget.closest(".hero-pipeline-card")?.classList.toggle("is-expanded", expanded);
+    widget.closest(".code-card")?.classList.toggle("is-expanded", expanded);
     viewport.setAttribute("aria-expanded", String(expanded));
     viewport.setAttribute("aria-label", expanded ? "Свернуть превью механики" : "Увеличить превью механики");
   };

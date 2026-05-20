@@ -1,3 +1,4 @@
+import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, loadEnv } from "vite";
 
 export default defineConfig(({ mode }) => {
@@ -7,19 +8,22 @@ export default defineConfig(({ mode }) => {
 
   return {
     base,
+    plugins: [tailwindcss()],
     server: {
       port: 5173,
     },
-  build: {
-    target: "es2022",
-    cssMinify: true,
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes("webglBg")) return "webgl";
+    build: {
+      target: "es2022",
+      cssMinify: true,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes("webglBg")) return "webgl";
+            if (id.includes("node_modules/motion")) return "motion";
+            if (id.includes("node_modules/lenis")) return "lenis";
+          },
         },
       },
     },
-  },
   };
 });

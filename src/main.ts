@@ -1,8 +1,5 @@
-import "./style.css";
-import "./compat.css";
-import "./performance.css";
-import "./portfolio-final.css";
-import "./effects-extra.css";
+import "./styles/tailwind.css";
+import "./styles/widgets.css";
 import { initSite } from "./initSite";
 import { renderSite } from "./renderSite";
 

@@ -1,14 +1,15 @@
-export type CollaborationPathStep = {
+export type CollaborationPillKind = "niche" | "tech" | "badge";
+
+export type CollaborationStep = {
   label: string;
   hint: string;
 };
 
 export type CollaborationFormat = {
   badge: string;
+  pillKind: CollaborationPillKind;
   title: string;
   summary: string;
-  when: string;
-  path: CollaborationPathStep[];
 };
 
 export const collaborationIntro = {
@@ -17,38 +18,39 @@ export const collaborationIntro = {
   lead: "Первое сообщение — про задачу и срок. Отвечаю рамкой scope и форматом отчётности. Старт после согласования.",
 };
 
+/** Общий путь старта — один раз в блоке «Связаться» */
+export const collaborationSteps: CollaborationStep[] = [
+  {
+    label: "Заявка · созвон · бриф",
+    hint: "Первое сообщение или слот на созвон: задача, контекст, ссылки на референсы",
+  },
+  {
+    label: "Дедлайн · критерии · смета",
+    hint: "Рамка по срокам и границам scope, критерии приёмки; смета после согласования",
+  },
+  {
+    label: "Приоритеты · спринты · скрам",
+    hint: "Старт работ: очередь, спринты с демо, встраивание в ваши ритуалы",
+  },
+];
+
 export const collaborationFormats: CollaborationFormat[] = [
   {
     badge: "проект",
+    pillKind: "niche",
     title: "Спринт",
     summary: "Лендинг, посадочная или блок механик — с ясным финишем и сроком.",
-    when: "Дедлайн кампании · новая услуга · срочная замена сайта",
-    path: [
-      { label: "Заявка", hint: "Слот на созвон или письменный бриф" },
-      { label: "Рамка", hint: "Дедлайн, границы, NDA при необходимости" },
-      { label: "Старт", hint: "Смета после «да», витки с демо" },
-    ],
   },
   {
     badge: "пакеты часов",
+    pillKind: "tech",
     title: "Ретейнер",
     summary: "Пакет часов: очередь задач, правки, сезонные посадочные без поиска подрядчика каждый раз.",
-    when: "Постоянные правки · серия промо · нет штатного веба",
-    path: [
-      { label: "Процесс", hint: "Канал, очередь, правила срочности" },
-      { label: "Пакет", hint: "Часы в неделю и отчётность" },
-      { label: "Поток", hint: "Первая задача, приоритеты с маркетингом" },
-    ],
   },
   {
     badge: "обсуждаемо",
+    pillKind: "badge",
     title: "Роль в команде",
     summary: "Штат или контракт: витрина, релизы, встраивание в ваши ритуалы.",
-    when: "«Хозяин витрины» в компании или агентстве",
-    path: [
-      { label: "Онбординг", hint: "Команда, каналы, зоны ответственности" },
-      { label: "Ритм", hint: "Ритуалы и критерии приёмки работ" },
-      { label: "Работа", hint: "Задачи с прозрачными границами роли" },
-    ],
   },
 ];

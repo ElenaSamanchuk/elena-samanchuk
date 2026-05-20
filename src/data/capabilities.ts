@@ -45,8 +45,6 @@ export const capabilities: Capability[] = [
   },
 ];
 
-export const bentoSpans = ["bento-span-7", "bento-span-5", "bento-span-6", "bento-span-6"];
-
 export const stack = [
   "Figma",
   "Tilda · Zero Block",

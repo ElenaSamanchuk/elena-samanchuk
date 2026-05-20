@@ -27,17 +27,21 @@ export function initCaseModal(cases: CaseCard[]) {
     lastFocus = document.activeElement as HTMLElement | null;
 
     if (title) title.textContent = item.title;
-    if (sector) sector.textContent = item.sector;
+    if (sector) sector.hidden = true;
     if (proof) proof.textContent = item.proof;
     if (role) role.innerHTML = `<strong>Роль:</strong> ${item.role}`;
-    if (outcome) outcome.innerHTML = `<strong>Результат:</strong> ${item.outcome}`;
+    if (outcome) {
+      if (item.outcome) {
+        outcome.hidden = false;
+        outcome.innerHTML = `<strong>Результат:</strong> ${item.outcome}`;
+      } else {
+        outcome.hidden = true;
+        outcome.innerHTML = "";
+      }
+    }
     if (metrics) {
-      metrics.innerHTML = item.metrics
-        .map(
-          (m) =>
-            `<div class="case-modal__metric"><span>${m.label}</span><strong>${m.value}</strong></div>`,
-        )
-        .join("");
+      metrics.hidden = true;
+      metrics.innerHTML = "";
     }
     if (tags) {
       const nicheHtml = item.niches.map((n) => `<span class="tag-niche">${n}</span>`).join("");

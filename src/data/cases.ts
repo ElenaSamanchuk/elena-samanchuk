@@ -3,41 +3,32 @@ export type CaseLink = { label: string; href: string };
 export type CaseCard = {
   id: string;
   title: string;
-  sector: string;
   role: string;
-  outcome: string;
   proof: string;
+  outcome?: string;
+  badges?: string[];
   links: CaseLink[];
   previewImage?: string;
   niches: string[];
   tech: string[];
-  metrics: { label: string; value: string }[];
 };
 
 export const topCases: CaseCard[] = [
   {
     id: "nasha",
     title: "Nasha",
-    sector: "каталог · бренд · Tilda · Zero Block · HTML/CSS/JS",
     proof: "Запуск e-commerce-витрины: каталог, контент и доводка интерфейса в одном контуре.",
     role: "Tilda, наполнение каталога, доработки на HTML/CSS/JS под макет.",
-    outcome: "Каталог в проде: путь от главной до карточки без тупиков.",
     previewImage: "/previews/nasha.png",
     links: [{ label: "Каталог", href: "https://nashashop.ru/catalog" }],
     niches: ["E-commerce", "B2C"],
     tech: ["Tilda", "Zero Block", "HTML/CSS/JS", "каталог", "адаптив", "анимация"],
-    metrics: [
-      { label: "Формат", value: "каталог + витрина" },
-      { label: "Фокус", value: "путь к покупке" },
-    ],
   },
   {
     id: "growfood",
     title: "Growfood",
-    sector: "FoodTech · Tilda · промо-механики",
     proof: "Серия промо: вовлечение и следующий шаг в воронке — не декоративные виджеты.",
     role: "Механики на HTML/CSS/JS (калькулятор, колесо, плейлист, корзина) + посадочные на Tilda.",
-    outcome: "Пять+ живых механик в проде — пользователь понимает, что делать дальше.",
     previewImage: "/previews/growfood.png",
     links: [
       { label: "ИМТ-калькулятор · выбор меню", href: "https://amb.growfood.pro/food-selection-1" },
@@ -59,18 +50,12 @@ export const topCases: CaseCard[] = [
       "баннеры",
       "ИМТ-калькулятор",
     ],
-    metrics: [
-      { label: "Механик", value: "5+ живых" },
-      { label: "Подход", value: "свой код" },
-    ],
   },
   {
     id: "priem",
     title: "Приём",
-    sector: "FoodTech · сезонные и партнёрки",
-    proof: "Сезонные кампании: срочность, сегментация и путь до контакта с командой — на странице.",
+    proof: "Сезонные кампании и партнёрские лендинги: срочность, сегментация и путь до контакта с командой.",
     role: "Таймер под корзиной (Т-Банк), сезонный квиз и игровые карточки — код HTML/CSS/JS.",
-    outcome: "Таймер даёт дедлайн, квиз — сегмент и следующий шаг; функционал рабочий, не декор.",
     previewImage: "/previews/priem.png",
     links: [
       { label: "Таймер под корзиной · партнёрка Т-Банк", href: "https://priem.menu/?cmz=Kdw5" },
@@ -91,18 +76,13 @@ export const topCases: CaseCard[] = [
       "таймер",
       "партнёрки с Т-Банком",
     ],
-    metrics: [
-      { label: "Сценарии", value: "таймер + квиз + карты" },
-      { label: "Логика", value: "сегментация лидов" },
-    ],
   },
   {
     id: "fitness",
     title: "Фитнес · эксперт",
-    sector: "Tilda · личный бренд · экспертные воронки",
     proof: "Витрины коучей и экспертов: доверие и заявка важнее «красивой картинки».",
     role: "Лендинги и taplink на Tilda — итоги года, модули, страницы под продукты.",
-    outcome: "Четыре эксперта в проде: ясный путь к заявке и блоки социального доказательства.",
+    badges: ["дизайн адаптива"],
     previewImage: "/previews/fitness.png",
     links: [
       { label: "Yourforma", href: "https://yourforma.ru/" },
@@ -112,18 +92,12 @@ export const topCases: CaseCard[] = [
     ],
     niches: ["B2C", "личный бренд", "эксперт"],
     tech: ["Tilda", "Zero Block", "HTML/CSS/JS", "адаптив", "дизайн адаптива", "анимации", "форма"],
-    metrics: [
-      { label: "Проектов", value: "4 эксперта" },
-      { label: "Фокус", value: "доверие · заявка" },
-    ],
   },
   {
     id: "education",
     title: "Образование · психология · платформы",
-    sector: "EdTech · школы · админки",
     proof: "Школы и платформы: длинные лендинги, много контента, спокойный тон без перегруза.",
     role: "Tilda, адаптив, QA и автотесты; курсы, HR-витрины, админка Platformax.",
-    outcome: "Шесть+ живых страниц: структура выдерживает рост блоков и правок от маркетинга.",
     previewImage: "/previews/education.png",
     links: [
       { label: "Система Ясности · психология", href: "https://sistemayasnosti.com/" },
@@ -135,9 +109,5 @@ export const topCases: CaseCard[] = [
     ],
     niches: ["EdTech", "B2B", "эксперт"],
     tech: ["Tilda", "Zero Block", "HTML/CSS/JS", "адаптив", "анимация", "QA", "автотесты"],
-    metrics: [
-      { label: "Формат", value: "школы / платформы" },
-      { label: "Страниц", value: "6+ живых" },
-    ],
   },
 ];
