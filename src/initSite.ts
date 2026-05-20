@@ -96,21 +96,28 @@ export function initSite() {
     });
   };
 
+  const updateActiveNav = () => {
+    if (!navSections.length) return;
+    const marker = window.scrollY + scrollOffset + 40;
+    let current = navSections[0].href;
+    for (const item of navSections) {
+      if (item.section.offsetTop <= marker) current = item.href;
+    }
+    setActiveNav(current);
+  };
+
   if (navSections.length) {
-    const navObserver = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        const top = visible[0]?.target;
-        if (top instanceof HTMLElement && top.id) setActiveNav(`#${top.id}`);
-      },
-      { rootMargin: "-22% 0px -58% 0px", threshold: [0.08, 0.2, 0.45] },
-    );
-    navSections.forEach(({ section }) => navObserver.observe(section));
-    const first = navSections[0];
-    if (first) setActiveNav(first.href);
+    updateActiveNav();
+    window.addEventListener("scroll", updateActiveNav, { passive: true });
+    window.addEventListener("resize", updateActiveNav);
   }
+
+  const navbar = document.getElementById("site-navbar");
+  const updateNavbar = () => {
+    navbar?.classList.toggle("is-scrolled", window.scrollY > 16);
+  };
+  updateNavbar();
+  window.addEventListener("scroll", updateNavbar, { passive: true });
 
   const animateMetric = (item: HTMLElement) => {
     if (item.dataset.metricAnimated === "true") return;
@@ -170,6 +177,7 @@ export function initSite() {
         const isActive = index === step;
         tab.classList.toggle("is-active", isActive);
         tab.setAttribute("aria-selected", String(isActive));
+        tab.tabIndex = isActive ? 0 : -1;
       });
       panels.forEach((panel, index) => {
         panel.classList.toggle("is-active", index === step);
@@ -178,10 +186,24 @@ export function initSite() {
       mechanicsCtrl?.setActive(step === 2);
     };
 
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        setPipelineStep(Number(tab.dataset.pipelineStep ?? "0"));
-      });
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => setPipelineStep(index));
+    });
+
+    pipelineRoot.addEventListener("keydown", (event) => {
+      const activeIndex = tabs.findIndex((tab) => tab.classList.contains("is-active"));
+      if (activeIndex < 0) return;
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        setPipelineStep((activeIndex + 1) % tabs.length);
+        tabs[(activeIndex + 1) % tabs.length]?.focus();
+      }
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        const next = (activeIndex - 1 + tabs.length) % tabs.length;
+        setPipelineStep(next);
+        tabs[next]?.focus();
+      }
     });
 
     setPipelineStep(0);

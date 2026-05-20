@@ -13,9 +13,9 @@ export const heroPipelineCardMarkup = `
     <p class="hero-pipeline-card__lead">Бриф → дизайн → релиз — как на вкладках, не в презентации.</p>
     <div class="pipeline-demo" data-pipeline>
       <div class="pipeline-demo__tabs" role="tablist" aria-label="Этапы полного цикла">
-        <button type="button" class="pipeline-tab is-active" role="tab" aria-selected="true" data-pipeline-step="0">Бриф</button>
-        <button type="button" class="pipeline-tab" role="tab" aria-selected="false" data-pipeline-step="1">Дизайн</button>
-        <button type="button" class="pipeline-tab" role="tab" aria-selected="false" data-pipeline-step="2">Разработка</button>
+        <button type="button" class="pipeline-tab is-active" role="tab" aria-selected="true" tabindex="0" data-pipeline-step="0">Бриф</button>
+        <button type="button" class="pipeline-tab" role="tab" aria-selected="false" tabindex="-1" data-pipeline-step="1">Дизайн</button>
+        <button type="button" class="pipeline-tab" role="tab" aria-selected="false" tabindex="-1" data-pipeline-step="2">Разработка</button>
       </div>
       <div class="pipeline-demo__track" aria-live="polite">
         <article class="pipeline-panel is-active" data-pipeline-panel="0">

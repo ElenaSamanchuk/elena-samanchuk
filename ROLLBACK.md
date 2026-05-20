@@ -1,52 +1,42 @@
 # Откат правок
 
-## Откатить UX/UI pass (последний)
+## Откатить UX pass 3 (последний)
 
 ```bash
 cd tochka-site-marketer-new
-git checkout before-ux-pass
+git checkout before-ux-pass-3
 ```
 
 или:
 
 ```bash
-git reset --hard snapshot-pre-ux-pass
+git reset --hard snapshot-pre-ux-pass-3
 ```
 
-## Вернуть UX pass
+## Вернуть pass 3
 
 ```bash
 git checkout master
 ```
 
-(после merge ветки `ux-pass`)
+## Предыдущие снимки
 
-## Откатить копирайт pass 2 (без UX)
+| Команда | Состояние |
+|---------|-----------|
+| `git reset --hard snapshot-pre-ux-pass` | до UX pass 1–2 |
+| `git reset --hard snapshot-pre-pass2` | до копирайт pass 2 |
+| `git reset --hard 7bf26b3` | первый git-снимок |
 
-```bash
-git reset --hard snapshot-pre-pass2
-```
+## Теги
 
-## Откатить всё до первого git-снимка
+- `snapshot-pre-ux-pass-3` — перед pass 3
+- `snapshot-pre-ux-pass` — перед pass 1–2
+- `snapshot-pre-pass2` — перед копирайт pass 2
 
-```bash
-git reset --hard 7bf26b3
-```
+## Файлы UX pass 3
 
-## Теги и ветки
-
-| Имя | Состояние |
-|-----|-----------|
-| `snapshot-pre-ux-pass` | перед UX pass (`3f2adc8`) |
-| `before-ux-pass` | ветка на том же коммите |
-| `ux-pass` | UX/UI правки |
-| `snapshot-pre-pass2` | перед копирайт pass 2 |
-| `master` | актуальная основная ветка |
-
-## Файлы UX pass
-
-- `src/style.css` — иерархия, фокус, кейсы, hero, контакт, a11y
-- `src/initSite.ts` — подсветка пункта меню при скролле, tilt только на desktop
-- `src/main.ts` — skip-link
+- `src/style.css` — mobile hero, метрики, timeline, navbar scroll, safe-area
+- `src/initSite.ts` — nav по scrollY, navbar is-scrolled, клавиатура вкладок pipeline
+- `src/markup/heroPipelineCard.ts` — tabindex вкладок
 
 Ссылки в кейсах не менялись.
