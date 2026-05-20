@@ -79,36 +79,23 @@ const caseDetailsMarkup = (item: CaseCard) => `
 const casePreviewMarkup = (item: CaseCard) => {
   if (!item.previewImage) return "";
 
-  const primaryLink = item.links[0]?.href ?? "";
-  const displayHost = primaryLink
-    ? primaryLink.replace(/^https?:\/\//, "").split("/")[0]
-    : "live preview";
-
-  return `<div class="case-preview__frame">
-    <aside class="case-preview is-loading" data-case-preview aria-label="Превью ${escapeHtml(item.title)}">
-      <div class="case-preview__device">
-        <div class="case-preview__chrome">
-          <div class="case-preview__chrome-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-          <p class="case-preview__url">${escapeHtml(displayHost)}</p>
-        </div>
-        <div class="case-preview__viewport">
-          <div class="case-preview__skeleton" aria-hidden="true"></div>
-          <div class="case-preview__stage" data-preview-stage>
-            <div class="case-preview__track" data-preview-track>
-              <img
-                data-preview-img
-                src="${safeHref(item.previewImage)}"
-                alt="Скриншот ${escapeHtml(item.title)}"
-                loading="lazy"
-                decoding="async"
-                fetchpriority="low"
-              />
-            </div>
-          </div>
+  return `<aside class="case-preview is-loading" data-case-preview aria-label="Превью ${escapeHtml(item.title)}">
+    <div class="case-preview__viewport">
+      <div class="case-preview__skeleton" aria-hidden="true"></div>
+      <div class="case-preview__stage" data-preview-stage>
+        <div class="case-preview__track" data-preview-track>
+          <img
+            data-preview-img
+            src="${safeHref(item.previewImage)}"
+            alt="Скриншот ${escapeHtml(item.title)}"
+            loading="lazy"
+            decoding="async"
+            fetchpriority="low"
+          />
         </div>
       </div>
-    </aside>
-  </div>`;
+    </div>
+  </aside>`;
 };
 
 const capabilityMarkup = capabilities

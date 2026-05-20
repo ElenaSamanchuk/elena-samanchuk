@@ -2,22 +2,21 @@ import { initModernTrends } from "./effects/modernTrends";
 import { initCasePreviews } from "./effects/casePreview";
 import { initMechanicsVideos } from "./effects/mechanicsVideos";
 import { initScrollToTop } from "./effects/scrollToTop";
-import { initWebGLBackground } from "./effects/webglBg";
-import { prefersLightEffects, prefersReducedMotion } from "./lib/mediaPrefs";
+import { prefersReducedMotion } from "./lib/mediaPrefs";
 import { readScrollOffset } from "./lib/scrollOffset";
 import { initScrollRuntime, registerScrollTask } from "./lib/scrollRuntime";
 
 /** Показывает в консоли и data-атрибуте активную сборку сайта */
-export const SITE_REVISION = "luxury-portfolio";
+export const SITE_REVISION = "apple-light";
 
 export function initSite() {
   document.documentElement.dataset.siteRevision = SITE_REVISION;
+  document.documentElement.dataset.theme = "light";
   if (import.meta.env.DEV) {
-    console.info(`[site] revision: ${SITE_REVISION} (фиолетовый фон, Inter, без pass-2)`);
+    console.info(`[site] revision: ${SITE_REVISION}`);
   }
 
   const reducedMotion = prefersReducedMotion();
-  const lightEffects = prefersLightEffects();
   let scrollOffset = readScrollOffset();
 
   initScrollRuntime();
@@ -25,10 +24,8 @@ export function initSite() {
   initModernTrends(reducedMotion);
   initScrollToTop(reducedMotion);
 
-  if (!lightEffects) {
-    const webglCanvas = document.querySelector<HTMLCanvasElement>("#webgl-bg");
-    if (webglCanvas) initWebGLBackground(webglCanvas);
-  }
+  const webglCanvas = document.querySelector<HTMLCanvasElement>("#webgl-bg");
+  if (webglCanvas) webglCanvas.hidden = true;
 
   const scrollToSection = (selector: string) => {
     const target = document.querySelector<HTMLElement>(selector);
@@ -49,23 +46,6 @@ export function initSite() {
   );
 
   document.querySelectorAll(".reveal-card").forEach((node) => revealObserver.observe(node));
-
-  const enableTilt = !lightEffects && !window.matchMedia("(pointer: coarse)").matches;
-
-  document.querySelectorAll<HTMLElement>("[data-tilt]").forEach((card) => {
-    if (!enableTilt) return;
-    card.addEventListener("pointermove", (event) => {
-      const rect = card.getBoundingClientRect();
-      const x = (event.clientX - rect.left) / rect.width - 0.5;
-      const y = (event.clientY - rect.top) / rect.height - 0.5;
-      card.style.setProperty("--tilt-x", `${(-y * 4).toFixed(2)}deg`);
-      card.style.setProperty("--tilt-y", `${(x * 5).toFixed(2)}deg`);
-    });
-    card.addEventListener("pointerleave", () => {
-      card.style.setProperty("--tilt-x", "0deg");
-      card.style.setProperty("--tilt-y", "0deg");
-    });
-  });
 
   document.addEventListener("click", (event) => {
     const link = (event.target as Element).closest<HTMLAnchorElement>('a[href^="#"]');

@@ -5,19 +5,33 @@
 | Тег / revision | Что это |
 |----------------|---------|
 | `snapshot-restored-baseline` | **Восстановленная** версия: Poppins/Space Grotesk, полный контент, бенто с groups, marquee стека, custom cursor |
-| **`snapshot-pro-portfolio`** | **Превью в рамке браузера**, Literata, pro-копирайт (перед luxury rebuild) |
-| `luxury-portfolio` (текущая) | Luxury rebuild: отступы у превью, секции 01/02, шире сетка |
+| **`snapshot-pro-portfolio`** | Тёмная pro-версия, **превью-колонка** (как вам понравилось) |
+| `snapshot-luxury-portfolio` | Тёмный luxury rebuild с рамкой браузера и отступами |
+| **`apple-light`** (текущая) | Светлая Apple-эстетика + превью как в pro-portfolio |
 | `da543c6` / pass 2 | Чёрный фон `#000`, сильное упрощение — **не использовать** |
 | `1c029d2` / pass 1 | Промежуточный premium (Inter, тёмнее) |
 
-## Вернуть версию с превью (до luxury rebuild)
+## Вернуть тёмную pro-версию (понравившееся превью)
 
 ```bash
 git reset --hard snapshot-pro-portfolio
 npm run dev:fresh
 ```
 
-Консоль: `[site] revision: pro-portfolio` (после reset обновите `SITE_REVISION` в initSite или смотрите визуально).
+## Вернуть luxury (тёмная, рамка браузера)
+
+```bash
+git reset --hard snapshot-luxury-portfolio
+npm run dev:fresh
+```
+
+## Текущая светлая Apple
+
+```bash
+npm run dev:fresh
+```
+
+Консоль: `[site] revision: apple-light`
 
 ## Вернуть восстановленную версию (по запросу)
 
