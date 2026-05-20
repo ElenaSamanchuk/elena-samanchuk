@@ -3,14 +3,13 @@ import { mechanicsWidgetMarkup } from "./mechanicsWidget";
 export const heroPipelineCardMarkup = `
   <section
     class="code-card hero-pipeline-card reveal-card"
-    data-tilt
     id="pipeline"
     style="view-transition-name: pipeline"
     aria-labelledby="pipeline-title"
   >
     <div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
-    <h2 id="pipeline-title" class="hero-pipeline-card__title">Маршрут проекта</h2>
-    <p class="hero-pipeline-card__lead">Бриф → дизайн → релиз — как на вкладках, не в презентации.</p>
+    <h2 id="pipeline-title" class="hero-pipeline-card__title">Как идёт проект</h2>
+    <p class="hero-pipeline-card__lead">Три этапа с артефактами на выходе — переключите вкладку.</p>
     <div class="pipeline-demo" data-pipeline>
       <div class="pipeline-demo__tabs" role="tablist" aria-label="Этапы полного цикла">
         <button type="button" class="pipeline-tab is-active" role="tab" id="pipeline-tab-0" aria-selected="true" aria-controls="pipeline-panel-0" tabindex="0" data-pipeline-step="0">Бриф</button>

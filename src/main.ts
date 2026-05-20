@@ -1,7 +1,8 @@
 import "./style.css";
 import "./compat.css";
 import "./performance.css";
-import "./cursor.css";
+import "./premium-refined.css";
+import "./pro-finish.css";
 import "./effects-extra.css";
 import { initSite } from "./initSite";
 import { renderSite } from "./renderSite";

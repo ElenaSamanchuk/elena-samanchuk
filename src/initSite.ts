@@ -1,4 +1,4 @@
-import { initCustomCursor } from "./effects/customCursor";
+import { initModernTrends } from "./effects/modernTrends";
 import { initCasePreviews } from "./effects/casePreview";
 import { initMechanicsVideos } from "./effects/mechanicsVideos";
 import { initScrollToTop } from "./effects/scrollToTop";
@@ -7,13 +7,13 @@ import { prefersLightEffects, prefersReducedMotion } from "./lib/mediaPrefs";
 import { readScrollOffset } from "./lib/scrollOffset";
 import { initScrollRuntime, registerScrollTask } from "./lib/scrollRuntime";
 
-/** Показывает в консоли и data-атрибуте, что загружена версия до premium-pass */
-export const SITE_REVISION = "restored-pre-premium-ui";
+/** Показывает в консоли и data-атрибуте активную сборку сайта */
+export const SITE_REVISION = "pro-portfolio";
 
 export function initSite() {
   document.documentElement.dataset.siteRevision = SITE_REVISION;
   if (import.meta.env.DEV) {
-    console.info(`[site] revision: ${SITE_REVISION} (до premium pass 1/2)`);
+    console.info(`[site] revision: ${SITE_REVISION} (фиолетовый фон, Inter, без pass-2)`);
   }
 
   const reducedMotion = prefersReducedMotion();
@@ -22,7 +22,7 @@ export function initSite() {
 
   initScrollRuntime();
 
-  initCustomCursor(reducedMotion);
+  initModernTrends(reducedMotion);
   initScrollToTop(reducedMotion);
 
   if (!lightEffects) {
@@ -87,20 +87,26 @@ export function initSite() {
     if (scrollProgressBar) scrollProgressBar.style.width = `${progress}%`;
   };
 
-  const navLinks = Array.from(
-    document.querySelectorAll<HTMLAnchorElement>(".nav-links a[href^='#']"),
+  const sectionNavLinks = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>(
+      ".nav-links a[href^='#'], .page-journey__link[href^='#']",
+    ),
   );
-  const navSections = navLinks
+  const navSections = sectionNavLinks
     .map((link) => {
       const href = link.getAttribute("href");
       if (!href || href === "#top") return null;
       const section = document.querySelector<HTMLElement>(href);
       return section ? { href, section } : null;
     })
+    .filter(
+      (item, index, list) =>
+        item && list.findIndex((other) => other?.href === item.href) === index,
+    )
     .filter((item): item is { href: string; section: HTMLElement } => Boolean(item));
 
   const setActiveNav = (href: string) => {
-    navLinks.forEach((link) => {
+    sectionNavLinks.forEach((link) => {
       const isActive = link.getAttribute("href") === href;
       link.classList.toggle("is-active", isActive);
       if (isActive) link.setAttribute("aria-current", "location");
@@ -165,18 +171,6 @@ export function initSite() {
 
   initCasePreviews(reducedMotion);
   const mechanicsCtrl = initMechanicsVideos(reducedMotion);
-
-  if (!lightEffects) {
-    document.querySelectorAll<HTMLElement>("[data-spotlight]").forEach((card) => {
-      card.addEventListener("pointermove", (event) => {
-        const rect = card.getBoundingClientRect();
-        const x = ((event.clientX - rect.left) / rect.width) * 100;
-        const y = ((event.clientY - rect.top) / rect.height) * 100;
-        card.style.setProperty("--spot-x", `${x}%`);
-        card.style.setProperty("--spot-y", `${y}%`);
-      });
-    });
-  }
 
   const pipelineRoot = document.querySelector<HTMLElement>("[data-pipeline]");
   if (pipelineRoot) {

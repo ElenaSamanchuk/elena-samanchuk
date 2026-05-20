@@ -14,7 +14,7 @@ export type CollaborationFormat = {
 export const collaborationIntro = {
   kicker: "Сотрудничество",
   title: "Спринт, ретейнер или роль в команде",
-  lead: "После первого сообщения — рамка: дедлайн, границы, отчётность. Старт только после «да» по scope.",
+  lead: "Первое сообщение — про задачу и срок. Отвечаю рамкой scope и форматом отчётности. Старт после согласования.",
 };
 
 export const collaborationFormats: CollaborationFormat[] = [
