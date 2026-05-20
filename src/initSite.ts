@@ -8,7 +8,7 @@ import { readScrollOffset } from "./lib/scrollOffset";
 import { initScrollRuntime, registerScrollTask } from "./lib/scrollRuntime";
 
 /** Показывает в консоли и data-атрибуте активную сборку сайта */
-export const SITE_REVISION = "pro-portfolio";
+export const SITE_REVISION = "luxury-portfolio";
 
 export function initSite() {
   document.documentElement.dataset.siteRevision = SITE_REVISION;

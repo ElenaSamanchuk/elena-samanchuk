@@ -11,6 +11,15 @@ import { heroPipelineCardMarkup } from "./markup/heroPipelineCard";
 
 const metrics = siteCopy.metrics;
 
+const sectionHeadMarkup = (num: string, kicker: string, title: string, lead: string) => `
+  <header class="section-head">
+    <span class="section-head__num" aria-hidden="true">${num}</span>
+    <p class="section-kicker">${escapeHtml(kicker)}</p>
+    <h2>${escapeHtml(title)}</h2>
+    <p class="block-lead">${escapeHtml(lead)}</p>
+  </header>
+`;
+
 const caseTagsMarkup = (item: CaseCard) => {
   const tags = getCaseDisplayTags(item.niches, item.tech);
   if (!tags.length) return "";
@@ -70,29 +79,43 @@ const caseDetailsMarkup = (item: CaseCard) => `
 const casePreviewMarkup = (item: CaseCard) => {
   if (!item.previewImage) return "";
 
-  return `<aside class="case-preview is-loading" data-case-preview aria-label="Превью ${escapeHtml(item.title)}">
-    <div class="case-preview__viewport">
-      <div class="case-preview__skeleton" aria-hidden="true"></div>
-      <div class="case-preview__stage" data-preview-stage>
-        <div class="case-preview__track" data-preview-track>
-          <img
-            data-preview-img
-            src="${safeHref(item.previewImage)}"
-            alt="Скриншот ${escapeHtml(item.title)}"
-            loading="lazy"
-            decoding="async"
-            fetchpriority="low"
-          />
+  const primaryLink = item.links[0]?.href ?? "";
+  const displayHost = primaryLink
+    ? primaryLink.replace(/^https?:\/\//, "").split("/")[0]
+    : "live preview";
+
+  return `<div class="case-preview__frame">
+    <aside class="case-preview is-loading" data-case-preview aria-label="Превью ${escapeHtml(item.title)}">
+      <div class="case-preview__device">
+        <div class="case-preview__chrome">
+          <div class="case-preview__chrome-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <p class="case-preview__url">${escapeHtml(displayHost)}</p>
+        </div>
+        <div class="case-preview__viewport">
+          <div class="case-preview__skeleton" aria-hidden="true"></div>
+          <div class="case-preview__stage" data-preview-stage>
+            <div class="case-preview__track" data-preview-track>
+              <img
+                data-preview-img
+                src="${safeHref(item.previewImage)}"
+                alt="Скриншот ${escapeHtml(item.title)}"
+                loading="lazy"
+                decoding="async"
+                fetchpriority="low"
+              />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </aside>`;
+    </aside>
+  </div>`;
 };
 
 const capabilityMarkup = capabilities
   .map(
     (item, index) => `
       <article class="capability-card reveal-card bento-item ${bentoSpans[index] ?? ""}">
+        <p class="capability-card__index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</p>
         <div class="capability-icon" aria-hidden="true"></div>
         <h3>${escapeHtml(item.title)}</h3>
         <p class="capability-card__lead">${escapeHtml(item.lead)}</p>
@@ -153,7 +176,8 @@ const caseMarkup = topCases
 const partnerNames = [...new Set([...agencies, ...brands])];
 
 const pageJourneyMarkup = `
-  <nav class="page-journey container" aria-label="Маршрут по странице">
+  <nav class="page-journey" aria-label="Маршрут по странице">
+    <div class="container">
     <ol class="page-journey__list">
       ${pageJourney
         .map(
@@ -168,6 +192,7 @@ const pageJourneyMarkup = `
         )
         .join("")}
     </ol>
+    </div>
   </nav>
 `;
 
@@ -301,11 +326,7 @@ export function renderSite(root: HTMLElement): void {
 
     <section class="resume-main">
       <section class="main-block vt-section section-cases" id="cases" style="view-transition-name: cases">
-        <header class="section-head">
-          <p class="section-kicker">${escapeHtml(siteCopy.cases.kicker)}</p>
-          <h2>${escapeHtml(siteCopy.cases.title)}</h2>
-          <p class="block-lead">${escapeHtml(siteCopy.cases.lead)}</p>
-        </header>
+        ${sectionHeadMarkup("01", siteCopy.cases.kicker, siteCopy.cases.title, siteCopy.cases.lead)}
         <div class="partners-strip reveal-card" aria-label="${escapeHtml(siteCopy.cases.partnersLabel)}">
           <p class="section-kicker partners-strip__label">${escapeHtml(siteCopy.cases.partnersLabel)}</p>
           <p class="partners-strip__line">${partnersLineMarkup}</p>
@@ -314,11 +335,7 @@ export function renderSite(root: HTMLElement): void {
       </section>
 
       <section class="main-block vt-section" id="${siteCopy.workProcess.id}" style="view-transition-name: capabilities">
-        <header class="section-head">
-          <p class="section-kicker">${escapeHtml(siteCopy.workProcess.kicker)}</p>
-          <h2>${escapeHtml(siteCopy.workProcess.title)}</h2>
-          <p class="block-lead">${escapeHtml(siteCopy.workProcess.lead)}</p>
-        </header>
+        ${sectionHeadMarkup("02", siteCopy.workProcess.kicker, siteCopy.workProcess.title, siteCopy.workProcess.lead)}
         <div class="capability-grid bento-grid">${capabilityMarkup}</div>
         <p class="work-process-footnote">${escapeHtml(siteCopy.workProcess.footnote)}</p>
       </section>

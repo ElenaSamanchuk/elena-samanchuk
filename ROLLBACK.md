@@ -5,10 +5,19 @@
 | Тег / revision | Что это |
 |----------------|---------|
 | `snapshot-restored-baseline` | **Восстановленная** версия: Poppins/Space Grotesk, полный контент, бенто с groups, marquee стека, custom cursor |
-| `pro-portfolio` (ветка `premium-refined-pass`) | **Текущая pro-версия:** Literata + Inter, редакторские кейсы, без AI-эффектов |
-| `premium-refined` | refined до pro-finish |
+| **`snapshot-pro-portfolio`** | **Превью в рамке браузера**, Literata, pro-копирайт (перед luxury rebuild) |
+| `luxury-portfolio` (текущая) | Luxury rebuild: отступы у превью, секции 01/02, шире сетка |
 | `da543c6` / pass 2 | Чёрный фон `#000`, сильное упрощение — **не использовать** |
 | `1c029d2` / pass 1 | Промежуточный premium (Inter, тёмнее) |
+
+## Вернуть версию с превью (до luxury rebuild)
+
+```bash
+git reset --hard snapshot-pro-portfolio
+npm run dev:fresh
+```
+
+Консоль: `[site] revision: pro-portfolio` (после reset обновите `SITE_REVISION` в initSite или смотрите визуально).
 
 ## Вернуть восстановленную версию (по запросу)
 
