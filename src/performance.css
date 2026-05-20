@@ -10,10 +10,6 @@
   contain-intrinsic-size: auto 360px;
 }
 
-.case-preview__track img {
-  content-visibility: auto;
-}
-
 /* Marquee: снижаем нагрузку вне viewport */
 .clients-marquee,
 .stack-marquee {

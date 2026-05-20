@@ -1,4 +1,5 @@
 import type { CaseCard } from "../data/cases";
+import { resolveAssetHref } from "../lib/safeUrl";
 
 export function initCaseModal(cases: CaseCard[]) {
   const modal = document.querySelector<HTMLElement>("[data-case-modal]");
@@ -51,7 +52,7 @@ export function initCaseModal(cases: CaseCard[]) {
     if (preview) {
       if (item.previewImage) {
         preview.hidden = false;
-        preview.innerHTML = `<img src="${item.previewImage}" alt="Превью ${item.title}" loading="lazy" />`;
+        preview.innerHTML = `<img src="${resolveAssetHref(item.previewImage)}" alt="Превью ${item.title}" loading="lazy" decoding="async" />`;
       } else {
         preview.hidden = true;
         preview.innerHTML = "";
