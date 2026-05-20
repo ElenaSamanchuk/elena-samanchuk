@@ -2281,12 +2281,32 @@ h3 {
   letter-spacing: -0.02em;
 }
 
+.contact-hub__cta-title {
+  margin: 0;
+  font-family: "Space Grotesk", "Poppins", sans-serif;
+  font-size: clamp(20px, 2.6vw, 28px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.contact-hub__cta-lead {
+  margin: 10px 0 0;
+  max-width: 62ch;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
 .contact-hub__collab .block-lead {
   margin-top: 10px;
 }
 
 .contact-hub__collab .collab-legend {
   margin-top: 12px;
+}
+
+.contact-hub__cta .hero-actions {
+  margin-top: 18px;
 }
 
 .reveal-card {
@@ -2484,4 +2504,16 @@ h3 {
   .case-preview {
     order: -1;
     height: auto;
-    min-height: min(240px, 4
+    min-height: min(240px, 40vh);
+    max-height: min(320px, 52vh);
+  }
+
+  .pipeline-autoplay {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .pipeline-demo__track {
+    min-height: 240px;
+  }
+}

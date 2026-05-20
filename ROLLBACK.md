@@ -1,47 +1,52 @@
-# Откат копирайт-рефреша
+# Откат правок (копирайт + структура)
 
-Перед правками сохранён снимок в git.
+В проекте включён git. Актуальная версия — ветка **`copywriter-refresh`**.
 
-## Если правки на ветке `copywriter-refresh`
+## Быстрый откат (только последние стили hero/кейсов/контакта)
+
+Если не нравятся только доработки CSS после рефреша:
 
 ```bash
 cd tochka-site-marketer-new
-
-# Вернуться к состоянию до правок (ветка main / master)
-git checkout main
-
-# Или удалить ветку с правками и остаться на main
-git branch -D copywriter-refresh
+git checkout master
 ```
 
-## Если нужно снова открыть правки
+На `master` — тот же текст и порядок блоков, без финальных правок в `src/style.css` (`.hero-for-whom`, `.contact-hub__cta-*` и т.д.).
+
+## Вернуть полную версию с рефрешем
 
 ```bash
 git checkout copywriter-refresh
 ```
 
-## Снимок до правок
+## Полный откат текстов и структуры
 
-Коммит с меткой: **`before-copywriter-refresh`** (создаётся при `git init` в этом сеансе).
+Первый коммит (`master`, ветка `before-copywriter-refresh`) сделан **уже после** переноса текстов в `siteCopy.ts` и смены порядка блоков — отдельного «до рефреша» в git нет.
 
-```bash
-git checkout before-copywriter-refresh
-# detached HEAD — только посмотреть файлы
+Варианты:
 
-git checkout main
-```
+1. **Cursor / VS Code** — Local History по файлам из списка ниже.
+2. **OneDrive** — версии файлов в папке проекта (если синхронизация включена).
+3. Написать в чат: «откати копирайт-рефреш» — можно собрать ветку `legacy-pre-copywriter` вручную.
 
-## Без git
+## Файлы, которые менялись в рефреше
 
-Если репозиторий не инициализировался, откат только через историю Cursor / локальные копии файлов.
+| Файл | Что изменилось |
+|------|----------------|
+| `src/data/siteCopy.ts` | новый — hero, навигация, заголовки секций |
+| `src/main.ts` | порядок: кейсы → как работаю → форматы; hero под ключ / по этапам |
+| `src/data/cases.ts` | разные формулировки задачи/вклада/результата |
+| `src/data/collaboration.ts` | тон блока сотрудничества |
+| `src/data/siteMeta.ts`, `index.html` | title/description |
+| `src/style.css` | стили hero и contact-hub |
+| `src/effects/pageAnchors.ts` | якоря из `siteCopy.nav` |
 
-Основные файлы правок:
+Ссылки в кейсах **не менялись**.
 
-- `src/data/siteCopy.ts` (новый)
-- `src/main.ts`
-- `src/data/cases.ts`
-- `src/data/collaboration.ts`
-- `src/data/siteMeta.ts`
-- `index.html`
-- `src/style.css`
-- `src/effects/pageAnchors.ts`
+## Ветки
+
+| Ветка | Смысл |
+|-------|--------|
+| `master` | базовый снимок при `git init` |
+| `before-copywriter-refresh` | то же, что `master` (метка-указатель) |
+| `copywriter-refresh` | актуальная версия после рефреша |
