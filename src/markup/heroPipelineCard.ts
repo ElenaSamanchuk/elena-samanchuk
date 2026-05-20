@@ -9,7 +9,8 @@ export const heroPipelineCardMarkup = `
     aria-labelledby="pipeline-title"
   >
     <div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
-    <h2 id="pipeline-title" class="hero-pipeline-card__title">Полный цикл</h2>
+    <h2 id="pipeline-title" class="hero-pipeline-card__title">Маршрут проекта</h2>
+    <p class="hero-pipeline-card__lead">Бриф → дизайн → релиз — как на вкладках, не в презентации.</p>
     <div class="pipeline-demo" data-pipeline>
       <div class="pipeline-demo__tabs" role="tablist" aria-label="Этапы полного цикла">
         <button type="button" class="pipeline-tab is-active" role="tab" aria-selected="true" data-pipeline-step="0">Бриф</button>

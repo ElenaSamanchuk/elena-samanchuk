@@ -1,52 +1,53 @@
-# Откат правок (копирайт + структура)
+# Откат правок
 
-В проекте включён git. Актуальная версия — ветка **`copywriter-refresh`**.
+## Откатить второй проход копирайта (pass 2)
 
-## Быстрый откат (только последние стили hero/кейсов/контакта)
-
-Если не нравятся только доработки CSS после рефреша:
+Версия **до** правок 20.05.2026 — тег и ветка:
 
 ```bash
 cd tochka-site-marketer-new
+git checkout before-copy-pass-2
+```
+
+Или жёстко вернуть `master` к снимку:
+
+```bash
+git checkout master
+git reset --hard snapshot-pre-pass2
+```
+
+## Вернуть pass 2
+
+```bash
+git checkout copy-pass-2
+# или после merge:
 git checkout master
 ```
 
-На `master` — тот же текст и порядок блоков, без финальных правок в `src/style.css` (`.hero-for-whom`, `.contact-hub__cta-*` и т.д.).
-
-## Вернуть полную версию с рефрешем
+## Откатить первый рефреш (ещё раньше)
 
 ```bash
-git checkout copywriter-refresh
+git reset --hard 7bf26b3
 ```
 
-## Полный откат текстов и структуры
+Коммит `7bf26b3` — состояние сразу после `git init` (без pass 2, без части стилей pass 1).
 
-Первый коммит (`master`, ветка `before-copywriter-refresh`) сделан **уже после** переноса текстов в `siteCopy.ts` и смены порядка блоков — отдельного «до рефреша» в git нет.
+## Ветки и теги
 
-Варианты:
+| Имя | Что это |
+|-----|---------|
+| `snapshot-pre-pass2` | снимок перед pass 2 (коммит `73eae20`) |
+| `before-copy-pass-2` | ветка на том же коммите |
+| `copy-pass-2` | второй проход копирайта |
+| `master` | основная ветка (обновляется merge) |
 
-1. **Cursor / VS Code** — Local History по файлам из списка ниже.
-2. **OneDrive** — версии файлов в папке проекта (если синхронизация включена).
-3. Написать в чат: «откати копирайт-рефреш» — можно собрать ветку `legacy-pre-copywriter` вручную.
+## Файлы pass 2
 
-## Файлы, которые менялись в рефреше
+- `src/data/siteCopy.ts` — hero с метками «Под ключ» / «Один этап», услуги, кейсы
+- `src/main.ts` — hero-modes, kickers, footnote
+- `src/markup/heroPipelineCard.ts` — «Маршрут проекта»
+- `src/data/cases.ts` — усиленные результаты
+- `src/data/collaboration.ts`, `siteMeta.ts`, `index.html`
+- `src/style.css` — hero-modes, section-kicker
 
-| Файл | Что изменилось |
-|------|----------------|
-| `src/data/siteCopy.ts` | новый — hero, навигация, заголовки секций |
-| `src/main.ts` | порядок: кейсы → как работаю → форматы; hero под ключ / по этапам |
-| `src/data/cases.ts` | разные формулировки задачи/вклада/результата |
-| `src/data/collaboration.ts` | тон блока сотрудничества |
-| `src/data/siteMeta.ts`, `index.html` | title/description |
-| `src/style.css` | стили hero и contact-hub |
-| `src/effects/pageAnchors.ts` | якоря из `siteCopy.nav` |
-
-Ссылки в кейсах **не менялись**.
-
-## Ветки
-
-| Ветка | Смысл |
-|-------|--------|
-| `master` | базовый снимок при `git init` |
-| `before-copywriter-refresh` | то же, что `master` (метка-указатель) |
-| `copywriter-refresh` | актуальная версия после рефреша |
+Ссылки в кейсах не менялись.

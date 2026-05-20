@@ -23,7 +23,7 @@ type Capability = {
 const capabilities: Capability[] = [
   {
     title: "Постановка",
-    lead: "Смысл и рамки задачи — до первого макета.",
+    lead: "Фиксируем цель страницы и рамки — до первого макета.",
     groups: [
       { label: "Стратегия", items: "оффер · KPI · гипотезы · конверсия" },
       { label: "Документы", items: "бриф · ТЗ по блокам" },
@@ -32,7 +32,7 @@ const capabilities: Capability[] = [
   },
   {
     title: "Контент и интерфейс",
-    lead: "Структура, тексты и визуал ведут к действию.",
+    lead: "Структура, копирайт и UI ведут к целевому действию.",
     groups: [
       { label: "Смысл", items: "структура · копирайт · сценарий блоков" },
       { label: "Дизайн", items: "прототип · UI · креатив · адаптив · UX" },
@@ -40,7 +40,7 @@ const capabilities: Capability[] = [
   },
   {
     title: "Разработка",
-    lead: "Макет становится рабочим продуктом в проде.",
+    lead: "Макет становится рабочей страницей: Tilda, Zero Block, свой код.",
     groups: [
       { label: "Сборка", items: "Tilda · Zero Block · HTML/CSS/JS" },
       { label: "Платформа", items: "механики · формы · админка · API · боты" },
@@ -48,7 +48,7 @@ const capabilities: Capability[] = [
   },
   {
     title: "После релиза",
-    lead: "Сайт стабилен, измерим и дорабатывается.",
+    lead: "Стабильность, метрики и итерации без поломки витрины.",
     groups: [
       { label: "Качество", items: "QA · адаптив · кросс-браузер" },
       { label: "Рост", items: "SEO · аналитика · контент · рефакторинг" },
@@ -281,12 +281,20 @@ app.innerHTML = `
         <p class="hero-label">${siteCopy.hero.label}</p>
         <h1>${siteCopy.hero.titleHtml}</h1>
         <p class="hero-for-whom">${siteCopy.hero.forWhom}</p>
-        <p class="hero-lead">${siteCopy.hero.leadTurnkey}</p>
-        <p class="hero-lead hero-lead--modular">${siteCopy.hero.leadModular}</p>
+        <div class="hero-modes">
+          <div class="hero-mode">
+            <span class="hero-mode__label">${siteCopy.hero.modeTurnkeyLabel}</span>
+            <p class="hero-mode__text">${siteCopy.hero.leadTurnkey}</p>
+          </div>
+          <div class="hero-mode">
+            <span class="hero-mode__label hero-mode__label--modular">${siteCopy.hero.modeModularLabel}</span>
+            <p class="hero-mode__text">${siteCopy.hero.leadModular}</p>
+          </div>
+        </div>
         <div class="hero-actions">
           <a class="btn btn-accent" href="https://t.me/ElaneDmitrievna" target="_blank" rel="noreferrer"><span class="btn__label">Написать в Telegram</span></a>
-          <a class="btn btn-glass" href="#cases"><span class="btn__label">Кейсы</span></a>
-          <a class="btn btn-glass" href="#capabilities"><span class="btn__label">Как работаю</span></a>
+          <a class="btn btn-glass" href="#cases"><span class="btn__label">Смотреть кейсы</span></a>
+          <a class="btn btn-glass" href="#capabilities"><span class="btn__label">Услуги</span></a>
         </div>
         <ul class="hero-metrics">${metricsMarkup}</ul>
       </div>
@@ -323,6 +331,7 @@ app.innerHTML = `
 
     <section class="resume-main">
       <section class="main-block vt-section" id="cases" style="view-transition-name: cases">
+        <p class="section-kicker">${siteCopy.cases.kicker}</p>
         <h2>${siteCopy.cases.title}</h2>
         <p class="block-lead">${siteCopy.cases.lead}</p>
         <div class="cases-partners reveal-card" aria-label="${siteCopy.cases.partnersLabel}">
@@ -335,9 +344,11 @@ app.innerHTML = `
       </section>
 
       <section class="main-block vt-section" id="${siteCopy.workProcess.id}" style="view-transition-name: capabilities">
+        <p class="section-kicker">${siteCopy.workProcess.kicker}</p>
         <h2>${siteCopy.workProcess.title}</h2>
         <p class="block-lead">${siteCopy.workProcess.lead}</p>
         <div class="capability-grid bento-grid">${capabilityMarkup}</div>
+        <p class="work-process-footnote">${siteCopy.workProcess.footnote}</p>
       </section>
 
       ${contactHubMarkup}
