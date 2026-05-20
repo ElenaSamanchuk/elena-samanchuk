@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label=";5=0 !0<0=GC:  <0@:5B>;>3 · ;5=48=38 · :59AK">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0a0f"/>
+      <stop offset="50%" stop-color="#161829"/>
+      <stop offset="100%" stop-color="#1a1030"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="180" cy="120" r="220" fill="#6366f1" opacity="0.22"/>
+  <circle cx="1020" cy="80" r="180" fill="#ec4899" opacity="0.18"/>
+  <rect x="72" y="72" width="72" height="72" rx="20" fill="url(#accent)"/>
+  <text x="108" y="122" text-anchor="middle" fill="#fff" font-family="Segoe UI, system-ui, sans-serif" font-size="28" font-weight="700">ES</text>
+  <text x="168" y="108" fill="#e7ebf5" font-family="Segoe UI, system-ui, sans-serif" font-size="22" font-weight="600" letter-spacing="0.06em"> " ·  · !+</text>
+  <text x="72" y="200" fill="#ffffff" font-family="Segoe UI, system-ui, sans-serif" font-size="52" font-weight="700">;5=0 !0<0=GC:</text>
+  <text x="72" y="268" fill="#a6b0c6" font-family="Segoe UI, system-ui, sans-serif" font-size="26">!B@0=8FK, 345 A<KA;, 48709= 8 @5;87 157 @07@K20</text>
+  <text x="72" y="330" fill="#c4cbe0" font-family="Segoe UI, system-ui, sans-serif" font-size="22">Tilda · HTML/CSS/JS · ?@><>-<5E0=8:8 · QA</text>
+  <rect x="72" y="400" width="420" height="56" rx="28" fill="url(#accent)"/>
+  <text x="282" y="437" text-anchor="middle" fill="#fff" font-family="Segoe UI, system-ui, sans-serif" font-size="20" font-weight="600">Growfood · @8Q< · Nasha</text>
+  <text x="72" y="520" fill="#7d8aa8" font-family="Segoe UI, system-ui, sans-serif" font-size="18">B:@KB0 : 8=B5@2LN · C40;Q==></text>
+</svg>

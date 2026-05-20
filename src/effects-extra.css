@@ -1,0 +1,74 @@
+#app {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+  max-width: 100%;
+}
+
+.webgl-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.scroll-progress {
+  z-index: 30;
+}
+
+.hire-bar {
+  z-index: 28;
+}
+
+.navbar {
+  z-index: 1000;
+}
+
+.hero-header,
+.hero-stack-strip,
+.resume-layout,
+.site-footer,
+.confetti-canvas {
+  position: relative;
+  z-index: 1;
+}
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.42s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.confetti-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.preview-catalog {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  width: 88px;
+}
+
+.preview-catalog i {
+  display: block;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.45), rgba(236, 72, 153, 0.35));
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}

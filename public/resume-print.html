@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Елена Саманчук — резюме</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 24px 28px;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        font-size: 11pt;
+        line-height: 1.45;
+        color: #141824;
+      }
+
+      h1 {
+        margin: 0 0 4px;
+        font-size: 20pt;
+      }
+
+      .lead {
+        margin: 0 0 16px;
+        color: #4b5568;
+      }
+
+      h2 {
+        margin: 14px 0 6px;
+        font-size: 11pt;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #6366f1;
+      }
+
+      p,
+      ul {
+        margin: 0 0 8px;
+      }
+
+      ul {
+        padding-left: 18px;
+      }
+
+      .contacts {
+        margin-top: 12px;
+        font-size: 10pt;
+      }
+
+      @media print {
+        body {
+          padding: 12mm 14mm;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Елена Саманчук</h1>
+    <p class="lead">Site marketing production · маркетинговые страницы · лендинги · удалённо</p>
+
+    <h2>О себе</h2>
+    <p>
+      Довожу landing от брифа и целей до рабочего интерфейса: структура, контент, дизайн, Tilda, свой код,
+      QA, админка, итерации и поддержка после публикации.
+    </p>
+
+    <h2>Зона ответственности</h2>
+    <ul>
+      <li>Стратегия лендинга, оффер, KPI, CTA, путь лида</li>
+      <li>UX/UI, Figma, прототипы, адаптив</li>
+      <li>ТЗ, бриф, координация marketing · design · dev · QA · SEO</li>
+      <li>Tilda, Zero Block, HTML/CSS/JS, промо-механики</li>
+    </ul>
+
+    <h2>Кейсы</h2>
+    <ul>
+      <li><strong>Growfood</strong> — промо-механики: колесо, калькулятор ИМТ, HTML5-баннеры</li>
+      <li><strong>Приём</strong> — таймер, квиз, промо-воронки</li>
+      <li><strong>Nasha</strong> — e-commerce каталог на Tilda</li>
+      <li><strong>Фитнес, EdTech</strong> — лендинги, Platformax, экспертные страницы</li>
+    </ul>
+
+    <h2>Стек</h2>
+    <p>Tilda · Zero Block · HTML/CSS/JS · Figma · Git · Playwright · Яндекс.Метрика · SEO</p>
+
+    <p class="contacts">
+      Telegram: @ElaneDmitrievna · elenasamanchuk@gmail.com · github.com/ElenaSamanchuk
+    </p>
+
+    <script>
+      if (new URLSearchParams(location.search).get("autoprint") === "1") {
+        window.addEventListener("load", () => {
+          window.setTimeout(() => window.print(), 350);
+        });
+      }
+    </script>
+  </body>
+</html>

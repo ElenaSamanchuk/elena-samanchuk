@@ -1,0 +1,74 @@
+[
+  {
+    "id": "growfood",
+    "name": "Growfood",
+    "href": "https://growfood.pro/",
+    "file": "/logos/growfood.png"
+  },
+  {
+    "id": "priem",
+    "name": "Приём",
+    "href": "https://priem.menu/",
+    "file": "/logos/priem.png"
+  },
+  {
+    "id": "nasha",
+    "name": "Nasha",
+    "href": "https://nashashop.ru/",
+    "file": "/logos/nasha.png"
+  },
+  {
+    "id": "popovichfit",
+    "name": "Popovichfit",
+    "href": "https://popovichfit.ru/",
+    "file": "/logos/popovichfit.png"
+  },
+  {
+    "id": "kochfit",
+    "name": "Kochfit",
+    "href": "https://kochfit.ru/",
+    "file": "/logos/kochfit.png"
+  },
+  {
+    "id": "kinezio",
+    "name": "Kinezio",
+    "href": "https://kineziofitness.online/",
+    "file": "/logos/kinezio.png"
+  },
+  {
+    "id": "forma",
+    "name": "Forma Fitness",
+    "href": "https://yourforma.ru/",
+    "file": "/logos/forma.png"
+  },
+  {
+    "id": "yasnost",
+    "name": "Система Ясности",
+    "href": "https://sistemayasnosti.com/",
+    "file": "/logos/yasnost.png"
+  },
+  {
+    "id": "bi13",
+    "name": "BI13",
+    "href": "https://bi13pro.ru/",
+    "file": "/logos/bi13.png"
+  },
+  {
+    "id": "platformax",
+    "name": "Platformax",
+    "href": "https://platformax.pro/",
+    "file": "/logos/platformax.png"
+  },
+  {
+    "id": "mostovoy",
+    "name": "Mostovoy",
+    "href": "https://mostovoyvv.com/",
+    "file": "/logos/mostovoy.png"
+  },
+  {
+    "id": "gf-gift",
+    "name": "GF Gift",
+    "href": "https://gf-gift.ru/",
+    "file": "/logos/gf-gift.png"
+  }
+]

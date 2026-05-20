@@ -1,0 +1,117 @@
+body.has-custom-cursor,
+body.has-custom-cursor a,
+body.has-custom-cursor button {
+  cursor: none;
+}
+
+.custom-cursor__dot,
+.custom-cursor__ring,
+.custom-cursor__glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 10001;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.custom-cursor__dot.is-visible,
+.custom-cursor__ring.is-visible,
+.custom-cursor__glow.is-visible {
+  opacity: 1;
+}
+
+.custom-cursor__dot {
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #a5b4fc, #f9a8d4);
+  box-shadow: 0 0 14px rgba(129, 140, 248, 0.9);
+  transition: transform 0.15s ease;
+}
+
+.custom-cursor__ring {
+  width: 36px;
+  height: 36px;
+  margin: -18px 0 0 -18px;
+  border: 1.5px solid rgba(231, 235, 245, 0.55);
+  border-radius: 50%;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.custom-cursor__glow {
+  width: 120px;
+  height: 120px;
+  margin: -60px 0 0 -60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.2), transparent 68%);
+  filter: blur(8px);
+  z-index: 10000;
+}
+
+body.cursor-hover .custom-cursor__ring {
+  transform: scale(1.75);
+  border-color: rgba(167, 139, 250, 0.85);
+  background: rgba(99, 102, 241, 0.12);
+}
+
+body.cursor-hover .custom-cursor__dot {
+  transform: scale(0.55);
+}
+
+body.cursor-press .custom-cursor__ring {
+  transform: scale(1.2);
+}
+
+/* Как в webdev-studio-corporate-services-landing */
+.scroll-top {
+  position: fixed;
+  right: 28px;
+  bottom: 28px;
+  z-index: 1000;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  color: #fff;
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1;
+  background: transparent;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.scroll-top.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.scroll-top:hover {
+  transform: translateY(-4px);
+  color: #c7d2fe;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.has-custom-cursor,
+  body.has-custom-cursor a,
+  body.has-custom-cursor button {
+    cursor: auto;
+  }
+
+  .custom-cursor__dot,
+  .custom-cursor__ring,
+  .custom-cursor__glow {
+    display: none;
+  }
+}
