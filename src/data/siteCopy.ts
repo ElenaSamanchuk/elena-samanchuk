@@ -38,7 +38,7 @@ export const siteCopy = {
   },
   nav: [
     { href: "#cases", label: "Кейсы" },
-    { href: "#capabilities", label: "Скиллы" },
+    { href: "#capabilities", label: "Компетенции" },
     { href: "#collaboration", label: "Связаться" },
   ],
   brand: {

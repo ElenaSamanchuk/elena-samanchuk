@@ -87,16 +87,17 @@
 
 .capability-roadmap__copy strong {
   display: block;
-  font-size: 15px;
-  line-height: 1.25;
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: 600;
+  line-height: var(--leading-tight, 1.2);
   color: var(--color-ink);
 }
 
 .capability-roadmap__copy > span {
   display: block;
   margin-top: 6px;
-  font-size: 12px;
-  line-height: 1.45;
+  font-size: var(--text-xs, 0.75rem);
+  line-height: var(--leading-body, 1.45);
   color: var(--color-muted);
 }
 
@@ -296,18 +297,18 @@
 
 .case-details__row dt {
   margin: 0;
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--tracking-kicker, 0.05em);
   text-transform: uppercase;
-  color: #7c849c;
+  color: var(--color-muted-soft);
 }
 
 .case-details__row dd {
   margin: 0;
-  font-size: 14px;
-  line-height: 1.55;
-  color: #a6b0c6;
+  font-size: var(--text-sm, 0.875rem);
+  line-height: var(--leading-body, 1.55);
+  color: var(--color-muted);
 }
 
 /* Hero: карточка этапов по центру, лёгкий наклон */
@@ -1099,13 +1100,18 @@
   color: #7c849c;
 }
 
-.contact-hub__collab > h2,
-.contact-hub__cta > h3 {
+.contact-hub .type-h2,
+.contact-hub .type-h3,
+.contact-hub .type-lead {
+  color: inherit;
+}
+
+.contact-hub .type-h2,
+.contact-hub .type-h3 {
   color: #fff;
 }
 
-.contact-hub__collab > p:not(.kicker),
-.contact-hub__cta > p:not(.kicker) {
+.contact-hub .type-lead {
   color: #a6b0c6;
 }
 
@@ -1149,16 +1155,17 @@
 
 .collab-path h3 {
   margin: 0;
-  font-size: 20px;
+  font-size: var(--text-lg, 1.125rem);
   font-weight: 600;
+  line-height: var(--leading-tight, 1.2);
   color: #fff;
 }
 
 .collab-path__summary {
   margin: 8px 0 0;
   color: #e7ebf5;
-  font-size: 13px;
-  line-height: 1.45;
+  font-size: var(--text-sm, 0.875rem);
+  line-height: var(--leading-body, 1.45);
 }
 
 .collab-path__when {
@@ -1251,8 +1258,9 @@
 
 .collab-path__copy strong {
   display: block;
-  font-size: 14px;
-  line-height: 1.2;
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: 600;
+  line-height: var(--leading-tight, 1.2);
   color: #e7ebf5;
 }
 
@@ -1260,8 +1268,8 @@
   display: block;
   margin-top: 4px;
   color: #a6b0c6;
-  font-size: 12px;
-  line-height: 1.4;
+  font-size: var(--text-xs, 0.75rem);
+  line-height: var(--leading-body, 1.4);
 }
 
 @media (max-width: 900px) {
