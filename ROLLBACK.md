@@ -1,42 +1,47 @@
 # Откат правок
 
-## Откатить QA / SEO pass (последний)
+Текущая ветка `master` — **до всех premium-проходов** (`af8825a`: QA/SEO + фикс превью/видео).
+
+## Быстрый откат (копировать в терминал)
 
 ```bash
 cd tochka-site-marketer-new
+
+# Сейчас на диске — полная версия до premium (рекомендуется)
+git reset --hard snapshot-pre-premium-ui
+
+# Ещё раньше — до QA/SEO
 git reset --hard snapshot-pre-qa-seo
 ```
 
-## Вернуть QA / SEO pass
+## Все снимки
+
+| Тег | Коммит | Что это |
+|-----|--------|---------|
+| **`snapshot-pre-premium-ui`** | `af8825a` | **До premium pass 1 и 2** — Poppins, полные тексты, marquee, сайдбар |
+| `snapshot-pre-premium-pass-2` | `1c029d2` | Только premium pass 1 (Inter, укороченные блоки) |
+| `snapshot-pre-qa-seo` | `769ac8b`… | До robots/sitemap/base path |
+| `snapshot-pre-dev-pass-4` | … | До fullstack pass 4 |
+| `snapshot-pre-ux-pass-3` | … | До UX pass 3 |
+
+## Вернуть эксперименты premium (если понадобится)
 
 ```bash
-git checkout qa-seo-pass
+# Premium pass 1 (первый «воздушный»)
+git reset --hard snapshot-pre-premium-pass-2
+# или
+git checkout premium-ui-pass
+
+# Premium pass 2 (сильное упрощение / Apple-black)
+git reset --hard da543c6
+# или
+git checkout premium-pass-2
 ```
 
-## Откатить fullstack pass 4
+## Перед любым новым проходом — создать снимок
 
 ```bash
-git reset --hard snapshot-pre-dev-pass-4
+git tag snapshot-pre-НАЗВАНИЕ-ПРОХОДА -m "Before …"
 ```
 
-## Предыдущие снимки
-
-| Тег | Состояние |
-|-----|-----------|
-| `snapshot-pre-qa-seo` | до QA/SEO pass |
-| `snapshot-pre-dev-pass-4` | до fullstack pass 4 |
-| `snapshot-pre-dev-pass` | до fullstack pass 1 |
-| `snapshot-pre-ux-pass-3` | до UX pass 3 |
-| `snapshot-pre-pass2` | до копирайт pass 2 |
-
-## Файлы QA / SEO pass
-
-- `public/robots.txt`, `sitemap.xml`, `site.webmanifest`
-- `index.html` — robots, theme-color, keywords, JSON-LD @graph, manifest
-- `src/data/siteMeta.ts` — URL, OG, JSON-LD для кода
-- `vite.config.ts`, `.env.production` — `base` для GitHub Pages
-- `src/compat.css`, `src/performance.css`
-- `src/lib/mediaPrefs.ts` — WebGL off на mobile/tablet
-- `QA.md` — чеклист и результаты
-
-Ссылки в кейсах (`cases.ts`) не менялись.
+Ссылки в кейсах (`cases.ts`, поле `href`) не трогали при откатах.
