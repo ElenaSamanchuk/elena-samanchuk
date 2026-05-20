@@ -11,9 +11,8 @@ import { heroPipelineCardMarkup } from "./markup/heroPipelineCard";
 
 const metrics = siteCopy.metrics;
 
-const sectionHeadMarkup = (num: string, kicker: string, title: string, lead: string) => `
+const sectionHeadMarkup = (_num: string, kicker: string, title: string, lead: string) => `
   <header class="section-head">
-    <span class="section-head__num" aria-hidden="true">${num}</span>
     <p class="section-kicker">${escapeHtml(kicker)}</p>
     <h2>${escapeHtml(title)}</h2>
     <p class="block-lead">${escapeHtml(lead)}</p>
@@ -102,7 +101,6 @@ const capabilityMarkup = capabilities
   .map(
     (item, index) => `
       <article class="capability-card reveal-card bento-item ${bentoSpans[index] ?? ""}">
-        <p class="capability-card__index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</p>
         <div class="capability-icon" aria-hidden="true"></div>
         <h3>${escapeHtml(item.title)}</h3>
         <p class="capability-card__lead">${escapeHtml(item.lead)}</p>

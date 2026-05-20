@@ -2,21 +2,23 @@ import { initModernTrends } from "./effects/modernTrends";
 import { initCasePreviews } from "./effects/casePreview";
 import { initMechanicsVideos } from "./effects/mechanicsVideos";
 import { initScrollToTop } from "./effects/scrollToTop";
-import { prefersReducedMotion } from "./lib/mediaPrefs";
+import { initWebGLBackground } from "./effects/webglBg";
+import { prefersLightEffects, prefersReducedMotion } from "./lib/mediaPrefs";
 import { readScrollOffset } from "./lib/scrollOffset";
 import { initScrollRuntime, registerScrollTask } from "./lib/scrollRuntime";
 
 /** Показывает в консоли и data-атрибуте активную сборку сайта */
-export const SITE_REVISION = "apple-light";
+export const SITE_REVISION = "portfolio-final";
 
 export function initSite() {
   document.documentElement.dataset.siteRevision = SITE_REVISION;
-  document.documentElement.dataset.theme = "light";
+  document.documentElement.dataset.theme = "dark";
   if (import.meta.env.DEV) {
     console.info(`[site] revision: ${SITE_REVISION}`);
   }
 
   const reducedMotion = prefersReducedMotion();
+  const lightEffects = prefersLightEffects();
   let scrollOffset = readScrollOffset();
 
   initScrollRuntime();
@@ -24,8 +26,10 @@ export function initSite() {
   initModernTrends(reducedMotion);
   initScrollToTop(reducedMotion);
 
-  const webglCanvas = document.querySelector<HTMLCanvasElement>("#webgl-bg");
-  if (webglCanvas) webglCanvas.hidden = true;
+  if (!lightEffects) {
+    const webglCanvas = document.querySelector<HTMLCanvasElement>("#webgl-bg");
+    if (webglCanvas) initWebGLBackground(webglCanvas);
+  }
 
   const scrollToSection = (selector: string) => {
     const target = document.querySelector<HTMLElement>(selector);

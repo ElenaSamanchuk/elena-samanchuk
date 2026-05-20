@@ -7,7 +7,9 @@
 | `snapshot-restored-baseline` | **Восстановленная** версия: Poppins/Space Grotesk, полный контент, бенто с groups, marquee стека, custom cursor |
 | **`snapshot-pro-portfolio`** | Тёмная pro-версия, **превью-колонка** (как вам понравилось) |
 | `snapshot-luxury-portfolio` | Тёмный luxury rebuild с рамкой браузера и отступами |
-| **`apple-light`** (текущая) | Светлая Apple-эстетика + превью как в pro-portfolio |
+| `apple-light` | Светлая Apple-эстетика (`src/apple-light.css`) |
+| **`portfolio-final`** (текущая) | Фиолет · розовый · зелёный + превью в карточке |
+| `apple-dark` / `apple-light` | Эксперименты Apple (файлы в `src/`, не подключены) |
 | `da543c6` / pass 2 | Чёрный фон `#000`, сильное упрощение — **не использовать** |
 | `1c029d2` / pass 1 | Промежуточный premium (Inter, тёмнее) |
 
@@ -25,13 +27,17 @@ git reset --hard snapshot-luxury-portfolio
 npm run dev:fresh
 ```
 
-## Текущая светлая Apple
+## Светлая Apple
+
+В `src/main.ts` замените `apple-dark.css` на `apple-light.css`, в `initSite.ts` — `apple-light` и `dataset.theme = "light"`.
+
+## Текущая версия (бренд)
 
 ```bash
 npm run dev:fresh
 ```
 
-Консоль: `[site] revision: apple-light`
+Консоль: `[site] revision: portfolio-final`
 
 ## Вернуть восстановленную версию (по запросу)
 

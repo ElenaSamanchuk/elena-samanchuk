@@ -1,7 +1,7 @@
 import "./style.css";
 import "./compat.css";
 import "./performance.css";
-import "./apple-light.css";
+import "./portfolio-final.css";
 import "./effects-extra.css";
 import { initSite } from "./initSite";
 import { renderSite } from "./renderSite";
