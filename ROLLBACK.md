@@ -1,53 +1,52 @@
 # Откат правок
 
-## Откатить второй проход копирайта (pass 2)
-
-Версия **до** правок 20.05.2026 — тег и ветка:
+## Откатить UX/UI pass (последний)
 
 ```bash
 cd tochka-site-marketer-new
-git checkout before-copy-pass-2
+git checkout before-ux-pass
 ```
 
-Или жёстко вернуть `master` к снимку:
+или:
+
+```bash
+git reset --hard snapshot-pre-ux-pass
+```
+
+## Вернуть UX pass
 
 ```bash
 git checkout master
+```
+
+(после merge ветки `ux-pass`)
+
+## Откатить копирайт pass 2 (без UX)
+
+```bash
 git reset --hard snapshot-pre-pass2
 ```
 
-## Вернуть pass 2
-
-```bash
-git checkout copy-pass-2
-# или после merge:
-git checkout master
-```
-
-## Откатить первый рефреш (ещё раньше)
+## Откатить всё до первого git-снимка
 
 ```bash
 git reset --hard 7bf26b3
 ```
 
-Коммит `7bf26b3` — состояние сразу после `git init` (без pass 2, без части стилей pass 1).
+## Теги и ветки
 
-## Ветки и теги
+| Имя | Состояние |
+|-----|-----------|
+| `snapshot-pre-ux-pass` | перед UX pass (`3f2adc8`) |
+| `before-ux-pass` | ветка на том же коммите |
+| `ux-pass` | UX/UI правки |
+| `snapshot-pre-pass2` | перед копирайт pass 2 |
+| `master` | актуальная основная ветка |
 
-| Имя | Что это |
-|-----|---------|
-| `snapshot-pre-pass2` | снимок перед pass 2 (коммит `73eae20`) |
-| `before-copy-pass-2` | ветка на том же коммите |
-| `copy-pass-2` | второй проход копирайта |
-| `master` | основная ветка (обновляется merge) |
+## Файлы UX pass
 
-## Файлы pass 2
-
-- `src/data/siteCopy.ts` — hero с метками «Под ключ» / «Один этап», услуги, кейсы
-- `src/main.ts` — hero-modes, kickers, footnote
-- `src/markup/heroPipelineCard.ts` — «Маршрут проекта»
-- `src/data/cases.ts` — усиленные результаты
-- `src/data/collaboration.ts`, `siteMeta.ts`, `index.html`
-- `src/style.css` — hero-modes, section-kicker
+- `src/style.css` — иерархия, фокус, кейсы, hero, контакт, a11y
+- `src/initSite.ts` — подсветка пункта меню при скролле, tilt только на desktop
+- `src/main.ts` — skip-link
 
 Ссылки в кейсах не менялись.

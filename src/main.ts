@@ -266,6 +266,7 @@ const contactHubMarkup = `
 `;
 
 app.innerHTML = `
+  <a class="skip-link" href="#cases">Перейти к контенту</a>
   <canvas id="webgl-bg" class="webgl-bg" aria-hidden="true"></canvas>
 
   <div class="scroll-progress" aria-hidden="true">

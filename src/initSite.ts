@@ -34,7 +34,11 @@ export function initSite() {
 
   document.querySelectorAll(".reveal-card").forEach((node) => observer.observe(node));
 
+  const enableTilt =
+    !reducedMotion && !window.matchMedia("(pointer: coarse)").matches;
+
   document.querySelectorAll<HTMLElement>("[data-tilt]").forEach((card) => {
+    if (!enableTilt) return;
     card.addEventListener("pointermove", (event) => {
       const rect = card.getBoundingClientRect();
       const x = (event.clientX - rect.left) / rect.width - 0.5;
@@ -70,6 +74,43 @@ export function initSite() {
   updateScrollUi();
   window.addEventListener("scroll", updateScrollUi, { passive: true });
   window.addEventListener("resize", updateScrollUi);
+
+  const navLinks = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>(".nav-links a[href^='#']"),
+  );
+  const navSections = navLinks
+    .map((link) => {
+      const href = link.getAttribute("href");
+      if (!href || href === "#top") return null;
+      const section = document.querySelector<HTMLElement>(href);
+      return section ? { href, section } : null;
+    })
+    .filter((item): item is { href: string; section: HTMLElement } => Boolean(item));
+
+  const setActiveNav = (href: string) => {
+    navLinks.forEach((link) => {
+      const isActive = link.getAttribute("href") === href;
+      link.classList.toggle("is-active", isActive);
+      if (isActive) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+  };
+
+  if (navSections.length) {
+    const navObserver = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        const top = visible[0]?.target;
+        if (top instanceof HTMLElement && top.id) setActiveNav(`#${top.id}`);
+      },
+      { rootMargin: "-22% 0px -58% 0px", threshold: [0.08, 0.2, 0.45] },
+    );
+    navSections.forEach(({ section }) => navObserver.observe(section));
+    const first = navSections[0];
+    if (first) setActiveNav(first.href);
+  }
 
   const animateMetric = (item: HTMLElement) => {
     if (item.dataset.metricAnimated === "true") return;
