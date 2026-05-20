@@ -1,4 +1,7 @@
 import { collaborationFormats } from "../data/collaboration";
+import { contactLinks, EXTERNAL_REL } from "../data/contacts";
+import { escapeHtml } from "../lib/escapeHtml";
+import { safeHref } from "../lib/safeUrl";
 
 const pathMarkup = (steps: (typeof collaborationFormats)[number]["path"]) =>
   steps
@@ -7,8 +10,8 @@ const pathMarkup = (steps: (typeof collaborationFormats)[number]["path"]) =>
       <li class="collab-path__node">
         <span class="collab-path__dot" aria-hidden="true">${index + 1}</span>
         <div class="collab-path__copy">
-          <strong>${step.label}</strong>
-          <span>${step.hint}</span>
+          <strong>${escapeHtml(step.label)}</strong>
+          <span>${escapeHtml(step.hint)}</span>
         </div>
       </li>
     `,
@@ -20,15 +23,15 @@ export const collaborationRoadmapsMarkup = collaborationFormats
     (format) => `
     <article class="collab-path reveal-card" data-collab-path>
       <header class="collab-path__head">
-        <span class="collab-path__badge">${format.badge}</span>
-        <h3>${format.title}</h3>
-        <p class="collab-path__summary">${format.summary}</p>
-        <p class="collab-path__when">${format.when}</p>
+        <span class="collab-path__badge">${escapeHtml(format.badge)}</span>
+        <h3>${escapeHtml(format.title)}</h3>
+        <p class="collab-path__summary">${escapeHtml(format.summary)}</p>
+        <p class="collab-path__when">${escapeHtml(format.when)}</p>
       </header>
-      <ol class="collab-path__roadmap" aria-label="Путь: ${format.title}">
+      <ol class="collab-path__roadmap" aria-label="Путь: ${escapeHtml(format.title)}">
         ${pathMarkup(format.path)}
       </ol>
-      <a class="btn btn-glass collab-path__cta" href="https://t.me/ElaneDmitrievna" target="_blank" rel="noreferrer">
+      <a class="btn btn-glass collab-path__cta" href="${safeHref(contactLinks.telegram)}" target="_blank" rel="${EXTERNAL_REL}">
         <span class="btn__label">Обсудить формат</span>
       </a>
     </article>

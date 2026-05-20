@@ -1,19 +1,19 @@
 # Откат правок
 
-## Откатить fullstack pass (последний)
+## Откатить fullstack pass 4 (последний)
 
 ```bash
 cd tochka-site-marketer-new
-git checkout before-dev-pass
+git checkout before-dev-pass-4
 ```
 
 или:
 
 ```bash
-git reset --hard snapshot-pre-dev-pass
+git reset --hard snapshot-pre-dev-pass-4
 ```
 
-## Вернуть fullstack pass
+## Вернуть pass 4
 
 ```bash
 git checkout master
@@ -21,23 +21,20 @@ git checkout master
 
 ## Предыдущие снимки
 
-| Тег / ветка | Состояние |
-|-------------|-----------|
-| `snapshot-pre-dev-pass` | до fullstack pass |
-| `before-dev-pass` | та же точка (ветка) |
+| Тег | Состояние |
+|-----|-----------|
+| `snapshot-pre-dev-pass-4` | до pass 4 |
+| `snapshot-pre-dev-pass` | до pass 1 |
 | `snapshot-pre-ux-pass-3` | до UX pass 3 |
-| `snapshot-pre-ux-pass` | до UX pass 1–2 |
 | `snapshot-pre-pass2` | до копирайт pass 2 |
 
-## Файлы fullstack pass
+## Файлы pass 4
 
-- `src/lib/scrollRuntime.ts`, `escapeHtml.ts`, `mediaPrefs.ts` — новые утилиты
-- `src/data/capabilities.ts` — вынесены данные из `main.ts`
-- `src/initSite.ts` — один батч scroll, saveData, tilt
-- `src/effects/webglBg.ts`, `scrollToTop.ts` — пауза WebGL, scroll runtime
-- `vite.config.ts` — chunk для WebGL
-- `index.html` — асинхронная загрузка шрифтов
-- Удалены неиспользуемые `counter.ts`, `pageAnchors.ts`
-- `src/style.css` — фикс padding кейсов (timeline-card)
+- `src/renderSite.ts` — разметка страницы (вынесена из `main.ts`)
+- `src/main.ts` — только entry: render + init
+- `src/data/contacts.ts` — единые контакты и `rel`
+- `src/lib/safeUrl.ts`, `scrollOffset.ts`
+- `src/initSite.ts` — делегирование кликов, динамический offset, unobserve observers
+- `src/markup/collaborationRoadmap.ts` — escape + safe href
 
-Ссылки в кейсах не менялись.
+Ссылки в кейсах (`cases.ts`) не менялись.

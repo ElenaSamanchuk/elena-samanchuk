@@ -4,12 +4,13 @@ import { initMechanicsVideos } from "./effects/mechanicsVideos";
 import { initScrollToTop } from "./effects/scrollToTop";
 import { initWebGLBackground } from "./effects/webglBg";
 import { prefersLightEffects, prefersReducedMotion } from "./lib/mediaPrefs";
+import { readScrollOffset } from "./lib/scrollOffset";
 import { initScrollRuntime, registerScrollTask } from "./lib/scrollRuntime";
 
 export function initSite() {
   const reducedMotion = prefersReducedMotion();
   const lightEffects = prefersLightEffects();
-  const scrollOffset = 92;
+  let scrollOffset = readScrollOffset();
 
   initScrollRuntime();
 
@@ -28,16 +29,18 @@ export function initSite() {
     window.scrollTo({ top, behavior: reducedMotion ? "auto" : "smooth" });
   };
 
-  const observer = new IntersectionObserver(
-    (entries) => {
+  const revealObserver = new IntersectionObserver(
+    (entries, observer) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) entry.target.classList.add("is-visible");
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
       });
     },
     { threshold: 0.12 },
   );
 
-  document.querySelectorAll(".reveal-card").forEach((node) => observer.observe(node));
+  document.querySelectorAll(".reveal-card").forEach((node) => revealObserver.observe(node));
 
   const enableTilt = !lightEffects && !window.matchMedia("(pointer: coarse)").matches;
 
@@ -56,20 +59,21 @@ export function initSite() {
     });
   });
 
-  document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((link) => {
-    link.addEventListener("click", (event) => {
-      const hash = link.getAttribute("href");
-      if (!hash || hash === "#") return;
-      const target = document.querySelector<HTMLElement>(hash);
-      if (!target) return;
-      event.preventDefault();
-      scrollToSection(hash);
-    });
+  document.addEventListener("click", (event) => {
+    const link = (event.target as Element).closest<HTMLAnchorElement>('a[href^="#"]');
+    if (!link) return;
+    const hash = link.getAttribute("href");
+    if (!hash || hash === "#") return;
+    const target = document.querySelector<HTMLElement>(hash);
+    if (!target) return;
+    event.preventDefault();
+    scrollToSection(hash);
   });
 
   const scrollProgressBar = document.querySelector<HTMLElement>("#scroll-progress-bar");
 
   const updateScrollUi = () => {
+    scrollOffset = readScrollOffset();
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
     const progress = docHeight > 0 ? Math.min(100, (window.scrollY / docHeight) * 100) : 0;
     if (scrollProgressBar) scrollProgressBar.style.width = `${progress}%`;
@@ -139,9 +143,11 @@ export function initSite() {
   };
 
   const metricObserver = new IntersectionObserver(
-    (entries) => {
+    (entries, observer) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) animateMetric(entry.target as HTMLElement);
+        if (!entry.isIntersecting) return;
+        animateMetric(entry.target as HTMLElement);
+        observer.unobserve(entry.target);
       });
     },
     { threshold: 0.35 },
@@ -152,15 +158,17 @@ export function initSite() {
   initCasePreviews(reducedMotion);
   const mechanicsCtrl = initMechanicsVideos(reducedMotion);
 
-  document.querySelectorAll<HTMLElement>("[data-spotlight]").forEach((card) => {
-    card.addEventListener("pointermove", (event) => {
-      const rect = card.getBoundingClientRect();
-      const x = ((event.clientX - rect.left) / rect.width) * 100;
-      const y = ((event.clientY - rect.top) / rect.height) * 100;
-      card.style.setProperty("--spot-x", `${x}%`);
-      card.style.setProperty("--spot-y", `${y}%`);
+  if (!lightEffects) {
+    document.querySelectorAll<HTMLElement>("[data-spotlight]").forEach((card) => {
+      card.addEventListener("pointermove", (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty("--spot-x", `${x}%`);
+        card.style.setProperty("--spot-y", `${y}%`);
+      });
     });
-  });
+  }
 
   const pipelineRoot = document.querySelector<HTMLElement>("[data-pipeline]");
   if (pipelineRoot) {
@@ -203,6 +211,17 @@ export function initSite() {
         const next = (activeIndex - 1 + tabs.length) % tabs.length;
         setPipelineStep(next);
         tabs[next]?.focus();
+      }
+      if (event.key === "Home") {
+        event.preventDefault();
+        setPipelineStep(0);
+        tabs[0]?.focus();
+      }
+      if (event.key === "End") {
+        event.preventDefault();
+        const last = tabs.length - 1;
+        setPipelineStep(last);
+        tabs[last]?.focus();
       }
     });
 

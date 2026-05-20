@@ -1,5 +1,6 @@
 import { pipelineDevVideo } from "../data/mechanicsVideos";
 import { escapeHtml } from "../lib/escapeHtml";
+import { safeHref } from "../lib/safeUrl";
 
 export const mechanicsWidgetMarkup = `
   <div class="mechanics-widget mechanics-widget--inline mechanics-widget--single" data-mechanics-widget aria-label="Живые механики">
@@ -12,7 +13,7 @@ export const mechanicsWidgetMarkup = `
     >
       <div class="mechanics-widget__slide is-active" data-mechanics-slide="0">
         <video
-          src="${pipelineDevVideo.src}"
+            src="${safeHref(pipelineDevVideo.src)}"
           muted
           playsinline
           loop
