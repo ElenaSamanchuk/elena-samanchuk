@@ -1,47 +1,47 @@
 # Откат правок
 
-Текущая ветка `master` — **до всех premium-проходов** (`af8825a`: QA/SEO + фикс превью/видео).
+**Сейчас в `master`:** версия **до всех premium-pass** (`snapshot-pre-premium-ui`).
 
-## Быстрый откат (копировать в терминал)
+## Вы смотрите не ту вкладку, если видите:
+
+- чёрный фон и синюю кнопку **Telegram** только в шапке;
+- заголовок «Страницы, которые доходят до релиза.** (без «без разрыва…»);
+- строку «Два формата — на выбор» и чипы **Цель / Аудитория** в брифе.
+
+Это **premium pass 2** — старый dev-сервер или кэш. В файлах проекта этого уже нет.
+
+## Правильная локальная версия
 
 ```bash
 cd tochka-site-marketer-new
-
-# Сейчас на диске — полная версия до premium (рекомендуется)
 git reset --hard snapshot-pre-premium-ui
-
-# Ещё раньше — до QA/SEO
-git reset --hard snapshot-pre-qa-seo
+npm run dev:fresh
 ```
 
-## Все снимки
+Откройте **http://127.0.0.1:5180/** (не 5173/5174 — там могут висеть старые процессы).
 
-| Тег | Коммит | Что это |
-|-----|--------|---------|
-| **`snapshot-pre-premium-ui`** | `af8825a` | **До premium pass 1 и 2** — Poppins, полные тексты, marquee, сайдбар |
-| `snapshot-pre-premium-pass-2` | `1c029d2` | Только premium pass 1 (Inter, укороченные блоки) |
-| `snapshot-pre-qa-seo` | `769ac8b`… | До robots/sitemap/base path |
-| `snapshot-pre-dev-pass-4` | … | До fullstack pass 4 |
-| `snapshot-pre-ux-pass-3` | … | До UX pass 3 |
+В консоли браузера (F12) должно быть: `[site] revision: restored-pre-premium-ui`
 
-## Вернуть эксперименты premium (если понадобится)
+На странице: фиолетовый градиент, в nav **«Доступна · удалённо»**, полный заголовок с «без разрыва между смыслом, дизайном и кодом».
+
+## Откат в git
 
 ```bash
-# Premium pass 1 (первый «воздушный»)
-git reset --hard snapshot-pre-premium-pass-2
-# или
-git checkout premium-ui-pass
-
-# Premium pass 2 (сильное упрощение / Apple-black)
-git reset --hard da543c6
-# или
-git checkout premium-pass-2
+git reset --hard snapshot-pre-premium-ui   # до premium (текущая цель)
+git reset --hard snapshot-pre-qa-seo      # ещё раньше — до QA/SEO
 ```
 
-## Перед любым новым проходом — создать снимок
+## Вернуть эксперимент premium (если понадобится)
 
 ```bash
-git tag snapshot-pre-НАЗВАНИЕ-ПРОХОДА -m "Before …"
+git reset --hard da543c6    # pass 2 (чёрный Apple)
+git reset --hard 1c029d2    # pass 1 (Inter, укороченно)
 ```
 
-Ссылки в кейсах (`cases.ts`, поле `href`) не трогали при откатах.
+## Перед новым проходом
+
+```bash
+git tag snapshot-pre-НАЗВАНИЕ -m "Before …"
+```
+
+Ссылки в кейсах (`href` в `cases.ts`) не менялись при откатах.

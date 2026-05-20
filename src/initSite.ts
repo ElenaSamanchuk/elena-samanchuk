@@ -7,7 +7,15 @@ import { prefersLightEffects, prefersReducedMotion } from "./lib/mediaPrefs";
 import { readScrollOffset } from "./lib/scrollOffset";
 import { initScrollRuntime, registerScrollTask } from "./lib/scrollRuntime";
 
+/** Показывает в консоли и data-атрибуте, что загружена версия до premium-pass */
+export const SITE_REVISION = "restored-pre-premium-ui";
+
 export function initSite() {
+  document.documentElement.dataset.siteRevision = SITE_REVISION;
+  if (import.meta.env.DEV) {
+    console.info(`[site] revision: ${SITE_REVISION} (до premium pass 1/2)`);
+  }
+
   const reducedMotion = prefersReducedMotion();
   const lightEffects = prefersLightEffects();
   let scrollOffset = readScrollOffset();
