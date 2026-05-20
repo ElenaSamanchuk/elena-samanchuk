@@ -32,7 +32,7 @@
   gap: 14px;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1200px) {
   .capability-roadmap {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;

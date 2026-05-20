@@ -147,7 +147,7 @@ const navbarMarkup = `
         <span class="type-nav-tagline block">${escapeHtml(siteCopy.brand.tagline)}</span>
       </span>
     </a>
-    <div class="ml-auto flex flex-wrap items-center gap-1">
+    <div class="nav-links ml-auto">
       ${siteCopy.nav.map((item) => `<a class="nav-link" href="${item.href}">${escapeHtml(item.label)}</a>`).join("")}
     </div>
   </nav>
@@ -172,7 +172,7 @@ const contactHubMarkup = `
       <h3 class="type-h3 mt-2">${escapeHtml(siteCopy.contact.ctaTitle)}</h3>
       <p class="type-lead mt-3 max-w-2xl">${escapeHtml(siteCopy.contact.ctaLead)}</p>
       ${collaborationFlowMarkup}
-      <div class="mt-5 flex flex-wrap gap-3">
+      <div class="contact-hub__actions mt-5">
         <a class="btn-primary" href="${safeHref(contactLinks.telegram)}" target="_blank" rel="${EXTERNAL_REL}">Написать в Telegram</a>
         <a class="btn-secondary" href="${safeHref(contactLinks.email)}">Написать на email</a>
       </div>
@@ -209,7 +209,7 @@ export function renderSite(root: HTMLElement): void {
     </div>
   </header>
 
-  <main class="site-container grid gap-10 pb-[72px] pt-14 lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-10">
+  <main class="site-layout site-container pb-16 pt-10 lg:pb-[72px] lg:pt-14">
     <aside class="site-sidebar min-w-0" data-stagger>
       <div class="site-sidebar__sticky flex flex-col gap-5 lg:sticky lg:top-[108px]">
         <section class="surface-card p-5" data-reveal>
