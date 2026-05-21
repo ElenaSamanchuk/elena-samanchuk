@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "dev:fresh": "vite --host 127.0.0.1 --port 5180 --strictPort",
-    "og:cover": "node scripts/generate-og-cover.mjs",
+    "og:cover": "tsx scripts/generate-og-cover.ts",
     "build": "tsc && vite build",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
@@ -15,6 +15,7 @@
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
     "@types/node": "^25.9.1",
+    "tsx": "^4.22.3",
     "typescript": "~6.0.2",
     "vite": "^8.0.12"
   },
