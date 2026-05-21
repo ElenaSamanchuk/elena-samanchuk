@@ -27,3 +27,9 @@ export const BUILDER_BLOCKS: BuilderBlockConfig[] = [
   { id: "cards", wire: { height: 72, width: 100 }, styled: { height: 74, width: 100 } },
   { id: "cta", wire: { height: 30, width: 38 }, styled: { height: 32, width: 42 } },
 ];
+
+/** Сумма styled-высот + gap (5px) между блоками — резерв под hero, без сдвига при анимации */
+export const BUILDER_STAGE_MIN_HEIGHT = BUILDER_BLOCKS.reduce(
+  (sum, block) => sum + block.styled.height,
+  0,
+) + (BUILDER_BLOCKS.length - 1) * 5;

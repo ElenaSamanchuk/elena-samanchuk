@@ -15,7 +15,18 @@
     --leading-body: 1.55;
     --tracking-tight: -0.02em;
     --tracking-kicker: 0.08em;
-    --section-gap: 4rem;
+
+    /* Spacing rhythm — 4px grid */
+    --space-intra: 0.5rem;
+    --space-stack: 0.75rem;
+    --space-block: 1.25rem;
+    --space-card: 1.25rem;
+    --space-section: 4rem;
+    --section-gap: var(--space-section);
+    --page-inline: 1.25rem;
+    --touch-min: 2.75rem;
+    --text-2xs: 0.6875rem;
+    --text-micro: 0.625rem;
   }
 }
 
@@ -26,6 +37,9 @@
     line-height: 1.08;
     letter-spacing: var(--tracking-tight);
     color: var(--color-ink);
+    max-width: 100%;
+    overflow-wrap: break-word;
+    text-wrap: pretty;
   }
 
   .type-h2 {
@@ -34,6 +48,16 @@
     line-height: var(--leading-tight);
     letter-spacing: var(--tracking-tight);
     color: var(--color-ink);
+    max-width: 100%;
+    overflow-wrap: break-word;
+    text-wrap: pretty;
+  }
+
+  @media (min-width: 768px) {
+    .type-display,
+    .type-h2 {
+      text-wrap: balance;
+    }
   }
 
   @media (min-width: 768px) {
@@ -57,18 +81,27 @@
     font-size: var(--text-base);
     line-height: var(--leading-body);
     color: var(--color-muted);
+    max-width: 100%;
+    overflow-wrap: break-word;
+    text-wrap: pretty;
   }
 
   .type-body {
     font-size: var(--text-sm);
     line-height: var(--leading-body);
     color: var(--color-muted);
+    max-width: 100%;
+    overflow-wrap: break-word;
+    text-wrap: pretty;
   }
 
   .type-caption {
     font-size: var(--text-xs);
     line-height: var(--leading-snug);
     color: var(--color-muted);
+    max-width: 100%;
+    overflow-wrap: break-word;
+    text-wrap: pretty;
   }
 
   .type-metric {
@@ -95,6 +128,10 @@
     margin-bottom: 2rem;
   }
 
+  .section-head--compact {
+    margin-bottom: 0;
+  }
+
   .content-stack {
     display: flex;
     flex-direction: column;
@@ -102,6 +139,68 @@
   }
 
   .content-section {
-    scroll-margin-top: calc(var(--site-nav-offset) + 72px);
+    scroll-margin-top: 0;
+  }
+
+  @media (max-width: 767px) {
+    :root {
+      --text-display: clamp(1.5rem, 6.5vw, 1.875rem);
+      --text-2xl: 1.125rem;
+      --text-3xl: 1.25rem;
+      --text-xl: 1.0625rem;
+      --text-lg: 1rem;
+      --text-base: 0.8125rem;
+      --text-sm: 0.75rem;
+      --text-xs: 0.6875rem;
+      --text-2xs: 0.625rem;
+      --text-micro: 0.5625rem;
+
+      --space-intra: 0.5rem;
+      --space-stack: 0.75rem;
+      --space-block: 1rem;
+      --space-card: 1.25rem;
+      --space-section: 2rem;
+      --section-gap: var(--space-section);
+      --page-inline: 1rem;
+      --touch-min: 2.5rem;
+    }
+
+    .type-h3--lg {
+      font-size: var(--text-xl);
+    }
+
+    .type-lead {
+      font-size: var(--text-sm);
+      line-height: 1.45;
+    }
+
+    .type-body,
+    .type-caption {
+      font-size: var(--text-xs);
+    }
+
+    .type-metric {
+      font-size: clamp(1.0625rem, 4.8vw, 1.1875rem);
+    }
+
+    .section-head {
+      margin-bottom: var(--space-block);
+    }
+
+    .section-head .type-h2 {
+      margin-top: var(--space-intra);
+    }
+
+    .section-head .type-lead {
+      margin-top: var(--space-intra);
+    }
+
+    .content-stack {
+      gap: var(--section-gap);
+    }
+
+    .content-section {
+      scroll-margin-top: 0;
+    }
   }
 }

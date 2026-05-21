@@ -1,17 +1,19 @@
 {
-  "name": "tochka-site-marketer-new",
+  "name": "elena-samanchuk",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "dev:fresh": "vite --host 127.0.0.1 --port 5180 --strictPort",
+    "og:cover": "node scripts/generate-og-cover.mjs",
     "build": "tsc && vite build",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "fetch-logos": "node scripts/fetch-logos.mjs"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "@types/node": "^25.9.1",
     "typescript": "~6.0.2",
     "vite": "^8.0.12"

@@ -1,36 +1,64 @@
+import { BUILDER_STAGE_MIN_HEIGHT } from "./data/blockBuilderConfig";
 import { initCasePreviews } from "./effects/casePreview";
+import { initDiagramMotion } from "./effects/diagramMotion";
 import { initBlockBuilder } from "./effects/blockBuilderAnim";
 import { initScrollToTop } from "./effects/scrollToTop";
 import { syncNavOffset } from "./lib/navOffset";
 import { prefersReducedMotion } from "./lib/mediaPrefs";
-import { readScrollOffset } from "./lib/scrollOffset";
+import { isNavSectionActive, readAnchorScrollOffset } from "./lib/scrollOffset";
 import { initMetricCounters, initSiteMotion } from "./lib/siteMotion";
+import { initSidebarLayout } from "./lib/sidebarLayout";
 import { initScrollRuntime, registerScrollTask } from "./lib/scrollRuntime";
 
 /** Показывает в консоли и data-атрибуте активную сборку сайта */
 export const SITE_REVISION = "stack-tw";
 
-/** Доп. сдвиг якоря: секция останавливается чуть ниже шапки, не «над» блоком */
-const ANCHOR_SCROLL_EXTRA = 72;
-
-/** Линия активации пункта меню (синхронна с якорной прокруткой) */
-const NAV_SPY_EXTRA = 64;
-
-export function initSite() {
+/** Подключаемые модули: siteMotion, casePreview, blockBuilderAnim, scrollToTop */
+export async function initSite() {
   document.documentElement.dataset.siteRevision = SITE_REVISION;
   document.documentElement.dataset.theme = "dark";
+  document.documentElement.style.setProperty("--bb-stage-min-h", `${BUILDER_STAGE_MIN_HEIGHT}px`);
   if (import.meta.env.DEV) {
     console.info(`[site] revision: ${SITE_REVISION}`);
   }
 
   const reducedMotion = prefersReducedMotion();
-  let scrollOffset = readScrollOffset();
+  let anchorScrollOffset = readAnchorScrollOffset();
+  let pendingNavHref: string | null = null;
 
   initScrollRuntime();
   syncNavOffset();
+  initSidebarLayout();
 
   const scrollProgressBar = document.querySelector<HTMLElement>("#scroll-progress-bar");
   const navbar = document.getElementById("site-navbar");
+  const navBurger = document.getElementById("nav-burger");
+  const navDrawerBackdrop = document.getElementById("nav-drawer-backdrop");
+
+  const setNavDrawerOpen = (open: boolean) => {
+    navbar?.classList.toggle("is-nav-open", open);
+    navBurger?.setAttribute("aria-expanded", open ? "true" : "false");
+    navBurger?.setAttribute("aria-label", open ? "Закрыть меню" : "Открыть меню");
+    document.body.classList.toggle("is-nav-drawer-open", open);
+    if (navDrawerBackdrop) {
+      if (open) navDrawerBackdrop.removeAttribute("hidden");
+      else navDrawerBackdrop.setAttribute("hidden", "");
+      navDrawerBackdrop.setAttribute("aria-hidden", open ? "false" : "true");
+    }
+  };
+
+  const closeNavDrawer = () => setNavDrawerOpen(false);
+
+  navBurger?.addEventListener("click", () => {
+    const isOpen = navbar?.classList.contains("is-nav-open") ?? false;
+    setNavDrawerOpen(!isOpen);
+  });
+
+  navDrawerBackdrop?.addEventListener("click", closeNavDrawer);
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && navbar?.classList.contains("is-nav-open")) closeNavDrawer();
+  });
 
   const sectionNavLinks = Array.from(
     document.querySelectorAll<HTMLAnchorElement>(".nav-link[href^='#']"),
@@ -48,9 +76,9 @@ export function initSite() {
     )
     .filter((item): item is { href: string; section: HTMLElement } => Boolean(item));
 
-  const setActiveNav = (href: string) => {
+  const setActiveNav = (href: string | null) => {
     sectionNavLinks.forEach((link) => {
-      const isActive = link.getAttribute("href") === href;
+      const isActive = href !== null && link.getAttribute("href") === href;
       link.classList.toggle("is-active", isActive);
       if (isActive) link.setAttribute("aria-current", "location");
       else link.removeAttribute("aria-current");
@@ -58,29 +86,31 @@ export function initSite() {
   };
 
   const updateScrollUi = () => {
-    scrollOffset = readScrollOffset();
+    anchorScrollOffset = readAnchorScrollOffset();
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
     const progress = docHeight > 0 ? Math.min(100, (window.scrollY / docHeight) * 100) : 0;
     if (scrollProgressBar) scrollProgressBar.style.width = `${progress}%`;
   };
 
-  const navMarkerTop = () => scrollOffset + NAV_SPY_EXTRA;
+  const navMarkerTop = () => anchorScrollOffset;
 
   const updateActiveNav = () => {
     if (!navSections.length) return;
-    const markerFromTop = navMarkerTop();
-    let current = navSections[0].href;
+    if (pendingNavHref) {
+      setActiveNav(pendingNavHref);
+      return;
+    }
 
-    for (let i = navSections.length - 1; i >= 0; i--) {
-      const item = navSections[i];
-      const top = item.section.getBoundingClientRect().top;
-      if (top <= markerFromTop) {
-        current = item.href;
-        break;
+    const marker = navMarkerTop();
+    let activeHref: string | null = null;
+
+    for (const item of navSections) {
+      if (isNavSectionActive(item.section, marker)) {
+        activeHref = item.href;
       }
     }
 
-    setActiveNav(current);
+    setActiveNav(activeHref);
   };
 
   const updateNavbar = () => {
@@ -100,17 +130,26 @@ export function initSite() {
 
   registerScrollTask(syncLayout);
 
-  const motionApi = initSiteMotion(onScroll);
-  initMetricCounters(reducedMotion);
+  const motionApi = await initSiteMotion(onScroll);
+  await initMetricCounters(reducedMotion);
   initScrollToTop(reducedMotion);
 
-  const scrollToSection = (selector: string) => {
+  const scrollToSection = (selector: string, activeHref?: string) => {
     const target = document.querySelector<HTMLElement>(selector);
     if (!target) return;
-    scrollOffset = readScrollOffset();
-    motionApi.scrollTo(target, scrollOffset + ANCHOR_SCROLL_EXTRA);
-    window.setTimeout(updateActiveNav, reducedMotion ? 0 : 450);
-    window.setTimeout(updateActiveNav, reducedMotion ? 50 : 1150);
+    anchorScrollOffset = readAnchorScrollOffset();
+    if (activeHref) {
+      pendingNavHref = activeHref;
+      setActiveNav(activeHref);
+    }
+    motionApi.scrollTo(target, anchorScrollOffset);
+    const finishNav = () => {
+      pendingNavHref = null;
+      updateActiveNav();
+    };
+    window.setTimeout(finishNav, reducedMotion ? 0 : 480);
+    window.setTimeout(finishNav, reducedMotion ? 100 : 1400);
+    window.setTimeout(finishNav, reducedMotion ? 100 : 2200);
   };
 
   document.addEventListener("click", (event) => {
@@ -121,11 +160,16 @@ export function initSite() {
     const target = document.querySelector<HTMLElement>(hash);
     if (!target) return;
     event.preventDefault();
-    if (link.classList.contains("nav-link")) setActiveNav(hash);
+    if (link.classList.contains("nav-link")) {
+      closeNavDrawer();
+      scrollToSection(hash, hash);
+      return;
+    }
     scrollToSection(hash);
   });
 
   initCasePreviews(reducedMotion);
+  initDiagramMotion(reducedMotion);
 
   const builderRoot = document.querySelector<HTMLElement>("[data-block-builder]");
   if (builderRoot) initBlockBuilder(builderRoot, reducedMotion);

@@ -13,7 +13,12 @@ const DISPLAY_TAG_ORDER = [
 
 const ALLOWED_NICHES = new Set(["E-commerce", "FoodTech", "EdTech", "B2B", "B2C"]);
 
-export type CaseDisplayTag = { label: string; kind: "niche" | "tech" };
+export type CaseDisplayTag = { label: string; mobileLabel?: string; kind: "niche" | "tech" };
+
+const MOBILE_TAG_LABELS: Record<string, string> = {
+  "HTML/CSS/JS": "JS",
+  "Tilda/Zero Block": "Tilda",
+};
 
 export function getCaseDisplayTags(niches: string[], tech: string[]): CaseDisplayTag[] {
   const selected = new Set<string>();
@@ -31,6 +36,7 @@ export function getCaseDisplayTags(niches: string[], tech: string[]): CaseDispla
     .slice(0, 5)
     .map((label) => ({
       label,
-      kind: ALLOWED_NICHES.has(label) ? "niche" : "tech",
+      mobileLabel: MOBILE_TAG_LABELS[label],
+      kind: ALLOWED_NICHES.has(label) ? ("niche" as const) : ("tech" as const),
     }));
 }

@@ -1,4 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+import { Resvg } from "@resvg/resvg-js";
+import { writeFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+const root = resolve(import.meta.dirname, "..");
+const svgPath = resolve(root, "public/og-cover.svg");
+const pngPath = resolve(root, "public/og-cover.png");
+
+const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Елена Саманчук — страницы для кампаний">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -44,4 +52,18 @@
   <text x="324" y="485" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, system-ui, sans-serif" font-size="19" font-weight="600">Growfood · Приём · Nasha · EdTech</text>
 
   <text x="64" y="560" fill="#6b7694" font-family="Segoe UI, system-ui, sans-serif" font-size="17">elenasamanchuk.github.io/elena-samanchuk</text>
-</svg>
+</svg>`;
+
+writeFileSync(svgPath, svg, "utf8");
+
+const resvg = new Resvg(svg, {
+  fitTo: { mode: "width", value: 1200 },
+  font: {
+    loadSystemFonts: true,
+    defaultFontFamily: "Segoe UI",
+  },
+});
+
+writeFileSync(pngPath, resvg.render().asPng());
+console.info(`[og:cover] ${svgPath}`);
+console.info(`[og:cover] ${pngPath}`);

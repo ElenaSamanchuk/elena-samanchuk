@@ -1,4 +1,4 @@
-export type CaseLink = { label: string; href: string };
+export type CaseLink = { label: string; href: string; mobileLabel?: string };
 
 export type CaseCard = {
   id: string;
@@ -31,11 +31,11 @@ export const topCases: CaseCard[] = [
     role: "Механики на HTML/CSS/JS (калькулятор, колесо, плейлист, корзина) + посадочные на Tilda.",
     previewImage: "/previews/growfood.png",
     links: [
-      { label: "ИМТ-калькулятор · выбор меню", href: "https://amb.growfood.pro/food-selection-1" },
+      { label: "ИМТ-калькулятор · меню", mobileLabel: "ИМТ-калькулятор", href: "https://amb.growfood.pro/food-selection-1" },
       { label: "Колесо фортуны", href: "https://amb.growfood.pro/page79566396.html#reg" },
       { label: "HTML5-баннеры", href: "https://elenasamanchuk.github.io/html5-banners-vitrina/" },
-      { label: "Плейлист осознанного питания", href: "https://gfmusic.tilda.ws/#rec943861591" },
-      { label: "Кастомная корзина · GF Gift", href: "https://gf-gift.ru/#podari" },
+      { label: "Плейлист питания", href: "https://gfmusic.tilda.ws/#rec943861591" },
+      { label: "Корзина GF Gift", href: "https://gf-gift.ru/#podari" },
     ],
     niches: ["FoodTech", "B2C"],
     tech: [
@@ -54,13 +54,13 @@ export const topCases: CaseCard[] = [
   {
     id: "priem",
     title: "Приём",
-    proof: "Сезонные кампании и партнёрские лендинги: срочность, сегментация и путь до контакта с командой.",
+    proof: "Сезонные кампании и партнёрские лендинги: срочность, сегментация и путь клиента.",
     role: "Таймер под корзиной (Т-Банк), сезонный квиз и игровые карточки — код HTML/CSS/JS.",
     previewImage: "/previews/priem.png",
     links: [
-      { label: "Таймер под корзиной · партнёрка Т-Банк", href: "https://priem.menu/?cmz=Kdw5" },
+      { label: "Таймер · Т-Банк", href: "https://priem.menu/?cmz=Kdw5" },
       { label: "Сезонный квиз", href: "https://priem.menu/?cmz=M3rW" },
-      { label: "Игровые карточки · сезон", href: "https://amb.priem.menu/page101080486.html" },
+      { label: "Игровые карточки", href: "https://amb.priem.menu/page101080486.html" },
     ],
     niches: ["FoodTech", "B2C"],
     tech: [
@@ -86,7 +86,7 @@ export const topCases: CaseCard[] = [
     previewImage: "/previews/fitness.png",
     links: [
       { label: "Yourforma", href: "https://yourforma.ru/" },
-      { label: "Kinezio · модуль zero", href: "https://kineziofitness.online/module-zero" },
+      { label: "Kinezio · zero", href: "https://kineziofitness.online/module-zero" },
       { label: "Popovichfit · taplink", href: "https://popovichfit.ru/taplink" },
       { label: "Kochfit · итоги года", href: "https://kochfit.ru/year-results" },
     ],
@@ -95,17 +95,17 @@ export const topCases: CaseCard[] = [
   },
   {
     id: "education",
-    title: "Образование · психология · платформы",
+    title: "Образование · психология",
     proof: "Школы и платформы: длинные лендинги, много контента, спокойный тон без перегруза.",
     role: "Tilda, адаптив, QA и автотесты; курсы, HR-витрины, админка Platformax.",
     previewImage: "/previews/education.png",
     links: [
-      { label: "Система Ясности · психология", href: "https://sistemayasnosti.com/" },
-      { label: "BI13 · школа фотографии", href: "https://bi13pro.ru/aestheticbi13" },
-      { label: "Mostovoy · школа продвижения", href: "https://mostovoyvv.com/" },
-      { label: "Savinar · школа продвижения", href: "https://savinarv.tilda.ws/" },
-      { label: "Platformax · админка для школ", href: "https://platformax.pro/" },
-      { label: "Лендинг вакансий · HR", href: "https://sales-manager-chat.tilda.ws/" },
+      { label: "Система Ясности", href: "https://sistemayasnosti.com/" },
+      { label: "BI13 · фотошкола", href: "https://bi13pro.ru/aestheticbi13" },
+      { label: "Mostovoy", href: "https://mostovoyvv.com/" },
+      { label: "Savinar", href: "https://savinarv.tilda.ws/" },
+      { label: "Platformax · админка", href: "https://platformax.pro/" },
+      { label: "Вакансии · HR", href: "https://sales-manager-chat.tilda.ws/" },
     ],
     niches: ["EdTech", "B2B", "эксперт"],
     tech: ["Tilda", "Zero Block", "HTML/CSS/JS", "адаптив", "анимация", "QA", "автотесты"],

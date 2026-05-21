@@ -1,0 +1,11 @@
+/**
+ * Единая точка входа стилей (порядок слоёв важен).
+ * 1. tailwind — токены, @theme, утилиты, body
+ * 2. type — типографическая шкала
+ * 3. widgets — карточки, roadmap, hero builder, scroll-top
+ * 4. ux — адаптив, touch, focus-visible, порядок колонок
+ */
+@import "./tailwind.css";
+@import "./type.css";
+@import "./widgets.css";
+@import "./ux.css";
