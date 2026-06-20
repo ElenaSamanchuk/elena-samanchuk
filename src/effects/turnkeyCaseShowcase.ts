@@ -1,23 +1,22 @@
-import { codeMarkupLines, turnkeyCaseSteps } from "../data/turnkeyCase";
+import { DEMO_SHOWCASE_BY_ID } from "../data/demoShowcases";
+import type { DemoShowcaseConfig, DemoShowcaseStepVisual } from "../data/demoShowcaseTypes";
 import { initBlockBuilder } from "./blockBuilderAnim";
 
 const AUTOPLAY_MS = 3200;
 const CODE_CHAR_MS = 22;
 const CODE_LINE_PAUSE_MS = 120;
 
-export function initTurnkeyCaseShowcase(reducedMotion: boolean): void {
-  const root = document.querySelector<HTMLElement>("[data-turnkey-showcase]");
-  if (!root) return;
+function getStepVisual(config: DemoShowcaseConfig, stepId: string | undefined): DemoShowcaseStepVisual | null {
+  if (!stepId || stepId === "ship") return null;
+  return config.steps.find((step) => step.id === stepId)?.visual ?? null;
+}
 
+function initDemoShowcaseRoot(root: HTMLElement, config: DemoShowcaseConfig, reducedMotion: boolean): void {
   const steps = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-turnkey-step]"));
   const overlays = root.querySelector<HTMLElement>("[data-turnkey-overlays]");
   const visuals = overlays
     ? Array.from(overlays.querySelectorAll<HTMLElement>("[data-turnkey-visual]"))
     : [];
-  const briefTrack = root.querySelector<HTMLElement>("[data-turnkey-brief-track]");
-  const briefViewport = root.querySelector<HTMLElement>("[data-turnkey-brief-viewport]");
-  const figmaBuilder = root.querySelector<HTMLElement>("[data-turnkey-figma-builder]");
-  const codeOutput = root.querySelector<HTMLElement>("[data-turnkey-code-output]");
 
   if (!steps.length || !visuals.length) return;
 
@@ -31,6 +30,7 @@ export function initTurnkeyCaseShowcase(reducedMotion: boolean): void {
   let briefPanFrame = 0;
   let briefPanOffset = 0;
   let briefPanActive = false;
+  let activeChipsPanel: HTMLElement | null = null;
 
   const clearStepTimer = () => {
     if (timer !== null) {
@@ -55,34 +55,45 @@ export function initTurnkeyCaseShowcase(reducedMotion: boolean): void {
   const stopFigmaBuilder = () => {
     figmaCleanup?.();
     figmaCleanup = null;
-    if (!figmaBuilder) return;
-    figmaBuilder.classList.remove("is-styled", "is-polish");
-    figmaBuilder.querySelectorAll<HTMLElement>(".pb").forEach((el) => {
-      el.classList.remove("is-visible", "is-styled");
-      el.style.height = "";
-      el.style.width = "";
-      el.style.opacity = "";
+    root.querySelectorAll<HTMLElement>("[data-turnkey-figma-builder]").forEach((figmaBuilder) => {
+      figmaBuilder.classList.remove("is-styled", "is-polish");
+      figmaBuilder.querySelectorAll<HTMLElement>(".pb").forEach((el) => {
+        el.classList.remove("is-visible", "is-styled");
+        el.style.height = "";
+        el.style.width = "";
+        el.style.opacity = "";
+      });
     });
   };
 
   const resetBriefPan = () => {
     briefPanOffset = 0;
-    if (briefTrack) briefTrack.style.transform = "translate3d(0, 0, 0)";
+    activeChipsPanel
+      ?.querySelector<HTMLElement>("[data-turnkey-brief-track]")
+      ?.style.setProperty("transform", "translate3d(0, 0, 0)");
   };
 
   const getBriefMaxOffset = (): number => {
+    if (!activeChipsPanel) return 0;
+    const briefTrack = activeChipsPanel.querySelector<HTMLElement>("[data-turnkey-brief-track]");
+    const briefViewport = activeChipsPanel.querySelector<HTMLElement>("[data-turnkey-brief-viewport]");
     if (!briefTrack || !briefViewport) return 0;
     return Math.max(0, briefTrack.scrollHeight - briefViewport.clientHeight);
   };
 
-  const startBriefScroll = () => {
-    if (!briefTrack || !briefViewport || reducedMotion) return;
-    if (turnkeyCaseSteps[activeIndex]?.id !== "brief") return;
+  const startChipsScroll = (stepId: string) => {
+    if (reducedMotion) return;
+    activeChipsPanel = root.querySelector<HTMLElement>(`[data-turnkey-visual="${stepId}"]`);
+    if (!activeChipsPanel) return;
+
     stopBriefPan();
     resetBriefPan();
 
+    const briefTrack = activeChipsPanel.querySelector<HTMLElement>("[data-turnkey-brief-track]");
+    if (!briefTrack) return;
+
     const runPan = () => {
-      if (turnkeyCaseSteps[activeIndex]?.id !== "brief") return;
+      if (getStepVisual(config, config.steps[activeIndex]?.id) !== "chips") return;
       briefPanActive = true;
       let phase = 0;
 
@@ -110,49 +121,54 @@ export function initTurnkeyCaseShowcase(reducedMotion: boolean): void {
     });
   };
 
-  const startFigmaBuilder = () => {
-    if (!figmaBuilder || figmaCleanup) return;
+  const startFigmaBuilder = (stepId: string) => {
+    if (figmaCleanup) return;
+    const panel = root.querySelector<HTMLElement>(`[data-turnkey-visual="${stepId}"]`);
+    const figmaBuilder = panel?.querySelector<HTMLElement>("[data-turnkey-figma-builder]");
+    if (!figmaBuilder) return;
     figmaCleanup = initBlockBuilder(figmaBuilder, reducedMotion);
   };
 
-  const typeNextCodeChar = () => {
-    if (!codeOutput) return;
-    const line = codeMarkupLines[codeLineIndex];
+  const typeNextCodeChar = (codeOutput: HTMLElement) => {
+    const line = config.codeLines[codeLineIndex];
     if (!line) {
       codeTimer = window.setTimeout(() => {
         codeOutput.textContent = "";
         codeLineIndex = 0;
         codeCharIndex = 0;
-        typeNextCodeChar();
+        typeNextCodeChar(codeOutput);
       }, reducedMotion ? 0 : 900);
       return;
     }
 
     if (codeCharIndex <= line.length) {
-      const chunk = codeMarkupLines.slice(0, codeLineIndex).join("\n");
+      const chunk = config.codeLines.slice(0, codeLineIndex).join("\n");
       const current = chunk + (chunk ? "\n" : "") + line.slice(0, codeCharIndex);
       codeOutput.textContent = current;
       codeCharIndex += 1;
-      codeTimer = window.setTimeout(typeNextCodeChar, reducedMotion ? 0 : CODE_CHAR_MS);
+      codeTimer = window.setTimeout(() => typeNextCodeChar(codeOutput), reducedMotion ? 0 : CODE_CHAR_MS);
       return;
     }
 
     codeLineIndex += 1;
     codeCharIndex = 0;
-    codeTimer = window.setTimeout(typeNextCodeChar, reducedMotion ? 0 : CODE_LINE_PAUSE_MS);
+    codeTimer = window.setTimeout(() => typeNextCodeChar(codeOutput), reducedMotion ? 0 : CODE_LINE_PAUSE_MS);
   };
 
-  const startCodeTyper = () => {
+  const startCodeTyper = (stepId: string) => {
     stopCodeTyper();
+    const panel = root.querySelector<HTMLElement>(`[data-turnkey-visual="${stepId}"]`);
+    const codeOutput = panel?.querySelector<HTMLElement>("[data-turnkey-code-output]");
     if (!codeOutput) return;
+
     codeLineIndex = 0;
     codeCharIndex = 0;
     codeOutput.textContent = "";
     if (reducedMotion) {
-      codeOutput.textContent = codeMarkupLines.join("\n");
+      codeOutput.textContent = config.codeLines.join("\n");
       return;
     }
-    typeNextCodeChar();
+    typeNextCodeChar(codeOutput);
   };
 
   const syncVisualEngines = (stepId: string | undefined) => {
@@ -160,14 +176,15 @@ export function initTurnkeyCaseShowcase(reducedMotion: boolean): void {
     stopCodeTyper();
     stopBriefPan();
 
-    if (stepId === "brief") startBriefScroll();
-    if (stepId === "figma") startFigmaBuilder();
-    if (stepId === "code") startCodeTyper();
+    const visual = getStepVisual(config, stepId);
+    if (visual === "chips" && stepId) startChipsScroll(stepId);
+    if (visual === "figma" && stepId) startFigmaBuilder(stepId);
+    if (visual === "code" && stepId) startCodeTyper(stepId);
   };
 
   const setActive = (index: number) => {
     activeIndex = ((index % steps.length) + steps.length) % steps.length;
-    const stepId = turnkeyCaseSteps[activeIndex]?.id;
+    const stepId = config.steps[activeIndex]?.id;
     const isShip = stepId === "ship";
 
     steps.forEach((btn, i) => {
@@ -220,7 +237,8 @@ export function initTurnkeyCaseShowcase(reducedMotion: boolean): void {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           startAutoplay();
-          if (turnkeyCaseSteps[activeIndex]?.id === "brief") startBriefScroll();
+          const stepId = config.steps[activeIndex]?.id;
+          if (getStepVisual(config, stepId) === "chips" && stepId) startChipsScroll(stepId);
         } else {
           clearStepTimer();
           stopBriefPan();
@@ -232,4 +250,16 @@ export function initTurnkeyCaseShowcase(reducedMotion: boolean): void {
     { threshold: 0.2 },
   );
   observer.observe(root);
+}
+
+export function initTurnkeyCaseShowcase(reducedMotion: boolean): void {
+  document.querySelectorAll<HTMLElement>("[data-turnkey-showcase]").forEach((root) => {
+    const config = DEMO_SHOWCASE_BY_ID[root.dataset.showcaseId ?? ""];
+    if (!config) return;
+    initDemoShowcaseRoot(root, config, reducedMotion);
+  });
+}
+
+export function initDemoShowcases(reducedMotion: boolean): void {
+  initTurnkeyCaseShowcase(reducedMotion);
 }
