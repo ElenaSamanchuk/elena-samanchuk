@@ -15,6 +15,21 @@ export type CaseCard = {
 
 export const topCases: CaseCard[] = [
   {
+    id: "yandex-pet-day",
+    title: "Yandex Pet Day",
+    proof: "Event-лендинг под ключ: Figma 1440+360, UI-kit, Play-прототип и интерактивный код на GitHub Pages.",
+    role: "UX/UI, прототип, адаптив 360–1440, HTML/CSS/JS (Vite), QA, handoff для разработки.",
+    badges: ["под ключ", "Figma Play"],
+    links: [
+      { label: "Figma", href: "https://www.figma.com/design/3xau5j9A2ixWs7YnfHCvXi/Untitled" },
+      { label: "Демо", href: "https://elenasamanchuk.github.io/yandex-pet-day/" },
+      { label: "Кейс", href: "https://elenasamanchuk.github.io/yandex-pet-day/case.html" },
+      { label: "GitHub", href: "https://github.com/ElenaSamanchuk/yandex-pet-day" },
+    ],
+    niches: ["Event", "B2B", "pet-tech"],
+    tech: ["Figma", "HTML/CSS/JS", "Vite", "Tailwind", "адаптив", "прототип", "UX/UI", "QA", "GitHub Pages"],
+  },
+  {
     id: "nasha",
     title: "Nasha",
     proof: "Запуск e-commerce-витрины: каталог, контент и доводка интерфейса в одном контуре.",
