@@ -1,11 +1,16 @@
 import type { DemoShowcaseConfig } from "./demoShowcaseTypes";
+import { jobRadarShowcase } from "./showcases/jobRadar";
 import { vitalCoachShowcase } from "./showcases/vitalCoach";
 import { yandexPetDayShowcase } from "./showcases/yandexPetDay";
 
 export type { DemoShowcaseConfig, DemoShowcaseLink, DemoShowcasePill, DemoShowcaseStep } from "./demoShowcaseTypes";
 
 /** Demo-карточки в блоке «Избранные проекты» — порядок на странице */
-export const DEMO_SHOWCASES: DemoShowcaseConfig[] = [yandexPetDayShowcase, vitalCoachShowcase];
+export const DEMO_SHOWCASES: DemoShowcaseConfig[] = [
+  yandexPetDayShowcase,
+  vitalCoachShowcase,
+  jobRadarShowcase,
+];
 
 export const DEMO_SHOWCASE_BY_ID = Object.fromEntries(
   DEMO_SHOWCASES.map((showcase) => [showcase.id, showcase]),
