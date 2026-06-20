@@ -82,7 +82,7 @@ const visualPanelMarkup = (
   step: DemoShowcaseStep,
   isFirstInteractive: boolean,
 ) => {
-  const codeTabs = config.codeTabs ?? ["index.html", "style.css"];
+  const codeTabs = step.codeTabs ?? config.codeTabs ?? ["index.html", "style.css"];
 
   if (step.visual === "chips") return chipsPanelMarkup(config.id, step, isFirstInteractive);
   if (step.visual === "figma") return figmaPanelMarkup(config.id, step, isFirstInteractive);
@@ -146,8 +146,7 @@ export function demoShowcaseMarkup(config: DemoShowcaseConfig): string {
     </div>
   `;
 
-  const platesLabel =
-    config.id === "vital-coach" ? "Этапы разработки приложения" : "Этапы кейса под ключ";
+  const platesLabel = config.platesLabel ?? "Этапы кейса под ключ";
 
   return `
     <article

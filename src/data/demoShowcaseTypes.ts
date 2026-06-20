@@ -9,6 +9,11 @@ export type DemoShowcaseStep = {
   visual?: DemoShowcaseStepVisual;
   /** Плашки для visual: chips */
   chips?: string[];
+  /** Превью для этого шага (если отличается от карточки) */
+  previewImage?: string;
+  /** Свой код для visual: code */
+  codeLines?: string[];
+  codeTabs?: [string, string];
 };
 
 export type DemoShowcaseLink = {
@@ -30,4 +35,6 @@ export type DemoShowcaseConfig = {
   steps: DemoShowcaseStep[];
   codeLines: string[];
   codeTabs?: [string, string];
+  /** Подпись табlist этапов */
+  platesLabel?: string;
 };

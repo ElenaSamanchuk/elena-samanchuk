@@ -1,5 +1,6 @@
 import { DEMO_SHOWCASE_BY_ID } from "../data/demoShowcases";
 import type { DemoShowcaseConfig, DemoShowcaseStepVisual } from "../data/demoShowcaseTypes";
+import { safeHref } from "../lib/safeUrl";
 import { initBlockBuilder } from "./blockBuilderAnim";
 
 const AUTOPLAY_MS = 3200;
@@ -9,6 +10,18 @@ const CODE_LINE_PAUSE_MS = 120;
 function getStepVisual(config: DemoShowcaseConfig, stepId: string | undefined): DemoShowcaseStepVisual | null {
   if (!stepId || stepId === "ship") return null;
   return config.steps.find((step) => step.id === stepId)?.visual ?? null;
+}
+
+function getStepCodeLines(config: DemoShowcaseConfig, stepId: string | undefined): string[] {
+  if (!stepId) return config.codeLines;
+  const step = config.steps.find((item) => item.id === stepId);
+  return step?.codeLines ?? config.codeLines;
+}
+
+function getStepPreviewImage(config: DemoShowcaseConfig, stepId: string | undefined): string {
+  if (!stepId) return config.previewImage;
+  const step = config.steps.find((item) => item.id === stepId);
+  return step?.previewImage ?? config.previewImage;
 }
 
 function initDemoShowcaseRoot(root: HTMLElement, config: DemoShowcaseConfig, reducedMotion: boolean): void {
@@ -129,30 +142,36 @@ function initDemoShowcaseRoot(root: HTMLElement, config: DemoShowcaseConfig, red
     figmaCleanup = initBlockBuilder(figmaBuilder, reducedMotion);
   };
 
-  const typeNextCodeChar = (codeOutput: HTMLElement) => {
-    const line = config.codeLines[codeLineIndex];
+  const typeNextCodeChar = (codeOutput: HTMLElement, lines: string[]) => {
+    const line = lines[codeLineIndex];
     if (!line) {
       codeTimer = window.setTimeout(() => {
         codeOutput.textContent = "";
         codeLineIndex = 0;
         codeCharIndex = 0;
-        typeNextCodeChar(codeOutput);
+        typeNextCodeChar(codeOutput, lines);
       }, reducedMotion ? 0 : 900);
       return;
     }
 
     if (codeCharIndex <= line.length) {
-      const chunk = config.codeLines.slice(0, codeLineIndex).join("\n");
+      const chunk = lines.slice(0, codeLineIndex).join("\n");
       const current = chunk + (chunk ? "\n" : "") + line.slice(0, codeCharIndex);
       codeOutput.textContent = current;
       codeCharIndex += 1;
-      codeTimer = window.setTimeout(() => typeNextCodeChar(codeOutput), reducedMotion ? 0 : CODE_CHAR_MS);
+      codeTimer = window.setTimeout(
+        () => typeNextCodeChar(codeOutput, lines),
+        reducedMotion ? 0 : CODE_CHAR_MS,
+      );
       return;
     }
 
     codeLineIndex += 1;
     codeCharIndex = 0;
-    codeTimer = window.setTimeout(() => typeNextCodeChar(codeOutput), reducedMotion ? 0 : CODE_LINE_PAUSE_MS);
+    codeTimer = window.setTimeout(
+      () => typeNextCodeChar(codeOutput, lines),
+      reducedMotion ? 0 : CODE_LINE_PAUSE_MS,
+    );
   };
 
   const startCodeTyper = (stepId: string) => {
@@ -161,14 +180,15 @@ function initDemoShowcaseRoot(root: HTMLElement, config: DemoShowcaseConfig, red
     const codeOutput = panel?.querySelector<HTMLElement>("[data-turnkey-code-output]");
     if (!codeOutput) return;
 
+    const lines = getStepCodeLines(config, stepId);
     codeLineIndex = 0;
     codeCharIndex = 0;
     codeOutput.textContent = "";
     if (reducedMotion) {
-      codeOutput.textContent = config.codeLines.join("\n");
+      codeOutput.textContent = lines.join("\n");
       return;
     }
-    typeNextCodeChar(codeOutput);
+    typeNextCodeChar(codeOutput, lines);
   };
 
   const syncVisualEngines = (stepId: string | undefined) => {
@@ -206,6 +226,15 @@ function initDemoShowcaseRoot(root: HTMLElement, config: DemoShowcaseConfig, red
     });
 
     root.classList.toggle("is-ship-step", isShip);
+
+    const previewImg = root.querySelector<HTMLImageElement>("[data-preview-img]");
+    if (previewImg && !isShip) {
+      const nextSrc = safeHref(getStepPreviewImage(config, stepId));
+      if (previewImg.getAttribute("src") !== nextSrc) {
+        previewImg.setAttribute("src", nextSrc);
+      }
+    }
+
     syncVisualEngines(stepId);
   };
 
