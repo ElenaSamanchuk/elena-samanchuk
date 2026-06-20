@@ -118,8 +118,11 @@ export function demoShowcaseMarkup(config: DemoShowcaseConfig): string {
     .map((pill) => `<span class="${pillClass(pill.kind)}">${t(pill.label)}</span>`)
     .join("");
 
+  const linksLayoutClass =
+    config.links.length === 1 ? "case-links--one" : "case-links--inline";
+
   const caseLinks = `
-    <ul class="case-links case-links--grid case-links--inline" aria-label="Ссылки проекта">
+    <ul class="case-links case-links--grid ${linksLayoutClass}" aria-label="Ссылки проекта">
       ${config.links
         .map(
           (link) => `

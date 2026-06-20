@@ -2305,6 +2305,18 @@
   min-width: 0;
 }
 
+.turnkey-showcase .case-links--one {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(10.25rem, 1fr));
+  margin-top: 1.25rem;
+}
+
+.turnkey-showcase .case-links--one .case-links__item {
+  grid-column: 1;
+  flex: none;
+  width: auto;
+}
+
 .turnkey-overlays {
   position: absolute;
   inset: 0;
