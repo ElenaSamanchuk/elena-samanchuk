@@ -1,5 +1,6 @@
 import { BUILDER_STAGE_MIN_HEIGHT } from "./data/blockBuilderConfig";
 import { initCasePreviews } from "./effects/casePreview";
+import { initTurnkeyCaseShowcase } from "./effects/turnkeyCaseShowcase";
 import { initDiagramMotion } from "./effects/diagramMotion";
 import { initBlockBuilder } from "./effects/blockBuilderAnim";
 import { initScrollToTop } from "./effects/scrollToTop";
@@ -169,6 +170,7 @@ export async function initSite() {
   });
 
   initCasePreviews(reducedMotion);
+  initTurnkeyCaseShowcase(reducedMotion);
   initDiagramMotion(reducedMotion);
 
   const builderRoot = document.querySelector<HTMLElement>("[data-block-builder]");

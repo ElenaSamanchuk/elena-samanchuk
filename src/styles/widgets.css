@@ -158,12 +158,17 @@
   height: auto;
   opacity: 0.55;
   filter: blur(14px);
-  transition: filter 0.5s ease, opacity 0.5s ease;
+  transform: scale(1.04);
+  transition:
+    filter 0.5s ease,
+    opacity 0.5s ease,
+    transform 0.5s ease;
 }
 
 .case-preview.is-ready .case-preview__track img {
   opacity: 1;
   filter: blur(0);
+  transform: scale(1);
 }
 
 @keyframes preview-shimmer {
@@ -2211,6 +2216,295 @@
   }
 }
 
+/* Кейс под ключ — в сетке timeline-card */
+.turnkey-showcase__demo-pill {
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.turnkey-showcase__demo-note {
+  margin: 0;
+  max-width: 36ch;
+  line-height: 1.4;
+  color: var(--color-muted-soft);
+}
+
+.turnkey-showcase__summary {
+  margin: 0;
+  font-size: var(--text-sm, 0.875rem);
+  line-height: 1.45;
+}
+
+.turnkey-plates {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 1.25rem;
+}
+
+.turnkey-plate {
+  display: grid;
+  gap: 0.2rem;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--r-lg, 14px);
+  color: inherit;
+  text-align: left;
+  background: rgb(255 255 255 / 0.03);
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.turnkey-plate:hover {
+  border-color: rgb(255 255 255 / 0.12);
+  background: rgb(255 255 255 / 0.05);
+}
+
+.turnkey-plate.is-active {
+  border-color: rgb(99 102 241 / 0.42);
+  background: rgb(99 102 241 / 0.1);
+  box-shadow: inset 0 0 0 1px rgb(99 102 241 / 0.08);
+}
+
+.turnkey-plate__focus {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted-soft);
+}
+
+.turnkey-plate.is-active .turnkey-plate__focus {
+  color: #a5b4fc;
+}
+
+.turnkey-plate__title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.turnkey-plate__lead {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--color-muted);
+}
+
+.turnkey-showcase .case-links--inline {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.4rem;
+  margin-top: 1.25rem;
+}
+
+.turnkey-showcase .case-links--inline .case-links__item {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.turnkey-overlays {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  background: #0c0e18;
+}
+
+.turnkey-overlays[hidden] {
+  display: none !important;
+}
+
+.turnkey-showcase__stamp {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  z-index: 2;
+  padding: 0.2rem 0.45rem;
+  border: 1px solid rgb(236 72 153 / 0.35);
+  border-radius: var(--r-pill);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fbcfe8;
+  background: rgb(236 72 153 / 0.12);
+  pointer-events: none;
+}
+
+.turnkey-visual {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  padding: 0.65rem;
+  animation: turnkey-panel-in 0.28s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.turnkey-visual--brief {
+  padding: 0.5rem 0.65rem;
+  align-content: stretch;
+  overflow: hidden;
+}
+
+.turnkey-visual[hidden] {
+  display: none !important;
+}
+
+@keyframes turnkey-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Бриф — колонка плашек с прокруткой */
+.turnkey-brief-scroll {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+}
+
+.turnkey-brief-cloud {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 0.32rem;
+  align-items: stretch;
+  width: 100%;
+  will-change: transform;
+}
+
+.turnkey-brief-chip {
+  display: block;
+  width: 100%;
+  padding: 0.28rem 0.55rem;
+  border-radius: var(--r-pill);
+  border: 1px solid rgb(255 255 255 / 0.12);
+  font-size: 0.625rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--color-muted);
+  background: rgb(255 255 255 / 0.05);
+  opacity: 1;
+  transform: none;
+  white-space: normal;
+}
+
+.turnkey-brief-chip:nth-child(3n + 1) {
+  border-color: rgb(99 102 241 / 0.35);
+  color: #c7d2fe;
+  background: rgb(99 102 241 / 0.1);
+}
+
+.turnkey-brief-chip:nth-child(3n + 2) {
+  border-color: rgb(133 51 255 / 0.32);
+  color: #ddd6fe;
+}
+
+/* Figma — сборка блоков как в hero */
+.page-builder--turnkey {
+  width: 100%;
+  max-width: 100%;
+  filter: none;
+}
+
+.page-builder--turnkey .page-builder__stage {
+  min-height: 210px;
+  gap: 4px;
+}
+
+/* Код — набор разметки */
+.turnkey-code-editor {
+  display: grid;
+  gap: 0;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  background: #0c0e16;
+}
+
+.turnkey-code-editor__tabs {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.04);
+}
+
+.turnkey-code-editor__tabs span {
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  font-size: 0.5625rem;
+  font-weight: 600;
+  color: var(--color-muted-soft);
+}
+
+.turnkey-code-editor__tabs span.is-active {
+  color: #c4b5fd;
+  background: rgb(133 51 255 / 0.15);
+}
+
+.turnkey-code-editor__pre {
+  margin: 0;
+  padding: 0.45rem 0.5rem;
+  overflow: hidden;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.5625rem;
+  line-height: 1.45;
+  color: #a5b4fc;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.turnkey-code-editor__pre code {
+  color: inherit;
+}
+
+.turnkey-code-editor__caret {
+  display: inline-block;
+  width: 0.35rem;
+  height: 0.75rem;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: #8533ff;
+  animation: turnkey-caret-blink 1s step-end infinite;
+}
+
+@keyframes turnkey-caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 1023px) {
+  .page-builder--turnkey .page-builder__stage {
+    min-height: 170px;
+  }
+
+  .turnkey-brief-chip {
+    font-size: 0.5625rem;
+    padding: 0.22rem 0.45rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .case-preview__skeleton {
     animation: none;
@@ -2232,6 +2526,19 @@
   .format-map__plane:not(.is-format-cards-visible) .format-map__card {
     opacity: 1;
     transform: none;
+    animation: none;
+  }
+
+  .turnkey-visual {
+    animation: none;
+  }
+
+  .turnkey-brief-chip {
+    opacity: 1;
+    transform: none;
+  }
+
+  .turnkey-code-editor__caret {
     animation: none;
   }
 }

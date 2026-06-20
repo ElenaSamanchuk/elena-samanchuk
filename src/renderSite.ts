@@ -8,6 +8,8 @@ import { escapeHtml } from "./lib/escapeHtml";
 import { bindTypography } from "./lib/typography";
 import { safeHref } from "./lib/safeUrl";
 import { collaborationMatrixMarkup } from "./markup/collaborationMatrix";
+import { casePreviewAsideMarkup } from "./markup/casePreview";
+import { turnkeyCaseShowcaseMarkup } from "./markup/turnkeyCaseShowcase";
 import { heroPipelineCardMarkup } from "./markup/heroPipelineCard";
 
 const metrics = siteCopy.metrics;
@@ -97,24 +99,7 @@ const caseDetailsMarkup = (item: CaseCard) => `
 
 const casePreviewMarkup = (item: CaseCard) => {
   if (!item.previewImage) return "";
-
-  return `<aside class="case-preview is-loading box-border w-full max-w-full max-lg:order-first max-lg:h-[200px] max-lg:min-h-[200px] max-lg:max-h-[200px]" data-case-preview aria-label="Превью ${t(item.title)}">
-    <div class="case-preview__viewport">
-      <div class="case-preview__skeleton" aria-hidden="true"></div>
-      <div class="case-preview__stage" data-preview-stage>
-        <div class="case-preview__track" data-preview-track>
-          <img
-            data-preview-img
-            src="${safeHref(item.previewImage)}"
-            alt="Скриншот ${t(item.title)}"
-            loading="lazy"
-            decoding="async"
-            fetchpriority="low"
-          />
-        </div>
-      </div>
-    </div>
-  </aside>`;
+  return casePreviewAsideMarkup({ src: item.previewImage, alt: item.title });
 };
 
 const stackMarkup = stack
@@ -139,7 +124,10 @@ const metricsMarkup = metrics
   )
   .join("");
 
+const featuredCaseId = "yandex-pet-day";
+
 const caseMarkup = topCases
+  .filter((item) => item.id !== featuredCaseId)
   .map(
     (item) => `
       <article class="timeline-card min-w-0${item.previewImage ? " has-case-preview grid lg:grid-cols-[minmax(0,1fr)_minmax(240px,38%)] lg:items-stretch" : ""}" data-case-card data-reveal>
@@ -272,7 +260,10 @@ export function renderSite(root: HTMLElement): void {
     <div class="content-stack min-w-0">
       <section class="content-section" id="cases" style="view-transition-name: cases">
         ${sectionHeadMarkup(siteCopy.cases.kicker, siteCopy.cases.title, siteCopy.cases.lead)}
-        <div class="case-list flex flex-col" data-stagger>${caseMarkup}</div>
+        <div class="case-list flex flex-col" data-stagger>
+          ${turnkeyCaseShowcaseMarkup}
+          ${caseMarkup}
+        </div>
       </section>
 
       <section
