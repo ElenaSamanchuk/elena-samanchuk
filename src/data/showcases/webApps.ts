@@ -7,7 +7,6 @@ export const webAppsShowcase: DemoShowcaseConfig = {
   pills: [
     { kind: "badge", label: "PWA" },
     { kind: "badge", label: "APK" },
-    { kind: "badge", label: "офлайн" },
     { kind: "badge", label: "vibe coding" },
     { kind: "tech", label: "Cursor" },
   ],
@@ -16,6 +15,7 @@ export const webAppsShowcase: DemoShowcaseConfig = {
     { label: "Republic 2077", href: "https://elenasamanchuk.github.io/republic-2077/" },
     { label: "Job Radar", href: "https://elenasamanchuk.github.io/job-radar/" },
     { label: "Still", href: "https://elenasamanchuk.github.io/still-store/" },
+    { label: "Videohost", href: "https://elenasamanchuk.github.io/videohost/" },
   ],
   platesLabel: "Приложения",
   steps: [
@@ -72,6 +72,19 @@ export const webAppsShowcase: DemoShowcaseConfig = {
         "Модалка товара, размеры, количество",
         "Dark / Light UI, sticky-фильтры",
         "Vite + Tailwind + vanilla JS",
+        "GitHub Pages",
+      ],
+    },
+    {
+      id: "videohost",
+      tab: "Videohost",
+      focus: "Кино",
+      title: "Каталог фильмов и просмотр трейлеров",
+      chips: [
+        "Kinopoisk Unofficial API",
+        "Поиск и топ популярных фильмов",
+        "Карточка с описанием и рейтингом",
+        "Встроенный YouTube-трейлер в модалке",
         "GitHub Pages",
       ],
     },
