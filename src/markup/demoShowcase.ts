@@ -120,7 +120,11 @@ export function demoShowcaseMarkup(config: DemoShowcaseConfig): string {
     .join("");
 
   const linksLayoutClass =
-    config.links.length === 1 ? "case-links--one" : "case-links--inline";
+    config.links.length === 1
+      ? "case-links--one"
+      : config.links.length === 2
+        ? "case-links--inline"
+        : "case-links--dense";
 
   const caseLinks = `
     <ul class="case-links case-links--grid ${linksLayoutClass}" aria-label="Ссылки проекта">
