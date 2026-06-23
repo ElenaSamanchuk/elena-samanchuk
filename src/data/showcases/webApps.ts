@@ -23,7 +23,6 @@ export const webAppsShowcase: DemoShowcaseConfig = {
       tab: "Поток",
       focus: "Life style",
       title: "Контроль жизни: питание, движение, сон, вода",
-      visual: "chips",
       previewImage: "/previews/vital-coach.png",
       chips: [
         "Life style · баланс дня",
@@ -32,20 +31,12 @@ export const webAppsShowcase: DemoShowcaseConfig = {
         "Цикл и аналитика записей",
         "PWA + APK Android",
       ],
-      codeLines: [
-        "// Поток · vibe coding в Cursor",
-        '"Онбординг → персональный план дня"',
-        '"Кольца прогресса и баланс сфер жизни"',
-        '"Дневник, аналитика, профиль"',
-      ],
-      codeTabs: ["Cursor", "CoachDashboard"],
     },
     {
       id: "republic",
       tab: "Игра",
       focus: "Republic 2077",
       title: "Свайп-игра с непростыми решениями",
-      visual: "chips",
       previewImage: "/previews/republic-2077.png",
       chips: [
         "Свайп влево / вправо — последствия",
@@ -54,20 +45,12 @@ export const webAppsShowcase: DemoShowcaseConfig = {
         "Офлайн после установки APK",
         "Десктоп-лендинг + игра в браузере",
       ],
-      codeLines: [
-        "// Republic 2077 · vibe coding",
-        '"Кампания решений правителя республики"',
-        '"Баланс народа, казны, силы и доверия"',
-        '"GitHub Pages · APK CI · без интернета"',
-      ],
-      codeTabs: ["Cursor", "LapseGame.tsx"],
     },
     {
       id: "radar",
       tab: "Job Radar",
       focus: "Вакансии",
       title: "Ресурс для подбора вакансий",
-      visual: "chips",
       previewImage: "/previews/job-radar.png",
       chips: [
         "Опросник навыков → профиль",
@@ -76,13 +59,6 @@ export const webAppsShowcase: DemoShowcaseConfig = {
         "Фильтры и подписки на поиски",
         "GitHub Pages",
       ],
-      codeLines: [
-        "// Job Radar · vibe coding",
-        '"Навыки и запрос → релевантные вакансии"',
-        '"Без хранения персональных данных"',
-        '"Ссылки на площадки для отклика"',
-      ],
-      codeTabs: ["Cursor", "matchProfile.ts"],
     },
   ],
   codeTabs: ["Cursor", "App.tsx"],

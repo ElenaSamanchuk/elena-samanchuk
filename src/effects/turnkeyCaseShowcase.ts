@@ -31,7 +31,9 @@ function initDemoShowcaseRoot(root: HTMLElement, config: DemoShowcaseConfig, red
     ? Array.from(overlays.querySelectorAll<HTMLElement>("[data-turnkey-visual]"))
     : [];
 
-  if (!steps.length || !visuals.length) return;
+  if (!steps.length) return;
+
+  const hasOverlays = visuals.length > 0;
 
   const autoplay = !reducedMotion;
   let activeIndex = 0;
@@ -215,15 +217,17 @@ function initDemoShowcaseRoot(root: HTMLElement, config: DemoShowcaseConfig, red
 
     if (isShip) {
       overlays?.setAttribute("hidden", "");
-    } else {
+    } else if (hasOverlays) {
       overlays?.removeAttribute("hidden");
     }
 
-    visuals.forEach((panel) => {
-      const isActive = !isShip && panel.dataset.turnkeyVisual === stepId;
-      panel.classList.toggle("is-active", isActive);
-      panel.hidden = !isActive;
-    });
+    if (hasOverlays) {
+      visuals.forEach((panel) => {
+        const isActive = !isShip && panel.dataset.turnkeyVisual === stepId;
+        panel.classList.toggle("is-active", isActive);
+        panel.hidden = !isActive;
+      });
+    }
 
     root.classList.toggle("is-ship-step", isShip);
 
@@ -231,6 +235,15 @@ function initDemoShowcaseRoot(root: HTMLElement, config: DemoShowcaseConfig, red
     if (previewImg && !isShip) {
       const nextSrc = safeHref(getStepPreviewImage(config, stepId));
       if (previewImg.getAttribute("src") !== nextSrc) {
+        previewImg.classList.remove("is-ready");
+        previewImg.addEventListener(
+          "load",
+          () => {
+            previewImg.classList.add("is-ready");
+            root.querySelector("[data-case-preview]")?.classList.add("is-ready");
+          },
+          { once: true },
+        );
         previewImg.setAttribute("src", nextSrc);
       }
     }

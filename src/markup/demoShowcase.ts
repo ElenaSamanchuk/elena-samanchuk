@@ -93,6 +93,7 @@ const visualPanelMarkup = (
 export function demoShowcaseMarkup(config: DemoShowcaseConfig): string {
   const interactiveSteps = config.steps.filter((step) => step.id !== "ship");
   const firstInteractiveId = interactiveSteps[0]?.id;
+  const hasVisualOverlays = interactiveSteps.some((step) => Boolean(step.visual));
 
   const stepPlates = config.steps
     .map(
@@ -138,13 +139,15 @@ export function demoShowcaseMarkup(config: DemoShowcaseConfig): string {
     </ul>
   `;
 
-  const overlaysMarkup = `
+  const overlaysMarkup = hasVisualOverlays
+    ? `
     <div class="turnkey-overlays" data-turnkey-overlays>
       ${interactiveSteps
         .map((step) => visualPanelMarkup(config, step, step.id === firstInteractiveId))
         .join("")}
     </div>
-  `;
+  `
+    : "";
 
   const platesLabel = config.platesLabel ?? "Этапы кейса под ключ";
 
