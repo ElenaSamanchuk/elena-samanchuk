@@ -15,6 +15,7 @@ export const webAppsShowcase: DemoShowcaseConfig = {
     { label: "Поток", href: "https://elenasamanchuk.github.io/vital-coach/onboarding/" },
     { label: "Republic 2077", href: "https://elenasamanchuk.github.io/republic-2077/" },
     { label: "Job Radar", href: "https://elenasamanchuk.github.io/job-radar/" },
+    { label: "Still", href: "https://elenasamanchuk.github.io/still-store/" },
   ],
   platesLabel: "Приложения",
   steps: [
@@ -57,6 +58,20 @@ export const webAppsShowcase: DemoShowcaseConfig = {
         "Матчинг: точно / подтянуть / под вопросом",
         "hh.ru, Remote OK, Jobicy, Upwork",
         "Фильтры и подписки на поиски",
+        "GitHub Pages",
+      ],
+    },
+    {
+      id: "still",
+      tab: "Still",
+      focus: "E-commerce",
+      title: "Интернет-магазин одежды",
+      previewImage: "/previews/still-store.png",
+      chips: [
+        "Каталог · корзина · checkout · аккаунт",
+        "Модалка товара, размеры, количество",
+        "Dark / Light UI, sticky-фильтры",
+        "Vite + Tailwind + vanilla JS",
         "GitHub Pages",
       ],
     },
