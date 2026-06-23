@@ -16,6 +16,7 @@ export const webAppsShowcase: DemoShowcaseConfig = {
     { label: "Job Radar", href: "https://elenasamanchuk.github.io/job-radar/" },
     { label: "Still", href: "https://elenasamanchuk.github.io/still-store/" },
     { label: "Videohost", href: "https://elenasamanchuk.github.io/videohost/" },
+    { label: "Learn Atlas", href: "https://elenasamanchuk.github.io/learn-atlas/" },
   ],
   platesLabel: "Приложения",
   steps: [
@@ -86,6 +87,20 @@ export const webAppsShowcase: DemoShowcaseConfig = {
         "Трейлеры: Kinopoisk · TMDB · YouTube",
         "Полные фильмы · public domain",
         "Мой список · сохранение в браузере",
+        "GitHub Pages",
+      ],
+    },
+    {
+      id: "learn-atlas",
+      tab: "Learn Atlas",
+      focus: "Обучение",
+      title: "Интерактивный курс HTML → Node.js",
+      previewImage: "/previews/learn-atlas.png",
+      chips: [
+        "React · Router · Tailwind Typography",
+        "5 глав HTML: семантика, формы, структура",
+        "Оглавление · практика · самопроверка",
+        "Прогресс глав в localStorage",
         "GitHub Pages",
       ],
     },
