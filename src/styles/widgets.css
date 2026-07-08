@@ -151,36 +151,24 @@
   will-change: transform;
 }
 
-.case-preview.is-cover-mode .case-preview__track {
-  inset: 0;
-  height: 100%;
-}
-
 .case-preview__track img {
   display: block;
   width: 100%;
-  opacity: 0.55;
-  filter: blur(14px);
-  transition:
-    filter 0.5s ease,
-    opacity 0.5s ease;
-}
-
-.case-preview.is-scroll-mode .case-preview__track img {
   height: auto;
   max-width: none;
-}
-
-.case-preview.is-cover-mode .case-preview__track img {
-  height: 100%;
-  max-width: none;
-  object-fit: cover;
-  object-position: top center;
+  opacity: 0.55;
+  filter: blur(14px);
+  transform: scale(1.04);
+  transition:
+    filter 0.5s ease,
+    opacity 0.5s ease,
+    transform 0.5s ease;
 }
 
 .case-preview.is-ready .case-preview__track img {
   opacity: 1;
   filter: blur(0);
+  transform: scale(1);
 }
 
 @keyframes preview-shimmer {

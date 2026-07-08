@@ -13,8 +13,7 @@ if (!url || !raw) {
     args: ["--disable-blink-features=AutomationControlled"],
   });
   const context = await browser.newContext({
-    viewport: { width: 1280, height: 900 },
-    deviceScaleFactor: 1,
+    viewport: { width: 1280, height: 800 },
     userAgent:
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
     locale: "ru-RU",
@@ -23,14 +22,9 @@ if (!url || !raw) {
     Object.defineProperty(navigator, "webdriver", { get: () => undefined });
   });
   const page = await context.newPage();
-  await page.goto(url, { waitUntil: "networkidle", timeout: 90000 });
-  await page.waitForTimeout(5000);
-
-  if (/job-radar/i.test(url)) {
-    await page.screenshot({ path: raw, fullPage: false, timeout: 120000 });
-  } else {
-    await page.screenshot({ path: raw, fullPage: true, timeout: 120000 });
-  }
+  await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
+  await page.waitForTimeout(4000);
+  await page.screenshot({ path: raw, fullPage: true });
   await browser.close();
 })().catch((error) => {
   console.error(error);
