@@ -145,31 +145,30 @@
 
 .case-preview__track {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
   will-change: transform;
 }
 
 .case-preview__track img {
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
   max-width: none;
-  object-fit: cover;
-  object-position: top center;
   opacity: 0.55;
   filter: blur(14px);
-  transform: none;
+  transform: scale(1.04);
   transition:
     filter 0.5s ease,
-    opacity 0.5s ease;
+    opacity 0.5s ease,
+    transform 0.5s ease;
 }
 
 .case-preview.is-ready .case-preview__track img {
   opacity: 1;
   filter: blur(0);
-  transform: none;
+  transform: scale(1);
 }
 
 @keyframes preview-shimmer {
