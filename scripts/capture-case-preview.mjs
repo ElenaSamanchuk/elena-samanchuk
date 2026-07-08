@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Full-page preview for portfolio cards: sharp PNG at 2x sidebar width.
+ * Full-page preview: 704px wide PNG (2× sidebar ~352px).
  * Usage: node scripts/capture-case-preview.mjs <url> <output-name>
  */
 import { execSync } from "node:child_process";
@@ -8,10 +8,8 @@ import { existsSync, mkdirSync, rmSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-/** ~2× typical preview column (~420 CSS px) for Retina */
-const PREVIEW_WIDTH = 840;
-/** Keep scroll room without multi‑MB job-list screenshots */
-const MAX_PREVIEW_HEIGHT = 4200;
+const PREVIEW_WIDTH = 704;
+const MAX_PREVIEW_HEIGHT = 4800;
 
 const [, , url, name] = process.argv;
 if (!url || !name) {
