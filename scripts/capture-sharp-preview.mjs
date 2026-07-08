@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 /**
- * Sharp portfolio preview: desktop capture → 704px PNG (pan-friendly, Retina-ready).
- * Usage: node scripts/capture-sharp-preview.mjs <url> <name> [--max-height=3200]
+ * Sharp mobile preview: scroll to load lazy blocks → full-page → 704px PNG.
+ * Usage: node scripts/capture-sharp-preview.mjs <url> <name> [--max-height=4000]
  */
 import { execSync } from "node:child_process";
-import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, rmSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 
 const PREVIEW_WIDTH = 704;
+const MOBILE_VIEWPORT = { width: 390, height: 844 };
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outDir = path.join(root, "public/previews");
@@ -21,8 +22,7 @@ if (!url || !name) {
 }
 
 const maxHeightFlag = flags.find((f) => f.startsWith("--max-height="));
-const maxHeight = maxHeightFlag ? Number(maxHeightFlag.split("=")[1]) : 3600;
-const mobile = flags.includes("--mobile");
+const maxHeight = maxHeightFlag ? Number(maxHeightFlag.split("=")[1]) : 4500;
 
 const raw = `/tmp/${name}-sharp-raw.png`;
 const resized = `/tmp/${name}-sharp-704.png`;
@@ -31,25 +31,35 @@ const out = path.join(outDir, `${name}.png`);
 mkdirSync(outDir, { recursive: true });
 
 async function scrollForLazyLoad(page) {
-  const height = await page.evaluate(() => document.documentElement.scrollHeight);
-  const steps = Math.min(12, Math.max(4, Math.ceil(height / 900)));
-  for (let i = 0; i <= steps; i += 1) {
-    const y = Math.floor((height * i) / steps);
-    await page.evaluate((scrollY) => window.scrollTo(0, scrollY), y);
-    await page.waitForTimeout(350);
+  let lastHeight = 0;
+  for (let pass = 0; pass < 3; pass += 1) {
+    const height = await page.evaluate(() => document.documentElement.scrollHeight);
+    const viewport = await page.evaluate(() => window.innerHeight);
+    const step = Math.max(280, Math.floor(viewport * 0.75));
+    for (let y = 0; y <= height; y += step) {
+      await page.evaluate((scrollY) => window.scrollTo(0, scrollY), y);
+      await page.waitForTimeout(700);
+    }
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await page.waitForTimeout(1200);
+    const nextHeight = await page.evaluate(() => document.documentElement.scrollHeight);
+    if (nextHeight <= lastHeight + 20) break;
+    lastHeight = nextHeight;
   }
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(800);
 }
 
 const browser = await chromium.launch({
   args: ["--disable-blink-features=AutomationControlled"],
 });
 const context = await browser.newContext({
-  viewport: mobile ? { width: 430, height: 932 } : { width: 1280, height: 900 },
+  viewport: MOBILE_VIEWPORT,
   deviceScaleFactor: 2,
+  isMobile: true,
+  hasTouch: true,
   userAgent:
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
   locale: "ru-RU",
 });
 await context.addInitScript(() => {
@@ -57,16 +67,14 @@ await context.addInitScript(() => {
 });
 
 const page = await context.newPage();
-await page.goto(url, { waitUntil: "networkidle", timeout: 90000 }).catch(async () => {
-  await page.goto(url, { waitUntil: "domcontentloaded", timeout: 90000 });
-});
-await page.waitForTimeout(2500);
-if (!mobile) await scrollForLazyLoad(page);
+await page.goto(url, { waitUntil: "domcontentloaded", timeout: 120000 });
+await page.waitForTimeout(3000);
+await scrollForLazyLoad(page);
 await page.screenshot({
   path: raw,
-  fullPage: !mobile,
+  fullPage: true,
   type: "png",
-  timeout: 120000,
+  timeout: 180000,
 });
 await browser.close();
 
@@ -74,11 +82,10 @@ execSync(`sips --resampleWidth ${PREVIEW_WIDTH} "${raw}" --out "${resized}"`, { 
 
 const meta = execSync(`sips -g pixelWidth -g pixelHeight "${resized}"`, { encoding: "utf8" });
 const height = Number(meta.match(/pixelHeight:\s*(\d+)/)?.[1] ?? 0);
-const width = Number(meta.match(/pixelWidth:\s*(\d+)/)?.[1] ?? 0);
 
 if (height > maxHeight) {
   execSync(
-    `python3 - <<'PY'\nfrom PIL import Image\nsrc="${resized}"\nim=Image.open(src)\nw,h=im.size\ncrop=im.crop((0,0,w,${maxHeight}))\ncrop.save(src)\nPY`,
+    `python3 -c "from PIL import Image; im=Image.open('${resized}'); im.crop((0,0,im.width,${maxHeight})).save('${resized}')"`,
     { stdio: "pipe" },
   );
 }
