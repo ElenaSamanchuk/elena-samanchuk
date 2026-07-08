@@ -80,6 +80,12 @@ await page.screenshot({
 });
 await browser.close();
 
+const viewportPixelWidth = MOBILE_VIEWPORT.width * 2;
+execSync(
+  `python3 -c "from PIL import Image; Image.MAX_IMAGE_PIXELS=None; im=Image.open('${raw}'); w=min(${viewportPixelWidth}, im.width); im=im.crop((0,0,w,im.height)); im.save('${raw}')"`,
+  { stdio: "pipe" },
+);
+
 execSync(`sips --resampleWidth ${PREVIEW_WIDTH} "${raw}" --out "${resized}"`, { stdio: "pipe" });
 
 const meta = execSync(`sips -g pixelWidth -g pixelHeight "${resized}"`, { encoding: "utf8" });

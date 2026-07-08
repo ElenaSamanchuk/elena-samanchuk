@@ -53,7 +53,7 @@ export const webAppsShowcase: DemoShowcaseConfig = {
       tab: "Job Radar",
       focus: "Вакансии",
       title: "Ресурс для подбора вакансий",
-      previewImage: "/previews/job-radar.png?v=20260708b",
+      previewImage: "/previews/job-radar.png?v=20260708c",
       chips: [
         "Опросник навыков → профиль",
         "Матчинг: точно / подтянуть / под вопросом",
