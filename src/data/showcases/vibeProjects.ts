@@ -44,7 +44,7 @@ export const vibeProjectsShowcase: DemoShowcaseConfig = {
       focus: "Job Radar",
       title: "Опросник → матчинг → отклик",
       visual: "code",
-      previewImage: "/previews/job-radar.png",
+      previewImage: "/previews/job-radar.png?v=20260708b",
       codeTabs: ["Cursor", "matchProfile.ts"],
       codeLines: [
         "// vibe session · без личных данных",

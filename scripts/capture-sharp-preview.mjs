@@ -23,6 +23,8 @@ if (!url || !name) {
 
 const maxHeightFlag = flags.find((f) => f.startsWith("--max-height="));
 const maxHeight = maxHeightFlag ? Number(maxHeightFlag.split("=")[1]) : 4500;
+const cropTopFlag = flags.find((f) => f.startsWith("--crop-top="));
+const cropTop = cropTopFlag ? Number(cropTopFlag.split("=")[1]) : 0;
 
 const raw = `/tmp/${name}-sharp-raw.png`;
 const resized = `/tmp/${name}-sharp-704.png`;
@@ -81,7 +83,16 @@ await browser.close();
 execSync(`sips --resampleWidth ${PREVIEW_WIDTH} "${raw}" --out "${resized}"`, { stdio: "pipe" });
 
 const meta = execSync(`sips -g pixelWidth -g pixelHeight "${resized}"`, { encoding: "utf8" });
-const height = Number(meta.match(/pixelHeight:\s*(\d+)/)?.[1] ?? 0);
+const width = Number(meta.match(/pixelWidth:\s*(\d+)/)?.[1] ?? PREVIEW_WIDTH);
+let height = Number(meta.match(/pixelHeight:\s*(\d+)/)?.[1] ?? 0);
+
+if (cropTop > 0 && height > cropTop + 400) {
+  execSync(
+    `python3 -c "from PIL import Image; im=Image.open('${resized}'); im=im.crop((0,${cropTop},im.width,im.height)); im.save('${resized}')"`,
+    { stdio: "pipe" },
+  );
+  height -= cropTop;
+}
 
 if (height > maxHeight) {
   execSync(

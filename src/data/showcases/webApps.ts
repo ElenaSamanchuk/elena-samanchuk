@@ -53,7 +53,7 @@ export const webAppsShowcase: DemoShowcaseConfig = {
       tab: "Job Radar",
       focus: "Вакансии",
       title: "Ресурс для подбора вакансий",
-      previewImage: "/previews/job-radar.png",
+      previewImage: "/previews/job-radar.png?v=20260708b",
       chips: [
         "Опросник навыков → профиль",
         "Матчинг: точно / подтянуть / под вопросом",
@@ -67,7 +67,7 @@ export const webAppsShowcase: DemoShowcaseConfig = {
       tab: "Still",
       focus: "E-commerce",
       title: "Интернет-магазин одежды",
-      previewImage: "/previews/still-store.png",
+      previewImage: "/previews/still-store.png?v=20260708b",
       chips: [
         "Каталог · корзина · checkout · аккаунт",
         "Модалка товара, размеры, количество",
