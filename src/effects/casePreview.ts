@@ -1,3 +1,6 @@
+/** Linear pan speed in CSS pixels per second (bottom → top loop). */
+const PREVIEW_PAN_SPEED_PX = 50;
+
 export function initCasePreviews(reducedMotion: boolean) {
   document.querySelectorAll<HTMLElement>("[data-case-preview]").forEach((preview) => {
     const stage = preview.querySelector<HTMLElement>("[data-preview-stage]");
@@ -11,31 +14,55 @@ export function initCasePreviews(reducedMotion: boolean) {
     let panFrame = 0;
     let isVisible = false;
     let currentOffset = 0;
+    let lastTickTime = 0;
 
     const stopPan = () => {
       if (panFrame) window.cancelAnimationFrame(panFrame);
       panFrame = 0;
+      lastTickTime = 0;
     };
 
     const getMaxOffset = () => Math.max(0, image.offsetHeight - stage.clientHeight);
+
+    const applyOffset = () => {
+      track.style.transform = `translate3d(0, ${-currentOffset}px, 0)`;
+    };
+
+    const resetToBottom = () => {
+      currentOffset = getMaxOffset();
+      applyOffset();
+    };
 
     const startPan = () => {
       if (reducedMotion || !preview.classList.contains("is-ready") || !isVisible) return;
       stopPan();
 
-      let phase = 0;
+      const maxOffset = getMaxOffset();
+      if (maxOffset <= 6) return;
 
-      const tick = () => {
-        const maxOffset = getMaxOffset();
-        if (maxOffset <= 6 || !isVisible) {
+      if (currentOffset <= 0 || currentOffset > maxOffset) {
+        currentOffset = maxOffset;
+        applyOffset();
+      }
+
+      const tick = (now: number) => {
+        const travel = getMaxOffset();
+        if (travel <= 6 || !isVisible) {
           stopPan();
           return;
         }
 
-        phase += 0.0011;
-        const target = ((Math.sin(phase) + 1) * 0.5) * maxOffset;
-        currentOffset += (target - currentOffset) * 0.028;
-        track.style.transform = `translate3d(0, ${-currentOffset}px, 0)`;
+        if (!lastTickTime) lastTickTime = now;
+        const deltaSec = Math.min(0.05, (now - lastTickTime) / 1000);
+        lastTickTime = now;
+
+        currentOffset = Math.min(travel, currentOffset) - PREVIEW_PAN_SPEED_PX * deltaSec;
+
+        if (currentOffset <= 0) {
+          currentOffset = travel;
+        }
+
+        applyOffset();
         panFrame = window.requestAnimationFrame(tick);
       };
 
@@ -45,8 +72,7 @@ export function initCasePreviews(reducedMotion: boolean) {
     const onReady = () => {
       preview.classList.remove("is-loading");
       preview.classList.add("is-ready");
-      currentOffset = 0;
-      track.style.transform = "translate3d(0, 0, 0)";
+      resetToBottom();
       if (isVisible) startPan();
     };
 
@@ -71,6 +97,14 @@ export function initCasePreviews(reducedMotion: boolean) {
     );
 
     observer.observe(card);
-    stage.addEventListener("wheel", stopPan, { passive: true });
+
+    const resizeObserver = new ResizeObserver(() => {
+      const maxOffset = getMaxOffset();
+      if (maxOffset <= 6) return;
+      if (currentOffset > maxOffset) currentOffset = maxOffset;
+      applyOffset();
+    });
+    resizeObserver.observe(image);
+    resizeObserver.observe(stage);
   });
 }
