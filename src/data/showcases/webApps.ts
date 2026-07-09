@@ -14,6 +14,7 @@ export const webAppsShowcase: DemoShowcaseConfig = {
     { label: "Поток", href: "https://elenasamanchuk.github.io/vital-coach/onboarding/" },
     { label: "Republic 2077", href: "https://elenasamanchuk.github.io/republic-2077/" },
     { label: "Job Radar", href: "https://elenasamanchuk.github.io/job-radar/" },
+    { label: "LexDesk", href: "https://elenasamanchuk.github.io/lawyer-crm/" },
     { label: "Still", href: "https://elenasamanchuk.github.io/still-store/" },
     { label: "Videohost", href: "https://elenasamanchuk.github.io/videohost/" },
     { label: "Learn Atlas", href: "https://elenasamanchuk.github.io/learn-atlas/" },
@@ -60,6 +61,20 @@ export const webAppsShowcase: DemoShowcaseConfig = {
         "hh.ru, Remote OK, Jobicy, Upwork",
         "Фильтры и подписки на поиски",
         "GitHub Pages",
+      ],
+    },
+    {
+      id: "lexdesk",
+      tab: "LexDesk",
+      focus: "Legal CRM",
+      title: "CRM для юристов",
+      previewImage: "/previews/lawyer-crm.png?v=20260709",
+      chips: [
+        "Обзор · клиенты · воронка дел",
+        "Статусы: новый → в работе → закрыт",
+        "Чеклист, заметки, история действий",
+        "Напоминания WhatsApp / Telegram",
+        "React · Vite · Tailwind · GitHub Pages",
       ],
     },
     {

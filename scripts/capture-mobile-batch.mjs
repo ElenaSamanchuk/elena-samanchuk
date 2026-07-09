@@ -15,6 +15,7 @@ const targets = [
   { url: "https://gf-gift.ru/#podari", name: "growfood", maxHeight: 5000 },
   { url: "https://priem.menu/?cmz=Kdw5", name: "priem", maxHeight: 5000 },
   { url: "https://elenasamanchuk.github.io/job-radar/", name: "job-radar", maxHeight: 3500 },
+  { url: "https://elenasamanchuk.github.io/lawyer-crm/", name: "lawyer-crm", maxHeight: 2800 },
   { url: "https://elenasamanchuk.github.io/videohost/", name: "videohost", maxHeight: 4500 },
   { url: "https://elenasamanchuk.github.io/still-store/", name: "still-store", maxHeight: 4000 },
   { url: "https://elenasamanchuk.github.io/learn-atlas/", name: "learn-atlas", maxHeight: 2500 },
