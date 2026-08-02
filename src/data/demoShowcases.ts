@@ -1,11 +1,12 @@
 import type { DemoShowcaseConfig } from "./demoShowcaseTypes";
+import { knowembedShowcase } from "./showcases/knowembed";
 import { webAppsShowcase } from "./showcases/webApps";
 import { yandexPetDayShowcase } from "./showcases/yandexPetDay";
 
 export type { DemoShowcaseConfig, DemoShowcaseLink, DemoShowcasePill, DemoShowcaseStep } from "./demoShowcaseTypes";
 
 /** Demo-карточки в блоке «Избранные проекты» — порядок на странице */
-export const DEMO_SHOWCASES: DemoShowcaseConfig[] = [yandexPetDayShowcase, webAppsShowcase];
+export const DEMO_SHOWCASES: DemoShowcaseConfig[] = [knowembedShowcase, yandexPetDayShowcase, webAppsShowcase];
 
 export const DEMO_SHOWCASE_BY_ID = Object.fromEntries(
   DEMO_SHOWCASES.map((showcase) => [showcase.id, showcase]),
