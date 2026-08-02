@@ -10,7 +10,7 @@ export const knowembedShowcase: DemoShowcaseConfig = {
     { kind: "badge", label: "full-stack MVP" },
     { kind: "badge", label: "B2B SaaS" },
     { kind: "niche", label: "AI" },
-    { kind: "tech", label: "Android APK" },
+    { kind: "tech", label: "APK" },
     { kind: "tech", label: "DB" },
     { kind: "tech", label: "Stripe" },
   ],
