@@ -215,10 +215,13 @@ function initDemoShowcaseRoot(root: HTMLElement, config: DemoShowcaseConfig, red
       btn.setAttribute("aria-selected", isActive ? "true" : "false");
     });
 
-    if (isShip) {
-      overlays?.setAttribute("hidden", "");
-    } else if (hasOverlays) {
+    const stepVisual = getStepVisual(config, stepId);
+    const showOverlays = !isShip && stepVisual !== null;
+
+    if (showOverlays && hasOverlays) {
       overlays?.removeAttribute("hidden");
+    } else {
+      overlays?.setAttribute("hidden", "");
     }
 
     if (hasOverlays) {

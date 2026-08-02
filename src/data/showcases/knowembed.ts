@@ -1,9 +1,11 @@
 import type { DemoShowcaseConfig } from "../demoShowcaseTypes";
 
+const previewV = "?v=20260802";
+
 export const knowembedShowcase: DemoShowcaseConfig = {
   id: "knowembed",
   title: "KnowEmbed · AI chatbot builder",
-  previewImage: "/previews/knowembed-mobile.png",
+  previewImage: `/previews/knowembed-mobile.png${previewV}`,
   pills: [
     { kind: "badge", label: "full-stack MVP" },
     { kind: "badge", label: "B2B SaaS" },
@@ -41,25 +43,25 @@ export const knowembedShowcase: DemoShowcaseConfig = {
       ],
     },
     {
+      id: "landing",
+      tab: "Landing",
+      focus: "Web",
+      title: "Mobile marketing + APK promo",
+      previewImage: `/previews/knowembed-mobile.png${previewV}`,
+    },
+    {
       id: "embed",
-      tab: "Widget",
-      focus: "Embed",
+      tab: "Store",
+      focus: "Widget",
       title: "Still store · widget open",
-      previewImage: "/previews/knowembed-embed-mobile.png",
+      previewImage: `/previews/knowembed-embed-mobile.png${previewV}`,
     },
     {
       id: "app",
       tab: "App",
       focus: "Android",
       title: "Native admin · bottom tabs",
-      previewImage: "/previews/knowembed-app-mobile.png",
-    },
-    {
-      id: "ci",
-      tab: "Релиз",
-      focus: "CI",
-      title: "GitHub Pages + Vercel",
-      previewImage: "/previews/knowembed-mobile.png",
+      previewImage: `/previews/knowembed-app-mobile.png${previewV}`,
     },
   ],
   codeLines: ['// Shadow DOM embed · one script tag'],
