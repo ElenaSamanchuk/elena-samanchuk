@@ -1,6 +1,6 @@
 import type { DemoShowcaseConfig } from "../demoShowcaseTypes";
 
-const previewV = "?v=20260802";
+const previewV = "?v=20260802b";
 
 export const knowembedShowcase: DemoShowcaseConfig = {
   id: "knowembed",

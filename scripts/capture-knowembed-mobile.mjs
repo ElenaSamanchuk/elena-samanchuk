@@ -12,6 +12,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outDir = path.join(root, "public/previews");
 const PREVIEW_WIDTH = 704;
 const MOBILE_VIEWPORT = { width: 390, height: 844 };
+const base = (process.env.CAPTURE_BASE ?? "https://elenasamanchuk.github.io/knowembed/").replace(/\/?$/, "/");
 
 mkdirSync(outDir, { recursive: true });
 
@@ -40,12 +41,12 @@ async function captureViewport(name, url, beforeShot) {
 
 await captureViewport(
   "knowembed-mobile",
-  "https://elenasamanchuk.github.io/knowembed/",
+  `${base}`,
 );
 
 await captureViewport(
   "knowembed-embed-mobile",
-  "https://elenasamanchuk.github.io/knowembed/embed-demo.html",
+  `${base}embed-demo.html`,
   async (page) => {
     await page.evaluate(() => {
       const host = document.querySelector("#knowembed-root");
