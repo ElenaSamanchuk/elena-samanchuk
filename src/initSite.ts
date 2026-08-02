@@ -1,3 +1,4 @@
+import { initTheme } from "./effects/theme";
 import { BUILDER_STAGE_MIN_HEIGHT } from "./data/blockBuilderConfig";
 import { initCasePreviews } from "./effects/casePreview";
 import { initTurnkeyCaseShowcase } from "./effects/turnkeyCaseShowcase";
@@ -17,8 +18,8 @@ export const SITE_REVISION = "stack-tw";
 /** Подключаемые модули: siteMotion, casePreview, blockBuilderAnim, scrollToTop */
 export async function initSite() {
   document.documentElement.dataset.siteRevision = SITE_REVISION;
-  document.documentElement.dataset.theme = "dark";
   document.documentElement.style.setProperty("--bb-stage-min-h", `${BUILDER_STAGE_MIN_HEIGHT}px`);
+  initTheme();
   if (import.meta.env.DEV) {
     console.info(`[site] revision: ${SITE_REVISION}`);
   }

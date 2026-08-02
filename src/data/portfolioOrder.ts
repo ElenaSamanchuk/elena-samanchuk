@@ -4,8 +4,8 @@ export type PortfolioCardRef =
   | { kind: "case"; id: string };
 
 export const PORTFOLIO_CARD_ORDER: PortfolioCardRef[] = [
-  { kind: "showcase", id: "knowembed" },
   { kind: "showcase", id: "yandex-pet-day" },
+  { kind: "showcase", id: "knowembed" },
   { kind: "case", id: "growfood" },
   { kind: "case", id: "priem" },
   { kind: "showcase", id: "web-apps" },

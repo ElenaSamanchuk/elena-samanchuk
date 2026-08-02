@@ -59,6 +59,10 @@ const navbarMarkup = `
         <span class="type-nav-tagline block">${t(siteCopy.brand.tagline)}</span>
       </span>
     </a>
+    <div class="nav-links" id="site-nav-drawer">
+      ${siteCopy.nav.map((item) => `<a class="nav-link" href="${item.href}">${t(item.label)}</a>`).join("")}
+    </div>
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Включить светлую тему">Светлая</button>
     <button
       type="button"
       class="nav-burger"
@@ -71,9 +75,6 @@ const navbarMarkup = `
       <span class="nav-burger__bar" aria-hidden="true"></span>
       <span class="nav-burger__bar" aria-hidden="true"></span>
     </button>
-    <div class="nav-links" id="site-nav-drawer">
-      ${siteCopy.nav.map((item) => `<a class="nav-link" href="${item.href}">${t(item.label)}</a>`).join("")}
-    </div>
   </nav>
   <div class="nav-drawer-backdrop" id="nav-drawer-backdrop" hidden aria-hidden="true"></div>
 `;

@@ -3,8 +3,7 @@ const storageKey = "site-theme";
 export function initTheme() {
   const toggle = document.querySelector<HTMLButtonElement>("#theme-toggle");
   const stored = localStorage.getItem(storageKey);
-  const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
-  const theme = stored === "light" || stored === "dark" ? stored : prefersLight ? "light" : "dark";
+  const theme = stored === "light" || stored === "dark" ? stored : "dark";
 
   applyTheme(theme);
 
@@ -21,6 +20,9 @@ export function initTheme() {
 function applyTheme(theme: "light" | "dark") {
   document.documentElement.dataset.theme = theme;
   localStorage.setItem(storageKey, theme);
+
+  const metaTheme = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  if (metaTheme) metaTheme.content = theme === "light" ? "#ffffff" : "#181e2e";
 
   const toggle = document.querySelector<HTMLButtonElement>("#theme-toggle");
   if (toggle) {
